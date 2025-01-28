@@ -21,14 +21,19 @@ swisspop <- swisspop %>%
     swiss_population = paste(j, collapse = " ")  
   ) %>%
   ungroup() %>%
-  select(-row_group)  
-
-swisspop <- swisspop %>%
-  filter(nchar(municipalityId) == 4 & municipalityId != "8001")  
+  select(-row_group) %>%
+  mutate(swiss_population = sapply(strsplit(swiss_population, " "), function(x) {
+    nums <- gsub("[^0-9.]", "", x)
+    first_num <- nums[nums != ""][1]
+    as.numeric(first_num)
+  })) %>%
+  filter(nchar(municipalityId) == 4 & municipalityId != "8001") %>%
+  mutate(
+    non_swiss_population = population - swiss_population,
+    percentage_non_swiss_pop = round((non_swiss_population / population) * 100, 2)
+  )
 
 print(swisspop)
-
-
 
 #head(import)
 

@@ -28,7 +28,7 @@ The most recent parliamentary elections in Switzerland took place on October 22,
 
 Over the past several decades, the distribution of dominant political parties in Swiss national elections has remained relatively stable. The primary parties represented in the federal parliament, along with their respective campaign focuses in the most recent elections, are detailed below. For improved readability, this paper will rely on german-language party names.
 
-| Party | 2023 Campaign Focus |
+| **Party** | **2023 Campaign Focus** |
 |------------|-----------------------------------------------------------|
 | SVP | Right-wing, anti-immigration, anti-welfare, free market policies |
 | SP | Left-wing, pro-welfare, pro-worker policies, cost of living |
@@ -40,20 +40,37 @@ Source: bdp.de TBD
 
 While many European countries have seen an extraordinary rise of right-wing politics throughout the 2010s, not much had shifted in Switzerland. The right-wing SVP (Schweizerische Volkspartei, in french: Union démocratique du centre UDC) has been part of the governing coalition since the 1990s. Certain segments of the party have been classified as far-right and right-wing extremist, most notably due to the party's hardline positions on migration and strict opposition to any legal protection of social, cultural and religious minorities like swiss muslims or LGBT citizens.
 
-
-
-
+The relationship between regional demographic composition and voting behavior has been a subject of ongoing research and debate, particularly if areas with lower proportions of migrants tend to support stricter immigration policies compared to ethnoculturally diverse regions. In this study, we examine the most recent Swiss election to analyze potential correlations between the percentage of non-Swiss residents and the electoral performance of the Swiss People's Party (SVP), which centered its campaign on an anti-immigration platform. To control for cofounding variables, other demographic markers as age and education will be included. 
 
 
 \newpage
 
-# Research Question
+# Background
 
-## Theoretical Framework
+## Core Concepts
 
-## Scientific Background
+Notes:
 
-## Research Hypothesis
+* Short historical primer on elections in switzerland (1 paragraph)
+* Short explanation on the voting system and the chambers (1 paragraph)
+* Explaining the demographic setup, defining Swiss, Non-Swiss from statistical perspective (2-3 paragraphs)
+
+## State of Research
+
+Notes:
+
+* Is there research on this exact question? If yes, can we make an assumption about the outcome of our analysis (1-2 paragraph)
+* What is known about voting behaviors and their relation to demographic structural markers (2-3 paragraphs)
+* What is known about anti-migration sentiment in the general public? Can we make an assumption on the outcome based on that? (2-3 paragraphs)
+* What is known about voter participation? Who actually goes to the ballots? (2-3 paragraphs)
+
+## Research Question and Hypothesis
+
+
+Notes (1 page approx.):
+
+* Formulating the research hypothesies: "There is a positive correlation between ethnocultural homogeneity and success of far-right party in the 2023 swiss elections."
+* Related questions: can we quantify the influence of other predictors like age, educational level on election outcomes? 
 
 \newpage
 
@@ -61,9 +78,22 @@ While many European countries have seen an extraordinary rise of right-wing poli
 
 ## Data Set
 
+Notes (0.5 page approx):
+
+* List the Data Sets that were used in a table
+* Explain Characteristics of the Data Sets: Source, Size, Processing etc.
+
 ## Resarch Process
 
+Notes (0.5 page approx):
+
+* A paragraph or a table on the research steps from developping the research questions up to the analysis.
+
 ## Statistical Methods
+
+Notes (0.5 page approx):
+
+* Statitiscal Methods that were applied e.g. Correlation, Multiple Linear Regression
 
 \newpage
 
@@ -77,11 +107,19 @@ Some tables.
 
 Several elaborate plots with descriptions.
 
-### Notes
+### Maps
 
 \newpage
 
 # Limitations
+
+What can not be measured with the results?
+
+Notes (1 page approx.):
+
+* High percentage of population that does not vote at all. Their opinion can't be measured.
+* Some people might vote for SVP for other reasons than migration policy
+* Different approaches to statistical modelling can produce different results, therefore there is no absolute "truth" (e.g. weighted correlation vs. non-weighted)
 
 \newpage
 

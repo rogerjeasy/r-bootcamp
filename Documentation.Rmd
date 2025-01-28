@@ -1,5 +1,5 @@
 ---
-title: "Mapping Demographic Composition as an Success Factor in the 2023 Swiss Federal Election"
+title: "Mapping Demographic Composition as a Predictor of Far-Right Success in the 2023 Swiss Federal Election"
 subtitle: "Exploring Interactions between Anti-Migration Sentiment and Ethnocultural Diversity"
 author: "Bavibidila, R., Jevdenic, R. "
 date: ""

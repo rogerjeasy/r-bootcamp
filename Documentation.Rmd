@@ -25,6 +25,20 @@ output:
 \newpage
 # Introduction
 
+The most recent parliamentary elections in Switzerland took place on October 22, 2023. Switzerland's bicameral parliament comprises the National Council, which proportionally represents the Swiss population with seats allocated to each canton based on its population, and the Council of States, where all cantons have equal representation. As the National Council reflects the population proportionally, its election results are often regarded as an indicator of trends in public opinion regarding politics and policy.
+
+Over the past several decades, the distribution of dominant political parties in Swiss national elections has remained relatively stable. The primary parties represented in the federal parliament, along with their respective campaign focuses in the most recent elections, are detailed below.
+
+| Party  | 2023 Campaign Focus                                                                                              |
+|--------|-------------------------------------------------------------------------------------------------------------|
+| SVP    | Reducing welfare state, restricting immigration and strict border protection|
+| SP     | Improving welfare system and reducing cost of living for low and middle income populations |
+| FDP    | Attractivity of Switzerland as business hub and improved access to interantional markets.|
+| Mitte  | Improving social cohesion in Switzerland, stronger international defense cooperation, eliminating tax disadvantages for married couples |
+| GLP    | Climate protection, improving political alignment with EU and advancing free-market policies.|
+| Greens | Climate protection, biodiversity and state regulation of certain sectors (e.g. finance) |
+
+Source: ...
 
 \newpage
 # Research Question

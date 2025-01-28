@@ -99,15 +99,15 @@ Notes (0.5 page approx):
 
 # Results
 
-### Tables
+## Tables
 
 Some tables.
 
-### Plots
+## Plots
 
 Several elaborate plots with descriptions.
 
-### Maps
+## Maps
 
 \newpage
 

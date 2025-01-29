@@ -64,7 +64,6 @@ election2023 <- import1 %>%
 election2023 <- election2023 %>%
   mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
 
-
 ### DATASET 3: Citizenship aquisition
 
 import3 <- import3[, !is.na(colnames(import3))]
@@ -97,8 +96,6 @@ municipaldata <- import4 %>%
 municipaldata <- municipaldata %>%
   mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
 
-municipaldata
-
 ### JOINING THE DATASETS
 
 combined_data <- election2023 %>%
@@ -106,4 +103,12 @@ combined_data <- election2023 %>%
   left_join(citizenship %>% select(municipalityId, Acquisition_of_Swiss_citizenship), by = "municipalityId") %>%
   left_join(municipaldata %>% select(municipalityId, districtId, districtName), by = "municipalityId")
 
-combined_data
+## SAVE COMBINED DATA IN DATATABLE AS CSV
+
+if (file.exists("datatable.csv")) {
+  file.remove("datatable.csv")
+}
+write.csv(combined_data, "datatable.csv", row.names = FALSE)
+
+
+

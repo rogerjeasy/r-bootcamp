@@ -11,9 +11,11 @@ import1 <- read.csv("sd-t-17.02-NRW2023-parteien-appendix.csv",
 import2 <- read_excel("px-x-0102010000_104_20250127-155044.xlsx", 
                       skip = 2)
 
-import3 <- read_excel("px-x-0102020000_201_20250129-105355.xlsx", 
+import3 <- read_excel("px-x-0102020000_201_20250129-134648.xlsx", 
                       skip = 2, 
                       col_names = FALSE)  
+
+import4 <- read_excel("Gemeindestand.xlsx")  
 
 ### DATASET 1: Population Numbers (Swiss vs. Non-Swiss Population)
 
@@ -40,7 +42,7 @@ swisspop <- swisspop %>%
     non_swiss_population = population - swiss_population,
     percentage_non_swiss_pop = round((non_swiss_population / population) * 100, 2)
 )
-
+swisspop
 
 ### DATASET 2: Election Results 2023
 
@@ -59,36 +61,49 @@ election2023 <- import1 %>%
   rename(municipalityId = gemeinde_nummer)    %>%  
   rename(SVP_result = partei_staerke) 
 
-### DATASET 3: Demographic Data (Age, Birth, Citizenship aquisition etc.)
-# We adjust the names of the columns
+election2023 <- election2023 %>%
+  mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
 
+
+### DATASET 3: Citizenship aquisition
+
+import3 <- import3[, !is.na(colnames(import3))]
+import3 <- import3[, 1:5]
 column_names <- c(
-  "ID", "municipalityId",  "citizenship",  "sex",  "Population_on_1_January",  "Live_birth",  "Death",  "Natural_change",  "Immigration_incl_change_of_population_type",
-  "In_migration_from_another_canton",  "In_migration_from_same_canton",  "Emigration",  "Out_migration_to_another_canton",  "Out_migration_to_same_canton",      
-  "Net_migration_incl_change_of_population_type",  "Change_of_population_type",  "Acquisition_of_Swiss_citizenship",  "Gender_change_in_civil_register_entry",    
-  "Gender_change_in_civil_register_exit",  "Statistical_adjustment",  "Population_on_31_December",  "Population_change"
+  "ID", "municipalityId", "citizenship", "sex", "Acquisition_of_Swiss_citizenship"
 )
 
 colnames(import3) <- column_names
-demography <- import3 %>%
+
+citizenship <- import3 %>%
   select(-ID, -citizenship, -sex) %>%
   filter(grepl("^\\.\\.\\.\\.\\.\\.", municipalityId)) %>%
   mutate(
     municipalityId = substr(municipalityId, 7, 10)
   )
-print(demography)
+
+print(citizenship)
+
+
+### DATASET 4: Overview of Municiaplity, Distric, Canton for improved matching
+
+municipaldata <- import4 %>%
+  select("Kanton",	"Bezirks-nummer",	"Bezirksname",	"BFS Gde-nummer",	"Gemeindename") %>%   
+  rename(districtId = "Bezirks-nummer")    %>%  
+  rename(districtName = "Bezirksname")    %>%  
+  rename(municipality = "Gemeindename")    %>%  
+  rename(municipalityId = "BFS Gde-nummer") 
+
+municipaldata <- municipaldata %>%
+  mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
+
+municipaldata
 
 ### JOINING THE DATASETS
 
-election2023 <- election2023 %>%
-  mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
-
 combined_data <- election2023 %>%
-  left_join(swisspop, by = "municipalityId")
-
-combined_data <- election2023 %>%
-  left_join(demography, by = "municipalityId")
+  left_join(swisspop %>% select(municipalityId, municipalityId, population, swiss_population, non_swiss_population, percentage_non_swiss_pop), by = "municipalityId") %>%
+  left_join(citizenship %>% select(municipalityId, Acquisition_of_Swiss_citizenship), by = "municipalityId") %>%
+  left_join(municipaldata %>% select(municipalityId, districtId, districtName), by = "municipalityId")
 
 combined_data
-
-

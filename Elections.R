@@ -84,7 +84,7 @@ citizenship <- import3 %>%
 print(citizenship)
 
 
-### DATASET 4: Overview of Municiaplity, Distric, Canton for improved matching
+### DATASET 4: Overview of Municipality, Distric, Canton for improved matching
 
 municipaldata <- import4 %>%
   select("Kanton",	"Bezirks-nummer",	"Bezirksname",	"BFS Gde-nummer",	"Gemeindename") %>%   
@@ -101,7 +101,7 @@ municipaldata <- municipaldata %>%
 combined_data <- election2023 %>%
   left_join(swisspop %>% select(municipalityId, municipalityId, population, swiss_population, non_swiss_population, percentage_non_swiss_pop), by = "municipalityId") %>%
   left_join(citizenship %>% select(municipalityId, Acquisition_of_Swiss_citizenship), by = "municipalityId") %>%
-  left_join(municipaldata %>% select(municipalityId, districtId, districtName), by = "municipalityId")
+  left_join(municipaldata %>% select(municipalityId, Kanton, districtId, districtName), by = "municipalityId")
 
 ## SAVE COMBINED DATA IN DATATABLE AS CSV
 

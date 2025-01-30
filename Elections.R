@@ -11,15 +11,19 @@ import1 <- read.csv("sd-t-17.02-NRW2023-parteien-appendix.csv",
 import2 <- read_excel("px-x-0102010000_104_20250127-155044.xlsx", 
                       skip = 2)
 
-import3 <- read_excel("su-e-40.02.15.08.05-2022.xlsx", skip = 4) %>%
-  select(districtId = 1, Kanton = 2, districtName = 3, edupop_num = 4, edulow_num = 6, edusec_num = 8, eduter_num = 10)
-import3
+import3 <- read_excel("su-e-40.02.15.08.05-2022.xlsx", skip = 4)
 
 import4 <- read_excel("px-x-0102020000_201_20250129-134648.xlsx", 
                       skip = 2, 
                       col_names = FALSE)  
 
-import5 <- read_excel("Gemeindestand.xlsx")  
+import5 <- read_excel("su-d-01.02.03.06.xlsx", 
+                      skip = 5, 
+                      col_names = FALSE)  
+
+# import 6: wealth / income metric TBD
+
+import7 <- read_excel("Gemeindestand.xlsx")  
 
 
 ### DATASET 1: Election Results 2023
@@ -109,10 +113,13 @@ swisspop <- swisspop %>%
   )
 swisspop
 
-### DATASET 3: Education TBD
+### DATASET 3: Education 
 
 
 education <- import3 %>%
+  select(districtId = 1, Kanton = 2, districtName = 3, edupop_num = 4, edulow_num = 6, edusec_num = 8, eduter_num = 10)
+
+education <- education %>%
   mutate(
     edupop_num = as.numeric(edupop_num),
     edulow_num = as.numeric(edulow_num),
@@ -120,12 +127,14 @@ education <- import3 %>%
     eduter_num = as.numeric(eduter_num)
   ) %>%
   mutate(
-    edulow_pct = (edulow_num / edupop_num) * 100,
-    edusec_pct = (edusec_num / edupop_num) * 100,
-    eduter_pct = (eduter_num / edupop_num) * 100
+    edulow_pct = round((edulow_num / edupop_num) * 100, 0),
+    edusec_pct = round((edusec_num / edupop_num) * 100, 0),
+    eduter_pct = round((eduter_num / edupop_num) * 100, 0)
   )
 
-education
+# edulow = low education (compulsory school)
+# edusec = secondary education (professional college)
+# eduter = tertiary education (unviersity education)
 
 ### DATASET 4: Citizenship aquisition
 
@@ -146,10 +155,38 @@ citizenship <- import4 %>%
 
 print(citizenship)
 
+### DATASET 5: Age distribution
+# agequota_pct: statistical measurement for aged population in relation to middle age (20-65) population
 
-### DATASET5: Overview of Municipality, Distric, Canton for improved matching
+age <- import5 %>%
+  rename(municipality_info = 1) %>% # Rename column1 to a temporary name
+  mutate(
+    municipalityId = substr(municipality_info, 7, 10) # Extract only municipality ID
+  ) %>%
+  select(
+    municipalityId, 
+    agepop_num = 2, 
+    everything() # Keep all other columns
+  ) %>%
+  mutate(
+    age2065_num = rowSums(select(., 23:68), na.rm = TRUE),
+    age66plus_num = rowSums(select(., 69:103), na.rm = TRUE)
+  ) %>%
+  mutate(
+    agequota_pct = round((age66plus_num / age2065_num) * 100, 2) # Percentage calculation
+  ) %>%
+  select(municipalityId, agepop_num, age2065_num, age66plus_num, agequota_pct)  # Keep only relevant columns
 
-municipaldata <- import5 %>%
+age
+
+### DATASET 6: some income or wealth metric 
+
+# TBD
+
+
+### DATASET 7: Overview of Municipality, Distric, Canton for improved matching
+
+municipaldata <- import7 %>%
   select("Kanton",	"Bezirks-nummer",	"Bezirksname",	"BFS Gde-nummer",	"Gemeindename") %>%   
   rename(districtId = "Bezirks-nummer")    %>%  
   rename(districtName = "Bezirksname")    %>%  
@@ -159,13 +196,15 @@ municipaldata <- import5 %>%
 municipaldata <- municipaldata %>%
   mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
 municipaldata
+
 ### JOINING THE DATASETS
 
 combined_data <- election2023 %>%
   left_join(swisspop %>% select(municipalityId, municipalityId, population, swisspop_num, nswisspop_num, nswisspop_pct), by = "municipalityId") %>%
   left_join(citizenship %>% select(municipalityId, naturalization_num), by = "municipalityId") %>%
   left_join(municipaldata %>% select(municipalityId, Kanton, districtId, districtName), by = "municipalityId") %>%
-  left_join(education %>% select(districtId, edupop_num, edulow_num, edusec_num, eduter_num, edulow_pct, edusec_pct, eduter_pct), by = "districtId")
+  left_join(education %>% select(districtId, edupop_num, edulow_num, edusec_num, eduter_num, edulow_pct, edusec_pct, eduter_pct), by = "districtId") %>%
+  left_join(age %>% select(municipalityId, agepop_num, age2065_num, age66plus_num, agequota_pct), by = "municipalityId") 
 
 combined_data
 

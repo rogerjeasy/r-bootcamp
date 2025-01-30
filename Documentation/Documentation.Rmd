@@ -1,0 +1,147 @@
+---
+title: "Mapping Demographic Composition as a Predictor of Far-Right Success in the
+  2023 Swiss Federal Election"
+author: 'Bavibidila, R., Jevdenic, R. '
+date: ''
+output:
+  pdf_document:
+    toc: false
+    number_sections: true
+    toc_depth: 2
+  html_document:
+    toc: false
+    toc_depth: '2'
+    df_print: paged
+abstract: |
+  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+fontsize: 11pt
+linestretch: 1.3
+subtitle: "Exploring Interactions between Anti-Migration Sentiment and Ethnocultural
+  Diversity"
+bibliography: references.bib
+csl: apa-6th-edition.csl
+---
+
+------------------------------------------------------------------------
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+# Introduction
+
+Rade: TBD.
+
+
+\newpage
+
+# Background
+
+## Switzerland, Democracy and Migration
+
+Switzerland has a long tradition of democracy, with its modern political system rooted in the 1848 Federal Constitution. The modern Swiss State, along with its constitution and the bicameral legislative system has been established in 1848 [@church_concise_2013, Chapter 6].\newline 
+Swiss elections take place every four years, with the federal government following a system of direct democracy that allows citizens not only to elect representatives but also to participate in referendums and initiatives. As mentioned before, Switzerland’s Federal Parliament consists of two chambers: the National Council (200 members) and the Council of States (46 members). The National Council represents the population proportionally, while the Council of States represents the cantons, with each full canton electing two representatives and six half-cantons electing one. This bicameral system aims at balancing demographic and regional in legislative decisions. \newline
+According to the annual overview of the federal office for statistics [@bundesamt_fur_statistik_schweiz_2023], Switzerland has a population of 8.8 million people (p. 132), of which around 74% hold Swiss citizenship. The remaining 26% are non-Swiss residents, including permanent residents, cross-border workers, and asylum seekers (p. 142). Swiss nationality is acquired for most citizens through descent and for migrants by naturalization, which is known to be a decentralised process mostly relying on cantonal and municipal approval. Only a fraction of foreign nationals applies for naturalisation. In the last decade, between 30’000 to 45’000 people a year, which corresponds to around 2% of the population eligible for naturalisation (p. 142). \newline
+Non-Swiss residents, despite their significant share of the population, have limited political rights at the federal level. Some cantons and municipalities allow foreigners to vote in local elections or even run for office, but they are largely excluded from national decision-making [@jurach_droits_2025; @nech_droits_2025]. Politics of Switzerland are described as relatively polarized compared to international standards [@jansen_affective_2024, p.3] \newline
+
+## 2023 Swiss Federal Elections
+
+The most recent parliamentary elections in Switzerland took place on October 22, 2023. Switzerland's bicameral parliament comprises the National Council, which proportionally represents the Swiss population with seats allocated to each canton based on its population, and the Council of States, where all cantons have equal representation. As the National Council reflects the population proportionally, its election results are often regarded as an indicator of trends in public opinion regarding politics and policy.  \newline
+Over the past several decades, the distribution of dominant political parties in Swiss national elections has remained relatively stable. The primary parties represented in the federal parliament, along with their respective campaign focuses in the most recent elections, are detailed below [@bpbde_hintergrund_2023] . For improved readability, this paper will rely on german-language party names.  \newline
+
+| **Party** | **2023 Campaign Focus** |
+|------------|-----------------------------------------------------------|
+| SVP | Right-wing, anti-immigration, anti-welfare, free market policies |
+| SP | Left-wing, pro-welfare, pro-worker policies, reducing cost of living |
+| FDP | Center-right, free market policies and improved access to international markets |
+| Die Mitte | Conservative centrist, defense spending, lower tax for married couples |
+| GLP | Progressive centrist, climate protection, EU alignment, liberal market policies |
+| GPS | Left-wing, climate protection, biodiversity, state regulation of business |
+
+While many European countries have seen an extraordinary rise of right-wing politics throughout the 2010s, not much had shifted in Switzerland. The right-wing SVP (Schweizerische Volkspartei, in french: Union démocratique du centre UDC) has been part of the governing coalition since the 1990s. Certain segments of the party have been classified as far-right and right-wing extremist, most notably due to the party's hardline positions on migration and strict opposition to any legal protection of social, cultural and religious minorities like swiss muslims or LGBT citizens [@jansesberger_different_2024, pp. 3-5; @ellermann_comparative_2021, p.3 & p.102] \newline
+The relationship between regional demographic composition and voting behavior has been a subject of ongoing research and debate, particularly if areas with lower proportions of migrants tend to support stricter immigration policies compared to ethnoculturally diverse regions. In this study, we examine the most recent Swiss election to analyze potential correlations between the percentage of non-Swiss residents and the electoral performance of the Swiss People's Party (SVP), which centered its campaign on an anti-immigration platform. To control for cofounding variables, other demographic markers as age and education will be included. 
+
+## State of Research
+
+Notes:
+
+* Is there research on this exact question? If yes, can we make an assumption about the outcome of our analysis (1-2 paragraph)
+* What is known about voting behaviors and their relation to demographic structural markers (2-3 paragraphs)
+* What is known about anti-migration sentiment in the general public? Can we make an assumption on the outcome based on that? (2-3 paragraphs)
+* What is known about voter participation? Who actually goes to the ballots? (2-3 paragraphs)
+
+## Research Question and Hypothesis
+
+
+Notes (1 page approx.):
+
+* Formulating the research hypothesies: "There is a positive correlation between ethnocultural homogeneity and success of far-right party in the 2023 swiss elections."
+* Related questions: can we quantify the influence of other predictors like age, educational level on election outcomes? 
+
+\newpage
+
+# Method
+
+## Data Set
+
+Notes (0.5 page approx):
+
+* List the Data Sets that were used in a table
+* Explain Characteristics of the Data Sets: Source, Size, Processing etc.
+
+## Resarch Process
+
+Notes (0.5 page approx):
+
+* A paragraph or a table on the research steps from developping the research questions up to the analysis.
+
+## Statistical Methods
+
+Notes (0.5 page approx):
+
+* Statitiscal Methods that were applied e.g. Correlation, Multiple Linear Regression
+
+\newpage
+
+# Results
+
+## Tables
+
+Some tables.
+
+## Plots
+
+Several elaborate plots with descriptions.
+
+## Maps
+
+\newpage
+
+# Limitations
+
+What can not be measured with the results?
+
+Notes (1 page approx.):
+
+* High percentage of population that does not vote at all. Their opinion can't be measured.
+* Some people might vote for SVP for other reasons than migration policy
+* Different approaches to statistical modelling can produce different results, therefore there is no absolute "truth" (e.g. weighted correlation vs. non-weighted)
+
+\newpage
+
+# Discussion
+
+Details of the analysis.
+
+\newpage
+
+# Conclusion
+
+How to understand the results.
+
+\newpage
+
+# References
+

@@ -11,8 +11,6 @@ import1 <- read.csv("sd-t-17.02-NRW2023-parteien-appendix.csv",
 import2 <- read_excel("px-x-0102010000_104_20250127-155044.xlsx", 
                       skip = 2)
 
-# import3 education 
-
 import4 <- read_excel("px-x-0102020000_201_20250129-134648.xlsx", 
                       skip = 2, 
                       col_names = FALSE)  
@@ -108,7 +106,7 @@ swisspop <- swisspop %>%
 swisspop
 
 
-### DATASET 3: Citizenship aquisition
+### DATASET 4: Citizenship aquisition
 
 import4 <- import4[, !is.na(colnames(import4))]
 import4 <- import4[, 1:5]
@@ -127,10 +125,8 @@ citizenship <- import4 %>%
 
 print(citizenship)
 
-### DATASET 3: Education (only per district)
 
-
-### DATASET 4: Overview of Municipality, Distric, Canton for improved matching
+### DATASET5: Overview of Municipality, Distric, Canton for improved matching
 
 municipaldata <- import5 %>%
   select("Kanton",	"Bezirks-nummer",	"Bezirksname",	"BFS Gde-nummer",	"Gemeindename") %>%   

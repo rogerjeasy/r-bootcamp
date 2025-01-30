@@ -1,0 +1,45 @@
+---
+title: "Tasklist"
+output: html_document
+---
+
+### Open questions
+
+To be clarified:
+
+- Shapefile Municipalities **(Feedback from Claude)**
+
+### Task Management Table
+
+- **Data Sets** 
+  - Must Haves
+    - ~~Election Results~~
+    - ~~Demography, Table with all Municipalities~~ 
+    - ~~Education Level~~ (District number missing!)
+  - Nice-To-Haves
+    - More demographic variables to control for cofounding (income, age structure etc.)
+- **Statistical Models** 
+  - Must Haves
+    - ~~Correlation Migrants vs. SVP Election Result: all of Switzerland~~ **(Rade)**
+    - ~~Correlation Migrants vs. SVP Election Result: per Cantons~~ **(Rade)**
+  - Nice-To-Haves
+    - Correlation Education Level vs. SVP Success: per District **(TBD)**   
+    - Correlation Migrants vs. SVP Election Result: per District **(TBD)**
+      - ..but only if we do education level per district
+- **Plots** 
+  - Must Haves
+      - Correlation Migrants vs. SVP Election Result: 
+        - Map of all Municipalities **(Roger)**
+        - Map per Cantons **(Roger)**
+        - Bivariate scatterplot for better comparison of cantons or municipalities **(Roger)**
+  - Nice-To-Haves
+    - If we include education: Map of Districts Correlation Education Level vs. SVP Success **(TBD)**
+- **Documentation** 
+  -  ~~Background and Core Concepts~~ **(Rade)**
+  - Current State of Research **(Rade)**
+  - Introduction **(Rade)**
+  - Results **(Rade/Roger)**
+  - Discussion **(Rade/Roger)**
+  - Conclusion **(Rade)**
+
+

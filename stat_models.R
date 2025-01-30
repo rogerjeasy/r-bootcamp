@@ -46,7 +46,6 @@ wtd_cor_by_canton <- split_data %>%
 
 names(wtd_cor_by_canton) <- map_chr(split_data, ~ unique(.x$Kanton))
 
-
 # Print results
 cor_result
 print(wtd_cor_result)

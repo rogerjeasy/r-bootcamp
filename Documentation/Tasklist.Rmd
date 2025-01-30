@@ -8,6 +8,7 @@ output: html_document
 To be clarified:
 
 - Shapefile Municipalities **(Feedback from Claude)**
+- Include education yes or no (dataset only has districts, not municipalities)
 
 ### Task Management Table
 

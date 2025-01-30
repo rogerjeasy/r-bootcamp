@@ -7,16 +7,20 @@ library(stringr)
 import1 <- read.csv("sd-t-17.02-NRW2023-parteien-appendix.csv",
                    header = TRUE,
                    sep = ";")
-import1
-import2 <- read_excel("px-x-0102010000_104_20250127-155044.xlsx", 
+
+import2 <- read.csv("sd-t-17.02-NRW2019-partei-gemeinden-APPENDIX",
+                    header = TRUE,
+                    sep = ";")
+
+
+import3 <- read_excel("px-x-0102010000_104_20250127-155044.xlsx", 
                       skip = 2)
 
-import3 <- read_excel("px-x-0102020000_201_20250129-134648.xlsx", 
+import4 <- read_excel("px-x-0102020000_201_20250129-134648.xlsx", 
                       skip = 2, 
                       col_names = FALSE)  
 
-import4 <- read_excel("Gemeindestand.xlsx")  
-
+import5 <- read_excel("Gemeindestand.xlsx")  
 
 
 ### DATASET 1: Election Results 2023
@@ -61,9 +65,11 @@ election2023 <- election2023 %>%
 
 election2023
 
-### DATASET 2: Population Numbers (Swiss vs. Non-Swiss Population)
+### DATASET 2: Election Results 2019
 
-swisspop <- import2 %>%
+### DATASET 3: Population Numbers (Swiss vs. Non-Swiss Population)
+
+swisspop <- import3 %>%
   select(c = 3, i = 9, j = 10) 
 
 swisspop <- swisspop %>%
@@ -89,17 +95,17 @@ swisspop <- swisspop %>%
 swisspop
 
 
-### DATASET 3: Citizenship aquisition
+### DATASET 4: Citizenship aquisition
 
-import3 <- import3[, !is.na(colnames(import3))]
-import3 <- import3[, 1:5]
+import4 <- import4[, !is.na(colnames(import4))]
+import4 <- import4[, 1:5]
 column_names <- c(
   "ID", "municipalityId", "citizenship", "sex", "Acquisition_of_Swiss_citizenship"
 )
 
-colnames(import3) <- column_names
+colnames(import4) <- column_names
 
-citizenship <- import3 %>%
+citizenship <- import4 %>%
   select(-ID, -citizenship, -sex) %>%
   filter(grepl("^\\.\\.\\.\\.\\.\\.", municipalityId)) %>%
   mutate(
@@ -109,9 +115,9 @@ citizenship <- import3 %>%
 print(citizenship)
 
 
-### DATASET 4: Overview of Municipality, Distric, Canton for improved matching
+### DATASET 5: Overview of Municipality, Distric, Canton for improved matching
 
-municipaldata <- import4 %>%
+municipaldata <- import5 %>%
   select("Kanton",	"Bezirks-nummer",	"Bezirksname",	"BFS Gde-nummer",	"Gemeindename") %>%   
   rename(districtId = "Bezirks-nummer")    %>%  
   rename(districtName = "Bezirksname")    %>%  

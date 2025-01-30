@@ -10,6 +10,7 @@ To be clarified:
 - Shapefile Municipalities **(Feedback from Claude)**
 - Include education yes or no (dataset only has districts, not municipalities)
 - How long should the theoretical part of the documentation be  (ask Claude)
+- Do we include small local far-right partys into the analysis? (Ticino: Lega, Geneva: MCG)
 
 ### Task Management Table
 

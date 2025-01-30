@@ -111,7 +111,7 @@ swisspop
 import4 <- import4[, !is.na(colnames(import4))]
 import4 <- import4[, 1:5]
 column_names <- c(
-  "ID", "municipalityId", "citizenship", "sex", "Naturalization_num"
+  "ID", "municipalityId", "citizenship", "sex", "naturalization_num"
 )
 
 colnames(import4) <- column_names
@@ -142,7 +142,7 @@ municipaldata <- municipaldata %>%
 
 combined_data <- election2023 %>%
   left_join(swisspop %>% select(municipalityId, municipalityId, population, swisspop_num, nswisspop_num, nswisspop_perc), by = "municipalityId") %>%
-  left_join(citizenship %>% select(municipalityId, Naturalization_num), by = "municipalityId") %>%
+  left_join(citizenship %>% select(municipalityId, naturalization_num), by = "municipalityId") %>%
   left_join(municipaldata %>% select(municipalityId, Kanton, districtId, districtName), by = "municipalityId")
 
 combined_data

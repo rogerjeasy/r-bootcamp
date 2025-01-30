@@ -8,12 +8,7 @@ import1 <- read.csv("sd-t-17.02-NRW2023-parteien-appendix.csv",
                    header = TRUE,
                    sep = ";")
 
-import2 <- read.csv("sd-t-17.02-NRW2019-partei-gemeinden-APPENDIX",
-                    header = TRUE,
-                    sep = ";")
-
-
-import3 <- read_excel("px-x-0102010000_104_20250127-155044.xlsx", 
+import2 <- read_excel("px-x-0102010000_104_20250127-155044.xlsx", 
                       skip = 2)
 
 import4 <- read_excel("px-x-0102020000_201_20250129-134648.xlsx", 
@@ -65,11 +60,9 @@ election2023 <- election2023 %>%
 
 election2023
 
-### DATASET 2: Election Results 2019
+### DATASET 2: Population Numbers (Swiss vs. Non-Swiss Population)
 
-### DATASET 3: Population Numbers (Swiss vs. Non-Swiss Population)
-
-swisspop <- import3 %>%
+swisspop <- import2 %>%
   select(c = 3, i = 9, j = 10) 
 
 swisspop <- swisspop %>%
@@ -95,7 +88,7 @@ swisspop <- swisspop %>%
 swisspop
 
 
-### DATASET 4: Citizenship aquisition
+### DATASET 3: Citizenship aquisition
 
 import4 <- import4[, !is.na(colnames(import4))]
 import4 <- import4[, 1:5]
@@ -115,7 +108,7 @@ citizenship <- import4 %>%
 print(citizenship)
 
 
-### DATASET 5: Overview of Municipality, Distric, Canton for improved matching
+### DATASET 4: Overview of Municipality, Distric, Canton for improved matching
 
 municipaldata <- import5 %>%
   select("Kanton",	"Bezirks-nummer",	"Bezirksname",	"BFS Gde-nummer",	"Gemeindename") %>%   

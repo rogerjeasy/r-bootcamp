@@ -16,7 +16,7 @@ To be clarified:
         -   ~~Election Results~~
         -   ~~Demography, Table with all Municipalities~~
         -   ~~Education Level~~ (District number missing!)
-        -   Age distribution (Rade)
+        -   ~~Age distribution~~ (Rade)
         -   Economical Indicator (Taxable income) -\> Rade
     -   Nice-To-Haves
         -   ...
@@ -30,7 +30,7 @@ To be clarified:
             -   ..but only if we do education level per district
 -   **Plots**
     -   Must Haves
-        -   Maps: General Plots with election results by shapefile (Roger):
+        -   Maps: General Plots with election results by shapefile **(Roger)**:
             -   On the basis of:
                 -   Map of Cantons
                 -   Map of Municipalities

@@ -56,7 +56,7 @@ Over the past several decades, the distribution of dominant political parties in
 | SVP | Right-wing, anti-immigration, anti-welfare, free market policies |
 | SP | Left-wing, pro-welfare, pro-worker policies, reducing cost of living |
 | FDP | Center-right, free market policies and improved access to international markets |
-| Die Mitte | Conservative centrist, defense spending, lower tax for married couples |
+| Die Mitte | Conservative centrist, pro-defense, tax cuts for married couples |
 | GLP | Progressive centrist, climate protection, EU alignment, liberal market policies |
 | GPS | Left-wing, climate protection, biodiversity, state regulation of business |
 
@@ -72,8 +72,8 @@ Notes:
 * What is known about anti-migration sentiment in the general public? Can we make an assumption on the outcome based on that? (2-3 paragraphs)
 * What is known about voter participation? Who actually goes to the ballots? (2-3 paragraphs)
 
+\newpage
 ## Research Question and Hypothesis
-
 
 Notes (1 page approx.):
 
@@ -81,9 +81,7 @@ Notes (1 page approx.):
 * Related questions: can we quantify the influence of other predictors like age, educational level on election outcomes? 
 
 \newpage
-
 # Method
-
 ## Data Set
 
 Notes (0.5 page approx):
@@ -91,34 +89,37 @@ Notes (0.5 page approx):
 * List the Data Sets that were used in a table
 * Explain Characteristics of the Data Sets: Source, Size, Processing etc.
 
+\newpage
 ## Resarch Process
 
-Notes (0.5 page approx):
+Notes (0.5 to 1 page approx):
 
 * A paragraph or a table on the research steps from developping the research questions up to the analysis.
 
+\newpage
 ## Statistical Methods
 
-Notes (0.5 page approx):
+Notes (0.5 to 1 page approx):
 
 * Statitiscal Methods that were applied e.g. Correlation, Multiple Linear Regression
 
 \newpage
-
 # Results
-
 ## Tables
 
 Some tables.
 
+\newpage
 ## Plots
 
 Several elaborate plots with descriptions.
 
+\newpage
 ## Maps
 
-\newpage
+Maps with municaplities (or cantons, districts etc)
 
+\newpage
 # Limitations
 
 What can not be measured with the results?

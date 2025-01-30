@@ -35,22 +35,22 @@ election2023 <- import1 %>%
          municipality = gemeinde_bezeichnung,  
          municipalityId = gemeinde_nummer) %>%
   mutate(
-    CSP = ifelse(partynameDE == "CSP", partei_staerke, 0),
-    EDU = ifelse(partynameDE == "EDU", partei_staerke, 0),
-    EVP = ifelse(partynameDE == "EVP", partei_staerke, 0),
-    FDP = ifelse(partynameDE == "FDP", partei_staerke, 0),
-    FGA = ifelse(partynameDE == "FGA", partei_staerke, 0),
-    GLP = ifelse(partynameDE == "GLP", partei_staerke, 0),
-    GRUENE = ifelse(partynameDE == "GRÜNE", partei_staerke, 0),
-    Lega = ifelse(partynameDE == "Lega", partei_staerke, 0),
-    LPS = ifelse(partynameDE == "LPS", partei_staerke, 0),
-    MCR = ifelse(partynameDE == "MCR", partei_staerke, 0),
-    Mitte = ifelse(partynameDE == "Mitte", partei_staerke, 0),
-    PdA_Sol = ifelse(partynameDE == "PdA/Sol.", partei_staerke, 0),
-    SD = ifelse(partynameDE == "SD", partei_staerke, 0),
-    SP = ifelse(partynameDE == "SP", partei_staerke, 0),
-    SVP = ifelse(partynameDE == "SVP", partei_staerke, 0),
-    Uebrige = ifelse(partynameDE == "Übrige", partei_staerke, 0),
+    CSP_23 = ifelse(partynameDE == "CSP", partei_staerke, 0),
+    EDU_23 = ifelse(partynameDE == "EDU", partei_staerke, 0),
+    EVP_23 = ifelse(partynameDE == "EVP", partei_staerke, 0),
+    FDP_23 = ifelse(partynameDE == "FDP", partei_staerke, 0),
+    FGA_23 = ifelse(partynameDE == "FGA", partei_staerke, 0),
+    GLP_23 = ifelse(partynameDE == "GLP", partei_staerke, 0),
+    GRUENE_23 = ifelse(partynameDE == "GRÜNE", partei_staerke, 0),
+    Lega_23 = ifelse(partynameDE == "Lega", partei_staerke, 0),
+    LPS_23 = ifelse(partynameDE == "LPS", partei_staerke, 0),
+    MCR_23 = ifelse(partynameDE == "MCR", partei_staerke, 0),
+    Mitte_23 = ifelse(partynameDE == "Mitte", partei_staerke, 0),
+    PdA_Sol_23 = ifelse(partynameDE == "PdA/Sol.", partei_staerke, 0),
+    SD_23 = ifelse(partynameDE == "SD", partei_staerke, 0),
+    SP_23 = ifelse(partynameDE == "SP", partei_staerke, 0),
+    SVP_23 = ifelse(partynameDE == "SVP", partei_staerke, 0),
+    Uebrige_23 = ifelse(partynameDE == "Übrige", partei_staerke, 0),
     CSP_19 = ifelse(partynameDE == "CSP", letzte_wahl_partei_staerke, 0),
     EDU_19 = ifelse(partynameDE == "EDU", letzte_wahl_partei_staerke, 0),
     EVP_19 = ifelse(partynameDE == "EVP", letzte_wahl_partei_staerke, 0),
@@ -70,7 +70,7 @@ election2023 <- import1 %>%
   ) %>%
   select(-partynameDE , -partynameFR, -partei_staerke, -letzte_wahl_partei_staerke) %>%
   group_by(municipality, municipalityId) %>% 
-  dplyr::summarize(across(CSP:Uebrige_19, ~ sum(.x, na.rm = TRUE)), .groups = "drop") %>% 
+  dplyr::summarize(across(CSP_23:Uebrige_19, ~ sum(.x, na.rm = TRUE)), .groups = "drop") %>% 
   arrange(municipalityId) 
 
 election2023 <- election2023 %>%

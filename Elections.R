@@ -11,6 +11,10 @@ import1 <- read.csv("sd-t-17.02-NRW2023-parteien-appendix.csv",
 import2 <- read_excel("px-x-0102010000_104_20250127-155044.xlsx", 
                       skip = 2)
 
+import3 <- read_excel("su-e-40.02.15.08.05-2022.xlsx", skip = 4) %>%
+  select(districtId = 1, Kanton = 2, districtName = 3, edupop_num = 4, edulow_num = 6, edusec_num = 8, eduter_num = 10)
+import3
+
 import4 <- read_excel("px-x-0102020000_201_20250129-134648.xlsx", 
                       skip = 2, 
                       col_names = FALSE)  
@@ -101,12 +105,27 @@ swisspop <- swisspop %>%
   filter(nchar(municipalityId) == 4 & municipalityId != "8001") %>%
   mutate(
     nswisspop_num = population - swisspop_num,
-    nswisspop_perc = round((nswisspop_num / population) * 100, 2)
+    nswisspop_pct = round((nswisspop_num / population) * 100, 2)
   )
 swisspop
 
 ### DATASET 3: Education TBD
 
+
+education <- import3 %>%
+  mutate(
+    edupop_num = as.numeric(edupop_num),
+    edulow_num = as.numeric(edulow_num),
+    edusec_num = as.numeric(edusec_num),
+    eduter_num = as.numeric(eduter_num)
+  ) %>%
+  mutate(
+    edulow_pct = (edulow_num / edupop_num) * 100,
+    edusec_pct = (edusec_num / edupop_num) * 100,
+    eduter_pct = (eduter_num / edupop_num) * 100
+  )
+
+education
 
 ### DATASET 4: Citizenship aquisition
 
@@ -139,13 +158,14 @@ municipaldata <- import5 %>%
 
 municipaldata <- municipaldata %>%
   mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
-
+municipaldata
 ### JOINING THE DATASETS
 
 combined_data <- election2023 %>%
-  left_join(swisspop %>% select(municipalityId, municipalityId, population, swisspop_num, nswisspop_num, nswisspop_perc), by = "municipalityId") %>%
+  left_join(swisspop %>% select(municipalityId, municipalityId, population, swisspop_num, nswisspop_num, nswisspop_pct), by = "municipalityId") %>%
   left_join(citizenship %>% select(municipalityId, naturalization_num), by = "municipalityId") %>%
-  left_join(municipaldata %>% select(municipalityId, Kanton, districtId, districtName), by = "municipalityId")
+  left_join(municipaldata %>% select(municipalityId, Kanton, districtId, districtName), by = "municipalityId") %>%
+  left_join(education %>% select(districtId, edupop_num, edulow_num, edusec_num, eduter_num, edulow_pct, edusec_pct, eduter_pct), by = "districtId")
 
 combined_data
 

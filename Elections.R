@@ -7,7 +7,6 @@ library(stringr)
 import1 <- read.csv("sd-t-17.02-NRW2023-parteien-appendix.csv",
                    header = TRUE,
                    sep = ";")
-import1
 
 import2 <- read_excel("px-x-0102010000_104_20250127-155044.xlsx", 
                       skip = 2)
@@ -90,19 +89,19 @@ swisspop <- swisspop %>%
   summarise(
     municipalityId = first(c),
     population = sum(as.numeric(i), na.rm = TRUE), 
-    swiss_population = paste(j, collapse = " ")  
+    swisspop_num = paste(j, collapse = " ")  
   ) %>%
   ungroup() %>%
   select(-row_group) %>%
-  mutate(swiss_population = sapply(strsplit(swiss_population, " "), function(x) {
+  mutate(swisspop_num = sapply(strsplit(swisspop_num, " "), function(x) {
     nums <- gsub("[^0-9.]", "", x)
     first_num <- nums[nums != ""][1]
     as.numeric(first_num)
   })) %>%
   filter(nchar(municipalityId) == 4 & municipalityId != "8001") %>%
   mutate(
-    non_swiss_population = population - swiss_population,
-    percentage_non_swiss_pop = round((non_swiss_population / population) * 100, 2)
+    nswisspop_num = population - swisspop_num,
+    nswisspop_perc = round((nswisspop_num / population) * 100, 2)
   )
 swisspop
 
@@ -112,7 +111,7 @@ swisspop
 import4 <- import4[, !is.na(colnames(import4))]
 import4 <- import4[, 1:5]
 column_names <- c(
-  "ID", "municipalityId", "citizenship", "sex", "Acquisition_of_Swiss_citizenship"
+  "ID", "municipalityId", "citizenship", "sex", "Naturalization_num"
 )
 
 colnames(import4) <- column_names
@@ -142,8 +141,8 @@ municipaldata <- municipaldata %>%
 ### JOINING THE DATASETS
 
 combined_data <- election2023 %>%
-  left_join(swisspop %>% select(municipalityId, municipalityId, population, swiss_population, non_swiss_population, percentage_non_swiss_pop), by = "municipalityId") %>%
-  left_join(citizenship %>% select(municipalityId, Acquisition_of_Swiss_citizenship), by = "municipalityId") %>%
+  left_join(swisspop %>% select(municipalityId, municipalityId, population, swisspop_num, nswisspop_num, nswisspop_perc), by = "municipalityId") %>%
+  left_join(citizenship %>% select(municipalityId, Naturalization_num), by = "municipalityId") %>%
   left_join(municipaldata %>% select(municipalityId, Kanton, districtId, districtName), by = "municipalityId")
 
 combined_data

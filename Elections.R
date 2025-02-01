@@ -4,26 +4,26 @@ library(stringr)
 
 ### IMPORTING THE DATASETS
 
-import1 <- read.csv("sd-t-17.02-NRW2023-parteien-appendix.csv",
-                   header = TRUE,
+import1 <- read.csv("Data/sd-t-17.02-NRW2023-parteien-appendix.csv",
+                  header = TRUE,
                    sep = ";")
 
-import2 <- read_excel("px-x-0102010000_104_20250127-155044.xlsx", 
+import2 <- read_excel("Data/px-x-0102010000_104_20250127-155044.xlsx", 
                       skip = 2)
 
-import3 <- read_excel("su-e-40.02.15.08.05-2022.xlsx", skip = 4)
+import3 <- read_excel("Data/su-e-40.02.15.08.05-2022.xlsx", skip = 4)
 
-import4 <- read_excel("px-x-0102020000_201_20250129-134648.xlsx", 
+import4 <- read_excel("Data/px-x-0102020000_201_20250129-134648.xlsx", 
                       skip = 2, 
                       col_names = FALSE)  
 
-import5 <- read_excel("su-d-01.02.03.06.xlsx", 
+import5 <- read_excel("Data/su-d-01.02.03.06.xlsx", 
                       skip = 5, 
                       col_names = FALSE)  
 
 # import 6: wealth / income metric TBD
 
-import7 <- read_excel("Gemeindestand.xlsx")  
+import7 <- read_excel("Data/Gemeindestand.xlsx")  
 
 
 ### DATASET 1: Election Results 2023

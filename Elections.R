@@ -210,10 +210,10 @@ combined_data
 
 ## SAVE COMBINED DATA IN DATATABLE AS CSV
 
-if (file.exists("datatable.csv")) {
-  file.remove("datatable.csv")
+if (file.exists("Data/datatable.csv")) {
+  file.remove("Data/datatable.csv")
 }
-write.csv(combined_data, "datatable.csv", row.names = FALSE)
+write.csv(combined_data, "Data/datatable.csv", row.names = FALSE)
 
 
 

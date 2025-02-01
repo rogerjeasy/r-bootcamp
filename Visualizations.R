@@ -12,8 +12,8 @@ setwd("C:/Users/rogej/Documents/hslu/courses/bootcamp/r-bootcamp")
 getwd()
 
 
-election_map <- read_csv("datatable.csv")
-party_colors <- read_csv("party_colors.csv")
+election_map <- read_csv("Data/datatable.csv")
+party_colors <- read_csv("Data/party_colors.csv")
 View(party_colors)
 
 swiss_cantons <- election_map %>%
@@ -66,46 +66,6 @@ ggplot(canton_totals, aes(x = Kanton, y = Percentage, fill = Party)) +
   ) +
   guides(fill = guide_legend(nrow = 2, byrow = TRUE))
 
-
-
-#install.packages("devtools")
-#devtools::install_github("ropensci/rnaturalearthhires")
-
-
-# Load Switzerland canton boundaries (GeoJSON format)
-swiss_cantons_map <- ne_states(country = "Switzerland", returnclass = "sf")
-
-# Merge election results with the map data
-swiss_cantons_map <- swiss_cantons_map %>%
-  mutate(
-    code_hasc = sub("CH\\.", "", code_hasc),
-    Kanton = code_hasc  
-  ) 
-
-# Now perform the join using the extracted canton code
-canton_results_map <- swiss_cantons_map %>%
-  left_join(canton_totals, by = "Kanton")
-
-View(canton_results_map)
-
-leaflet(canton_results_map) %>%
-  addTiles() %>%
-  addPolygons(
-    fillColor = ~colorQuantile("YlOrRd", Percentage)(Percentage),  # Color by percentage
-    weight = 1,
-    opacity = 1,
-    color = "white",
-    fillOpacity = 0.7,
-    highlight = highlightOptions(weight = 3, color = "#666", fillOpacity = 0.9),
-    label = ~paste0(name, ": ", round(Percentage, 1), "%"),
-    popup = ~paste0("<b>", name, "</b><br>Percentage: ", round(Percentage, 1), "%")
-  ) %>%
-  addLegend(pal = colorQuantile("YlOrRd", canton_totals$Percentage), 
-            values = canton_totals$Percentage,
-            title = "Vote Percentage",
-            position = "bottomright")
-
-
 # canton borders
 canton_geo <- read_sf("Shapefiles/g2k23.shp")
 
@@ -116,19 +76,7 @@ country_geo <- read_sf("Shapefiles/g2l23.shp")
 lake_geo <- read_sf("Shapefiles/g2s23.shp")
 
 # read productive area (2324 municipalities)
-municipality_prod_geo <- read_sf("Shapefiles/gde-1-1-15.shp")
-
-relief <- raster("Shapefiles/02-relief-ascii.asc") %>%
-  # hide relief outside of Switzerland by masking with country borders
-  mask(country_geo) %>%
-  as("SpatialPixelsDataFrame") %>%
-  as.data.frame() %>%
-  rename(value = `X02.relief.ascii`)
-
-# clean up
-rm(country_geo)
-
-library(terra)
+municipality_prod_geo <- read_sf("Shapefiles/gde-1-1-23.shp")
 
 # Load the relief raster
 relief <- raster("Shapefiles/02-relief-ascii.asc")

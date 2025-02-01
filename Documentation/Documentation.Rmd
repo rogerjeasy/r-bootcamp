@@ -3,10 +3,8 @@ title: "Mapping Demographic Composition as a Predictor of Far-Right Success in t
 author: 'Bavibidila, R., Jevdenic, R.'
 output:
   pdf_document:
-    toc: true
     number_sections: true
   html_document:
-    toc: true
     df_print: paged
 bibliography: references.bib
 csl: apa-6th-edition.csl
@@ -14,13 +12,35 @@ fontsize: 11pt
 linestretch: 1.3
 subtitle: "Exploring Interactions between Anti-Migration Sentiment and Ethnocultural Diversity"
 ---
+```{=latex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{title.png}
+\end{figure}
 
+
+
+\begin{tabular}{ll}
+Course   & R Bootcamp \\
+Semester & Fall 2024/25
+\end{tabular}
+```
+
+\pagenumbering{gobble}
+\pagebreak
+\pagenumbering{Roman} 
+ 
+**Abstract**
+  
+Lorem Ipsum....
+ 
+\pagebreak 
 ```{=latex}
 \tableofcontents
 ```
 
 \pagebreak
-
+\pagenumbering{arabic} 
 # Introduction
 
 Rade: TBD.

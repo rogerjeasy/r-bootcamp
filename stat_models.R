@@ -46,12 +46,12 @@ wtd_cor_by_canton <- split_data %>%
 
 names(wtd_cor_by_canton) <- map_chr(split_data, ~ unique(.x$Kanton))
 
-# Print results
+# Correlations per canton but every municipality = 1 unit (non-adjusted)
 cor_result
-print(wtd_cor_result)
-
-# Sort correlations by canton name
 print(cor_by_canton[order(names(cor_by_canton))])
+
+# Correlations per canton but adjusted for population
+print(wtd_cor_result)
 print(wtd_cor_by_canton[order(names(wtd_cor_by_canton))])
 
 

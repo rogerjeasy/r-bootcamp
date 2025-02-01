@@ -6,9 +6,7 @@ library(tidyterra)
 library(osmdata)
 library(readr)
 library(tidyr)
-library(rnaturalearth)
-library(rnaturalearthdata)
-library(leaflet)
+library(raster)
 
 setwd("C:/Users/rogej/Documents/hslu/courses/bootcamp/r-bootcamp")
 getwd()
@@ -89,3 +87,65 @@ canton_results_map <- swiss_cantons_map %>%
   left_join(canton_totals, by = "Kanton")
 
 View(canton_results_map)
+
+leaflet(canton_results_map) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~colorQuantile("YlOrRd", Percentage)(Percentage),  # Color by percentage
+    weight = 1,
+    opacity = 1,
+    color = "white",
+    fillOpacity = 0.7,
+    highlight = highlightOptions(weight = 3, color = "#666", fillOpacity = 0.9),
+    label = ~paste0(name, ": ", round(Percentage, 1), "%"),
+    popup = ~paste0("<b>", name, "</b><br>Percentage: ", round(Percentage, 1), "%")
+  ) %>%
+  addLegend(pal = colorQuantile("YlOrRd", canton_totals$Percentage), 
+            values = canton_totals$Percentage,
+            title = "Vote Percentage",
+            position = "bottomright")
+
+
+# canton borders
+canton_geo <- read_sf("Shapefiles/g2k23.shp")
+
+# read country borders
+country_geo <- read_sf("Shapefiles/g2l23.shp")
+
+# read lakes
+lake_geo <- read_sf("Shapefiles/g2s23.shp")
+
+# read productive area (2324 municipalities)
+municipality_prod_geo <- read_sf("Shapefiles/gde-1-1-15.shp")
+
+relief <- raster("Shapefiles/02-relief-ascii.asc") %>%
+  # hide relief outside of Switzerland by masking with country borders
+  mask(country_geo) %>%
+  as("SpatialPixelsDataFrame") %>%
+  as.data.frame() %>%
+  rename(value = `X02.relief.ascii`)
+
+# clean up
+rm(country_geo)
+
+library(terra)
+
+# Load the relief raster
+relief <- raster("Shapefiles/02-relief-ascii.asc")
+
+# Check and reproject country borders if necessary
+if (crs(relief) != st_crs(country_geo)) {
+  country_geo <- st_transform(country_geo, crs(relief))
+}
+
+# Crop and mask the relief raster
+cropped_relief <- crop(relief, country_geo)
+masked_relief <- mask(cropped_relief, country_geo)
+
+# Convert to SpatialPixelsDataFrame and then to a data frame
+relief_df <- as(masked_relief, "SpatialPixelsDataFrame") %>%
+  as.data.frame() %>%
+  rename(value = `X02.relief.ascii`)
+
+# Clean up
+rm(country_geo)

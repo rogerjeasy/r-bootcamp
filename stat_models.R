@@ -2,19 +2,19 @@ library(dplyr)
 library(purrr)
 library(Hmisc)
 
-data <- read.csv("datatable.csv", stringsAsFactors = FALSE)
+data <- read.csv("Data/datatable.csv", stringsAsFactors = FALSE)
 data <- data %>% filter(!is.na(Kanton))
 
 ## Basic Correlation 
-cor_result <- cor(data$SVP_result, data$percentage_non_swiss_pop, use = "complete.obs", method = "pearson")
+cor_result <- cor(data$SVP_23, data$nswisspop_pct, use = "complete.obs", method = "pearson")
 
 ## Weighted Correlation 
 library(weights)
-wtd_cor_result <- wtd.cor(data$SVP_result, data$percentage_non_swiss_pop, weight = data$population)
+wtd_cor_result <- wtd.cor(data$SVP_23, data$nswisspop_pct, weight = data$swisspop_num)
 
 ## Basic Correlation per canton
 get_correlation <- function(df) {
-  cor(df$SVP_result, df$percentage_non_swiss_pop, use = "pairwise.complete.obs")
+  cor(df$SVP_23, df$nswisspop_pct, use = "pairwise.complete.obs")
 }
 
 cor_by_canton <- data %>%
@@ -28,7 +28,7 @@ names(cor_by_canton) <- unique(data$Kanton)
 
 get_wtd_correlation <- function(df) {
   wtd_cor_result <- tryCatch(
-    wtd.cor(df$SVP_result, df$percentage_non_swiss_pop, weight = df$population),
+    wtd.cor(df$SVP_23, df$nswisspop_pct, weight = df$swisspop_num),
     error = function(e) return(NA_real_)
   )
   

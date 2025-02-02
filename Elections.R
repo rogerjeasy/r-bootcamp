@@ -34,7 +34,7 @@ election2023 <- import1 %>%
          letzte_wahl_partei_staerke,
          partei_bezeichnung_de,
          partei_bezeichnung_fr) %>%   
-  filter(!is.na(gemeinde_nummer) & gemeinde_nummer != "") %>% 
+  filter(!is.na(gemeinde_nummer) & gemeinde_nummer != "" & nchar(gemeinde_nummer) < 5) %>% 
   mutate(partei_staerke = round(partei_staerke, 0),
          letzte_wahl_partei_staerke = round(letzte_wahl_partei_staerke, 0)) %>%
   rename(partynameDE = partei_bezeichnung_de,  
@@ -132,6 +132,8 @@ education <- education %>%
     eduter_pct = round((eduter_num / edupop_num) * 100, 0)
   )
 
+
+
 # edulow = low education (compulsory school)
 # edusec = secondary education (professional college)
 # eduter = tertiary education (unviersity education)
@@ -206,7 +208,12 @@ combined_data <- election2023 %>%
   left_join(education %>% select(districtId, edupop_num, edulow_num, edusec_num, eduter_num, edulow_pct, edusec_pct, eduter_pct), by = "districtId") %>%
   left_join(age %>% select(municipalityId, agepop_num, age2065_num, age66plus_num, agequota_pct), by = "municipalityId") 
 
-combined_data
+combined_data <- combined_data %>%
+  filter(nchar(municipalityId) == 4,
+         !is.na(districtId),  # Remove rows where districtId is NA
+         districtId != "" 
+         )
+
 
 ## SAVE COMBINED DATA IN DATATABLE AS CSV
 

@@ -35,6 +35,8 @@ To be clarified:
                 -   Map of Cantons
                 -   Map of Municipalities
             -   Attention: Partys are color-coded (see <https://www.elections.admin.ch/en/ch/>)
+            -   Parties should be **in order of political position** (left to right):\
+                PdA_Sol, GRUENE, SP, GLP, CSP, Mitte, EVP, FDP, EDU, LEGA, MCR, SVP
         -   Bar Diagram: Plotting Results in all cantons (see austrian example: <https://wetteraukreis.de/fileadmin/6_Wetterau/Portraet/Statistik/Wahlergebnisse_BTW_21_Gemeinden.jpg>)
     -   Nice-To-Haves
         -   Correlation Migrants vs. SVP Election Result:

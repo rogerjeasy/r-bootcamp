@@ -55,3 +55,12 @@ print(wtd_cor_result)
 print(wtd_cor_by_canton[order(names(wtd_cor_by_canton))])
 
 
+head(data)
+
+model <- lm(SVP_23 ~ incomePerCapita + agequota_pct + edulow_pct + nswisspop_pct, 
+            data = data, 
+            weights = population)
+
+anova_result <- anova(model)
+summary(model)
+print(anova_result)

@@ -1,5 +1,6 @@
 library(readxl)
 library(dplyr)
+library(readr)
 library(stringr)
 
 ### IMPORTING THE DATASETS
@@ -21,20 +22,22 @@ import5 <- read_excel("Data/su-d-01.02.03.06.xlsx",
                       skip = 5, 
                       col_names = FALSE)  
 
-# import 6: wealth / income metric TBD
+import6 <- read_excel("Data/27600_131.xlsx", 
+                      skip = 6, 
+                      col_names = FALSE)  
 
 import7 <- read_excel("Data/Gemeindestand.xlsx")  
 
 
 ### DATASET 1: Election Results 2023
 election2023 <- import1 %>%
-  select(gemeinde_bezeichnung,
+  dplyr::select(gemeinde_bezeichnung,
          gemeinde_nummer,
          partei_staerke,
          letzte_wahl_partei_staerke,
          partei_bezeichnung_de,
          partei_bezeichnung_fr) %>%   
-  filter(!is.na(gemeinde_nummer) & gemeinde_nummer != "") %>% 
+  filter(!is.na(gemeinde_nummer) & gemeinde_nummer != "" & nchar(gemeinde_nummer) < 5) %>% 
   mutate(partei_staerke = round(partei_staerke, 0),
          letzte_wahl_partei_staerke = round(letzte_wahl_partei_staerke, 0)) %>%
   rename(partynameDE = partei_bezeichnung_de,  
@@ -75,7 +78,7 @@ election2023 <- import1 %>%
     SVP_19 = ifelse(partynameDE == "SVP", letzte_wahl_partei_staerke, 0),
     Uebrige_19 = ifelse(partynameDE == "Übrige", letzte_wahl_partei_staerke, 0)
   ) %>%
-  select(-partynameDE , -partynameFR, -partei_staerke, -letzte_wahl_partei_staerke) %>%
+  dplyr::select(-partynameDE , -partynameFR, -partei_staerke, -letzte_wahl_partei_staerke) %>%
   group_by(municipality, municipalityId) %>% 
   dplyr::summarize(across(CSP_23:Uebrige_19, ~ sum(.x, na.rm = TRUE)), .groups = "drop") %>% 
   arrange(municipalityId) 
@@ -89,7 +92,7 @@ election2023
 ### DATASET 2: Population Numbers (Swiss vs. Non-Swiss Population)
 
 swisspop <- import2 %>%
-  select(c = 3, i = 9, j = 10) 
+  dplyr::select(c = 3, i = 9, j = 10) 
 
 swisspop <- swisspop %>%
   mutate(row_group = rep(1:(n() / 2), each = 2, length.out = n())) %>%  
@@ -100,7 +103,7 @@ swisspop <- swisspop %>%
     swisspop_num = paste(j, collapse = " ")  
   ) %>%
   ungroup() %>%
-  select(-row_group) %>%
+  dplyr::select(-row_group) %>%
   mutate(swisspop_num = sapply(strsplit(swisspop_num, " "), function(x) {
     nums <- gsub("[^0-9.]", "", x)
     first_num <- nums[nums != ""][1]
@@ -117,14 +120,14 @@ swisspop
 
 
 education <- import3 %>%
-  select(districtId = 1, Kanton = 2, districtName = 3, edupop_num = 4, edulow_num = 6, edusec_num = 8, eduter_num = 10)
+  dplyr::select(districtId = 1, Kanton = 2, districtName = 3, edupop_num = 4, edulow_num = 6, edusec_num = 8, eduter_num = 10)
 
 education <- education %>%
   mutate(
-    edupop_num = as.numeric(edupop_num),
-    edulow_num = as.numeric(edulow_num),
-    edusec_num = as.numeric(edusec_num),
-    eduter_num = as.numeric(eduter_num)
+    edupop_num = round(as.numeric(edupop_num)),
+    edulow_num = round(as.numeric(edulow_num)),
+    edusec_num = round(as.numeric(edusec_num)),
+    eduter_num = round(as.numeric(eduter_num))
   ) %>%
   mutate(
     edulow_pct = round((edulow_num / edupop_num) * 100, 0),
@@ -147,7 +150,7 @@ column_names <- c(
 colnames(import4) <- column_names
 
 citizenship <- import4 %>%
-  select(-ID, -citizenship, -sex) %>%
+  dplyr::select(-ID, -citizenship, -sex) %>%
   filter(grepl("^\\.\\.\\.\\.\\.\\.", municipalityId)) %>%
   mutate(
     municipalityId = substr(municipalityId, 7, 10)
@@ -163,31 +166,41 @@ age <- import5 %>%
   mutate(
     municipalityId = substr(municipality_info, 7, 10) # Extract only municipality ID
   ) %>%
-  select(
+  dplyr::select(
     municipalityId, 
     agepop_num = 2, 
     everything() # Keep all other columns
   ) %>%
   mutate(
-    age2065_num = rowSums(select(., 23:68), na.rm = TRUE),
-    age66plus_num = rowSums(select(., 69:103), na.rm = TRUE)
+    age2065_num = rowSums(dplyr::select(., 23:68), na.rm = TRUE),
+    age66plus_num = rowSums(dplyr::select(., 69:103), na.rm = TRUE)
   ) %>%
   mutate(
     agequota_pct = round((age66plus_num / age2065_num) * 100, 2) # Percentage calculation
   ) %>%
-  select(municipalityId, agepop_num, age2065_num, age66plus_num, agequota_pct)  # Keep only relevant columns
+  dplyr::select(municipalityId, agepop_num, age2065_num, age66plus_num, agequota_pct)  # Keep only relevant columns
 
 age
 
 ### DATASET 6: some income or wealth metric 
 
-# TBD
+income <- import6[, 1:4]
+column_names_inc <- c("municipalityId", "municipalityName", "incomePerCommune", "incomePerCapita")
+colnames(income) <- column_names_inc
 
+income <- income %>%
+  mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
+
+income <- income %>%
+  mutate(incomePerCapita = round(as.numeric(incomePerCapita))) %>%
+  dplyr::select(municipalityId, incomePerCapita)
+
+income
 
 ### DATASET 7: Overview of Municipality, Distric, Canton for improved matching
 
 municipaldata <- import7 %>%
-  select("Kanton",	"Bezirks-nummer",	"Bezirksname",	"BFS Gde-nummer",	"Gemeindename") %>%   
+  dplyr::select("Kanton",	"Bezirks-nummer",	"Bezirksname",	"BFS Gde-nummer",	"Gemeindename") %>%   
   rename(districtId = "Bezirks-nummer")    %>%  
   rename(districtName = "Bezirksname")    %>%  
   rename(municipality = "Gemeindename")    %>%  
@@ -200,13 +213,20 @@ municipaldata
 ### JOINING THE DATASETS
 
 combined_data <- election2023 %>%
-  left_join(swisspop %>% select(municipalityId, municipalityId, population, swisspop_num, nswisspop_num, nswisspop_pct), by = "municipalityId") %>%
-  left_join(citizenship %>% select(municipalityId, naturalization_num), by = "municipalityId") %>%
-  left_join(municipaldata %>% select(municipalityId, Kanton, districtId, districtName), by = "municipalityId") %>%
-  left_join(education %>% select(districtId, edupop_num, edulow_num, edusec_num, eduter_num, edulow_pct, edusec_pct, eduter_pct), by = "districtId") %>%
-  left_join(age %>% select(municipalityId, agepop_num, age2065_num, age66plus_num, agequota_pct), by = "municipalityId") 
+  left_join(swisspop %>% dplyr::select(municipalityId, municipalityId, population, swisspop_num, nswisspop_num, nswisspop_pct), by = "municipalityId") %>%
+  left_join(citizenship %>% dplyr::select(municipalityId, naturalization_num), by = "municipalityId") %>%
+  left_join(municipaldata %>% dplyr::select(municipalityId, Kanton, districtId, districtName), by = "municipalityId") %>%
+  left_join(education %>% dplyr::select(districtId, edupop_num, edulow_num, edusec_num, eduter_num, edulow_pct, edusec_pct, eduter_pct), by = "districtId") %>%
+  left_join(age %>% dplyr::select(municipalityId, agepop_num, age2065_num, age66plus_num, agequota_pct), by = "municipalityId") %>%
+  left_join(income %>% dplyr::select(municipalityId, incomePerCapita), by = "municipalityId") 
 
-combined_data
+
+combined_data <- combined_data %>%
+  filter(nchar(municipalityId) == 4,
+         !is.na(districtId),  # Remove rows where districtId is NA
+         districtId != "" 
+         )
+
 
 ## SAVE COMBINED DATA IN DATATABLE AS CSV
 
@@ -214,6 +234,4 @@ if (file.exists("Data/datatable.csv")) {
   file.remove("Data/datatable.csv")
 }
 write.csv(combined_data, "Data/datatable.csv", row.names = FALSE)
-
-
 

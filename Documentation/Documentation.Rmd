@@ -3,10 +3,8 @@ title: "Mapping Demographic Composition as a Predictor of Far-Right Success in t
 author: 'Bavibidila, R., Jevdenic, R.'
 output:
   pdf_document:
-    toc: true
     number_sections: true
   html_document:
-    toc: true
     df_print: paged
 bibliography: references.bib
 csl: apa-6th-edition.csl
@@ -14,13 +12,35 @@ fontsize: 11pt
 linestretch: 1.3
 subtitle: "Exploring Interactions between Anti-Migration Sentiment and Ethnocultural Diversity"
 ---
+```{=latex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{title.png}
+\end{figure}
 
+
+
+\begin{tabular}{ll}
+Course   & R Bootcamp \\
+Semester & Fall 2024/25
+\end{tabular}
+```
+
+\pagenumbering{gobble}
+\pagebreak
+\pagenumbering{Roman} 
+ 
+**Abstract**
+  
+Lorem Ipsum....
+ 
+\pagebreak 
 ```{=latex}
 \tableofcontents
 ```
 
 \pagebreak
-
+\pagenumbering{arabic} 
 # Introduction
 
 Rade: TBD.
@@ -103,6 +123,10 @@ kable(dataset_info, caption = "Overview of Used Datasets")
 
 ```
 
+During prepocessing of data there were minor inconsistencies since the used datasets span from 2019 to 2024 and some smaller municipalities had merged with larger communes during those years. Therefore, some smaller communities can not be represented perfectly in the analysis. In 2020, the former municipalities of Vogorno, Sonogno, Corippo, Brione (Verzasca) and Frasco merged to form the new municipality of Verzasca.  In 2021 many small communes disappeared from the map: Haldenstein (merged into Chur), Bauen (merged into Seedorf), Surpierre (merged into Cheiry), Charrat (merged into Martigny), Montherod (merged into Aubonne), Casti-Wergenstein, Donat, Lohn and Mathon (merged together),Miège, Venthône and Veyras (merged together), municipalities of Gänsbrunnen and Welschenrohr (mmerged together),Obersteckholz (merged into Langenthal), Gettnau (merged into Willisau), Altwis (merged into Hitzkirch), Rohr (merged into Stüsslingen), Bagnes and Vollèges (merged together), Corcelles-Cormondrèche, Peseux and Valangin (merged into Neuchâtel), Les Brenets (merged into Le Locle), Bioley-Orjulaz (merged into Assens), Apples, Cottens, Pampigny, Sévery, Bussy-Chardonney and Reverolle merged into the new municipality of Hautemorges.  In 2022, the following communes were dissolved: Galmiz, Gempenach and Clavaleyres (merged into Murten), Essertes (merged into Oron), Bözen, Effingen, Elfingen and Hornussen (merged together), Bad Zurzach, Baldingen, Böbikon, Kaiserstuhl, Rekingen, Rietheim, Rümikon and Wislikofen (merged into the municipality of Zurzach), Rüte and Schwende (merged together), Blonay and Saint-Légier-La Chiésaz merged together. 2023 saw the dissolution of Herznach and Ueken (merged togehter), La Chaux-des-Breuleux (merged into Le Breleux), Burg (merged into Menziken), Adlikon and Humlikon (merged to form the municipality of Andelfingen (merged together), Hemberg and Oberhelfenschwil merged into the new municipality of Neckertal. In 2021, Lüterswil-Gächliwil merged into Buchegg, Turgi was merged into Baden. Bonfol merged with Beurnevésin, Wangenried merged into Wangen an der Aare. 
+
+Even tough the list of communes seems long, most of these munnicipalities do not affect the outcome of the weighted correlation since their population is in almost all cases below 1000 and in many cases below 100, with Corippo TI having a population of to 9 inhabitants at the time of the merger being the lowest populated commune ever recorded in Switzerland. Therefore these mergers do not affect the outcome of the analysis in any significant way.
+
 \pagebreak
 
 ## Research Process
@@ -112,6 +136,8 @@ kable(dataset_info, caption = "Overview of Used Datasets")
 \pagebreak
 
 ## Statistical Methods
+
+Initially the correlation between migrant population and far-right election success was calculated both weighted and unweighted, meaning each municipality counts as one unit nevertheless of the population size. The unajusted analysis did not produce a significiant correlation, presumebly, because both left-wing votership and migrant populations tend to be concentrated in larger cities and therefore could not be represented in an unweighted statistical design. But when adjusted for population size, there were clear correlations visible.
 
 -   Statistical methods applied (e.g., Correlation, Multiple Linear Regression).
 

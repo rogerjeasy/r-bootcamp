@@ -10,9 +10,6 @@ library(tidyr)
 library(raster)
 library(magrittr)
 
-setwd("C:/Users/rogej/Documents/hslu/courses/bootcamp/r-bootcamp")
-getwd()
-
 
 election_results <- read_csv("Data/datatable.csv")
 View(election_results)

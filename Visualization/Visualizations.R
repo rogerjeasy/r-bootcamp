@@ -7,6 +7,8 @@ library(osmdata)
 library(readr)
 library(tidyr)
 library(raster)
+library(magrittr)
+library(plotly)
 
 setwd("C:/Users/rogej/Documents/hslu/courses/bootcamp/r-bootcamp")
 getwd()
@@ -14,7 +16,7 @@ getwd()
 
 election_map <- read_csv("Data/datatable.csv")
 party_colors <- read_csv("Data/party_colors.csv")
-View(party_colors)
+canton_symbols <- read_csv("Data/kanton_names.csv")
 
 swiss_cantons <- election_map %>%
   distinct(Kanton) %>%  
@@ -30,8 +32,11 @@ canton_totals <- election_map %>%
   group_by(Kanton, Party) %>%
   summarise(Total_Votes = sum(Votes), .groups = "drop") %>%
   group_by(Kanton) %>%
-  mutate(Percentage = (Total_Votes / sum(Total_Votes)) * 100) %>%
+  mutate(Percentage = round((Total_Votes / sum(Total_Votes)) * 100, 2)) %>%
   ungroup()
+
+canton_totals <- canton_totals %>%
+  filter(!is.na(Kanton))
 
 party_colors %>%
   count(Party) %>%
@@ -45,14 +50,16 @@ canton_totals <- canton_totals %>%
   left_join(party_colors, by = "Party")
 
 # Ensure canton order is maintained
-canton_totals$Kanton <- factor(canton_totals$Kanton, levels = swiss_cantons)
-
+canton_totals$Kanton <- factor(canton_totals$Kanton, levels = unique(election_map$Kanton))
 View(canton_totals)
 
 # Create the stacked bar plot
-ggplot(canton_totals, aes(x = Kanton, y = Percentage, fill = Party)) +
+p <- ggplot(canton_totals, aes(x = Kanton, y = Percentage, fill = Party, 
+                               text = paste("Canton:", Kanton,
+                                            "<br>Party:", Party,
+                                            "<br>Percentage:", Percentage, "%"))) +
   geom_bar(stat = "identity") +
-  scale_fill_manual(values = setNames(party_colors$Color, party_colors$Party)) + # Apply correct colors
+  scale_fill_manual(values = setNames(party_colors$Color, party_colors$Party)) +
   labs(
     title = "Results of the 2023 Federal Elections by Canton",
     x = "Cantons",
@@ -66,6 +73,13 @@ ggplot(canton_totals, aes(x = Kanton, y = Percentage, fill = Party)) +
   ) +
   guides(fill = guide_legend(nrow = 2, byrow = TRUE))
 
+# Convert to interactive plot
+interactive_plot <- ggplotly(p, tooltip = "text") %>%
+  layout(legend = list(orientation = "h", y = -0.2))
+
+# Display the interactive plot
+interactive_plot
+
 # canton borders
 canton_geo <- read_sf("Shapefiles/g2k23.shp")
 
@@ -76,7 +90,7 @@ country_geo <- read_sf("Shapefiles/g2l23.shp")
 lake_geo <- read_sf("Shapefiles/g2s23.shp")
 
 # read productive area (2324 municipalities)
-municipality_prod_geo <- read_sf("Shapefiles/gde-1-1-23.shp")
+municipality_prod_geo <- read_sf("Shapefiles/gde-1-1-15.shp")
 
 # Load the relief raster
 relief <- raster("Shapefiles/02-relief-ascii.asc")
@@ -95,5 +109,11 @@ relief_df <- as(masked_relief, "SpatialPixelsDataFrame") %>%
   as.data.frame() %>%
   rename(value = `X02.relief.ascii`)
 
-# Clean up
-rm(country_geo)
+municipality_prod_geo %<>%
+  mutate(BFS_ID = sprintf("%04d", BFS_ID))
+
+municipality_prod_geo %<>%
+  rename(municipalityId = BFS_ID)
+
+municipality_prod_geo %<>%
+  left_join(election_map, by = "municipalityId")

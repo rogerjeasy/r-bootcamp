@@ -88,32 +88,3 @@ country_geo <- read_sf("Shapefiles/g2l23.shp")
 
 # read lakes
 lake_geo <- read_sf("Shapefiles/g2s23.shp")
-
-# read productive area (2324 municipalities)
-municipality_prod_geo <- read_sf("Shapefiles/gde-1-1-15.shp")
-
-# Load the relief raster
-relief <- raster("Shapefiles/02-relief-ascii.asc")
-
-# Check and reproject country borders if necessary
-if (crs(relief) != st_crs(country_geo)) {
-  country_geo <- st_transform(country_geo, crs(relief))
-}
-
-# Crop and mask the relief raster
-cropped_relief <- crop(relief, country_geo)
-masked_relief <- mask(cropped_relief, country_geo)
-
-# Convert to SpatialPixelsDataFrame and then to a data frame
-relief_df <- as(masked_relief, "SpatialPixelsDataFrame") %>%
-  as.data.frame() %>%
-  rename(value = `X02.relief.ascii`)
-
-municipality_prod_geo %<>%
-  mutate(BFS_ID = sprintf("%04d", BFS_ID))
-
-municipality_prod_geo %<>%
-  rename(municipalityId = BFS_ID)
-
-municipality_prod_geo %<>%
-  left_join(election_map, by = "municipalityId")

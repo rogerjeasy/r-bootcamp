@@ -5,29 +5,27 @@ library(stringr)
 
 ### IMPORTING THE DATASETS
 
-import1 <- read.csv("Data/sd-t-17.02-NRW2023-parteien-appendix.csv",
-                  header = TRUE,
-                   sep = ";")
+import_data <- function(file_path, skip = 0, col_names = TRUE, sep = ";") {
+  if (grepl("\\.csv$", file_path)) {
+    return(read.csv(file_path, header = TRUE, sep = sep))
+  } else if (grepl("\\.xlsx$", file_path)) {
+    return(read_excel(file_path, skip = skip, col_names = col_names))
+  } else {
+    stop("Unsupported file format: ", file_path)
+  }
+}
+ files <- list(
+  list("Data/sd-t-17.02-NRW2023-parteien-appendix.csv", 0, TRUE, ";"),
+  list("Data/px-x-0102010000_104_20250127-155044.xlsx", 2, TRUE),
+  list("Data/su-e-40.02.15.08.05-2022.xlsx", 4, TRUE),
+  list("Data/px-x-0102020000_201_20250129-134648.xlsx", 2, FALSE),
+  list("Data/su-d-01.02.03.06.xlsx", 5, FALSE),
+  list("Data/27600_131.xlsx", 6, FALSE),
+  list("Data/Gemeindestand.xlsx", 0, TRUE)
+)
 
-import2 <- read_excel("Data/px-x-0102010000_104_20250127-155044.xlsx", 
-                      skip = 2)
-
-import3 <- read_excel("Data/su-e-40.02.15.08.05-2022.xlsx", skip = 4)
-
-import4 <- read_excel("Data/px-x-0102020000_201_20250129-134648.xlsx", 
-                      skip = 2, 
-                      col_names = FALSE)  
-
-import5 <- read_excel("Data/su-d-01.02.03.06.xlsx", 
-                      skip = 5, 
-                      col_names = FALSE)  
-
-import6 <- read_excel("Data/27600_131.xlsx", 
-                      skip = 6, 
-                      col_names = FALSE)  
-
-import7 <- read_excel("Data/Gemeindestand.xlsx")  
-
+imported_data <- lapply(files, function(f) import_data(f[[1]], f[[2]], f[[3]]))
+names(imported_data) <- paste0("import", 1:length(files))
 
 ### DATASET 1: Election Results 2023
 election2023 <- import1 %>%

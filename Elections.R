@@ -84,9 +84,6 @@ election2023 <- import1 %>%
 election2023 <- election2023 %>%
   mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
 
-election2023
-
-
 ### DATASET 2: Population Numbers (Swiss vs. Non-Swiss Population)
 
 swisspop <- import2 %>%
@@ -115,7 +112,6 @@ swisspop <- swisspop %>%
 swisspop
 
 ### DATASET 3: Education 
-
 
 education <- import3 %>%
   dplyr::select(districtId = 1, Kanton = 2, districtName = 3, edupop_num = 4, edulow_num = 6, edusec_num = 8, eduter_num = 10)
@@ -178,8 +174,6 @@ age <- import5 %>%
   ) %>%
   dplyr::select(municipalityId, agepop_num, age2065_num, age66plus_num, agequota_pct)  # Keep only relevant columns
 
-age
-
 ### DATASET 6: some income or wealth metric 
 
 income <- import6[, 1:4]
@@ -193,8 +187,6 @@ income <- income %>%
   mutate(incomePerCapita = round(as.numeric(incomePerCapita))) %>%
   dplyr::select(municipalityId, incomePerCapita)
 
-income
-
 ### DATASET 7: Overview of Municipality, Distric, Canton for improved matching
 
 municipaldata <- import7 %>%
@@ -206,7 +198,6 @@ municipaldata <- import7 %>%
 
 municipaldata <- municipaldata %>%
   mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
-municipaldata
 
 ### JOINING THE DATASETS
 
@@ -218,13 +209,11 @@ combined_data <- election2023 %>%
   left_join(age %>% dplyr::select(municipalityId, agepop_num, age2065_num, age66plus_num, agequota_pct), by = "municipalityId") %>%
   left_join(income %>% dplyr::select(municipalityId, incomePerCapita), by = "municipalityId") 
 
-
 combined_data <- combined_data %>%
   filter(nchar(municipalityId) == 4,
          !is.na(districtId),  # Remove rows where districtId is NA
          districtId != "" 
          )
-
 
 ## SAVE COMBINED DATA IN DATATABLE AS CSV
 

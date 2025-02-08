@@ -18,7 +18,6 @@ election_map <- read_csv("Data/datatable.csv")
 party_colors <- read_csv("Data/party_colors.csv")
 canton_symbols <- read_csv("Data/kanton_names.csv")
 
-
 swiss_cantons <- election_map %>%
   distinct(Kanton) %>%  
   filter(!is.na(Kanton)) %>%  
@@ -29,13 +28,12 @@ party_cols <- names(election_map)[which(names(election_map) == "CSP_23"):which(n
 
 canton_totals <- election_map %>%
   pivot_longer(cols = all_of(party_cols), names_to = "Party", values_to = "Vote_Percentage") %>%
-  mutate(Actual_Votes = (Vote_Percentage / 100) * vote_num) %>%  # Convert percentage to actual votes
+  mutate(Actual_Votes = (Vote_Percentage / 100) * vote_num) %>%  
   group_by(Kanton, Party) %>%
-  summarise(Total_Votes = sum(Actual_Votes, na.rm = TRUE), .groups = "drop") %>%  # Sum real votes at canton level
+  summarise(Total_Votes = sum(Actual_Votes, na.rm = TRUE), .groups = "drop") %>%  
   group_by(Kanton) %>%
-  mutate(Percentage = round((Total_Votes / sum(Total_Votes)) * 100, 2)) %>%  # Recalculate percentages at canton level
+  mutate(Percentage = round((Total_Votes / sum(Total_Votes)) * 100, 2)) %>% 
   ungroup()
-
 
 canton_totals <- canton_totals %>%
   filter(!is.na(Kanton))
@@ -51,9 +49,12 @@ canton_totals <- canton_totals %>%
   mutate(Party = gsub("_23$", "", Party)) %>%  # Remove suffix "_23"
   left_join(party_colors, by = "Party")
 
-# Ensure canton order is maintained
-canton_totals$Kanton <- factor(canton_totals$Kanton, levels = unique(election_map$Kanton))
-View(canton_totals)
+# Define party order explicitly
+party_order <- c("PdA_Sol", "GRUENE", "SP", "GLP", "CSP", 
+                 "Mitte", "EVP", "FDP", "EDU", "LEGA", "MCR", "SVP")
+
+# Convert Party column to factor with correct order
+canton_totals$Party <- factor(canton_totals$Party, levels = party_order)
 
 # Create the stacked bar plot
 p <- ggplot(canton_totals, aes(x = Kanton, y = Percentage, fill = Party, 
@@ -81,6 +82,7 @@ interactive_plot <- ggplotly(p, tooltip = "text") %>%
 
 # Display the interactive plot
 interactive_plot
+
 
 # canton borders
 canton_geo <- read_sf("Shapefiles/g2k23.shp")

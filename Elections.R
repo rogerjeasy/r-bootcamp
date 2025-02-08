@@ -21,7 +21,8 @@ import_data <- function(file_path, skip = 0, col_names = TRUE, sep = ";") {
   list("Data/px-x-0102020000_201_20250129-134648.xlsx", 2, FALSE),
   list("Data/su-d-01.02.03.06.xlsx", 5, FALSE),
   list("Data/27600_131.xlsx", 6, FALSE),
-  list("Data/Gemeindestand.xlsx", 0, TRUE)
+  list("Data/Gemeindestand.xlsx", 0, TRUE),
+  list("Data/sd-t-17.02-NRW2023-wahlbeteiligung-appendix.csv",0, TRUE, ";")
 )
 
 imported_data <- lapply(files, function(f) import_data(f[[1]], f[[2]], f[[3]]))
@@ -80,7 +81,7 @@ election2023 <- import1 %>%
   group_by(municipality, municipalityId) %>% 
   dplyr::summarize(across(CSP_23:Uebrige_19, ~ sum(.x, na.rm = TRUE)), .groups = "drop") %>% 
   arrange(municipalityId) 
-
+ 
 election2023 <- election2023 %>%
   mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
 
@@ -199,6 +200,19 @@ municipaldata <- import7 %>%
 municipaldata <- municipaldata %>%
   mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
 
+### DATASET 8: Total voter num
+votenums <- imported_data[[8]] %>%
+  dplyr::select(
+    municipalityId = gemeinde_nummer,   # Rename gemeinde_nummer to municipalityId
+    vote_num = gueltige_wahlzettel     # Rename gueltige_wahlzettel to vote_num
+  ) %>%
+  filter(!is.na(municipalityId) & municipalityId != "")  # Exclude rows where municipalityId is NA or empty
+
+votenums <- votenums %>%
+  mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
+
+View(votenums)
+
 ### JOINING THE DATASETS
 
 combined_data <- election2023 %>%
@@ -207,7 +221,8 @@ combined_data <- election2023 %>%
   left_join(municipaldata %>% dplyr::select(municipalityId, Kanton, districtId, districtName), by = "municipalityId") %>%
   left_join(education %>% dplyr::select(districtId, edupop_num, edulow_num, edusec_num, eduter_num, edulow_pct, edusec_pct, eduter_pct), by = "districtId") %>%
   left_join(age %>% dplyr::select(municipalityId, agepop_num, age2065_num, age66plus_num, agequota_pct), by = "municipalityId") %>%
-  left_join(income %>% dplyr::select(municipalityId, incomePerCapita), by = "municipalityId") 
+  left_join(income %>% dplyr::select(municipalityId, incomePerCapita), by = "municipalityId")  %>%
+  left_join(votenums %>% dplyr::select(municipalityId, vote_num), by = "municipalityId") 
 
 combined_data <- combined_data %>%
   filter(nchar(municipalityId) == 4,

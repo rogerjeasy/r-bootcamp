@@ -18,6 +18,7 @@ election_map <- read_csv("Data/datatable.csv")
 party_colors <- read_csv("Data/party_colors.csv")
 canton_symbols <- read_csv("Data/kanton_names.csv")
 
+
 swiss_cantons <- election_map %>%
   distinct(Kanton) %>%  
   filter(!is.na(Kanton)) %>%  
@@ -26,14 +27,15 @@ swiss_cantons <- election_map %>%
 # Identify the party columns dynamically (columns from CSP_23 to Uebrige_23)
 party_cols <- names(election_map)[which(names(election_map) == "CSP_23"):which(names(election_map) == "Uebrige_23")]
 
-# Compute total percentage per canton
 canton_totals <- election_map %>%
-  pivot_longer(cols = all_of(party_cols), names_to = "Party", values_to = "Votes") %>%
+  pivot_longer(cols = all_of(party_cols), names_to = "Party", values_to = "Vote_Percentage") %>%
+  mutate(Actual_Votes = (Vote_Percentage / 100) * vote_num) %>%  # Convert percentage to actual votes
   group_by(Kanton, Party) %>%
-  summarise(Total_Votes = sum(Votes), .groups = "drop") %>%
+  summarise(Total_Votes = sum(Actual_Votes, na.rm = TRUE), .groups = "drop") %>%  # Sum real votes at canton level
   group_by(Kanton) %>%
-  mutate(Percentage = round((Total_Votes / sum(Total_Votes)) * 100, 2)) %>%
+  mutate(Percentage = round((Total_Votes / sum(Total_Votes)) * 100, 2)) %>%  # Recalculate percentages at canton level
   ungroup()
+
 
 canton_totals <- canton_totals %>%
   filter(!is.na(Kanton))

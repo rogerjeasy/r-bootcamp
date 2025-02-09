@@ -2,16 +2,17 @@
 title: "Mapping Demographic Composition as a Predictor of Far-Right Success in the 2023 Swiss Federal Election"
 author: 'Bavibidila, R., Jevdenic, R.'
 output:
-  pdf_document:
-    number_sections: true
   html_document:
     df_print: paged
+  pdf_document:
+    number_sections: true
 bibliography: references.bib
 csl: apa-6th-edition.csl
 fontsize: 11pt
 linestretch: 1.3
 subtitle: "Exploring Interactions between Anti-Migration Sentiment and Ethnocultural Diversity"
 ---
+
 ```{=latex}
 \begin{figure}[h]
 \centering
@@ -28,19 +29,21 @@ Semester & Fall 2024/25
 
 \pagenumbering{gobble}
 \pagebreak
-\pagenumbering{Roman} 
- 
+\pagenumbering{Roman}
+
 **Abstract**
-  
+
 Lorem Ipsum....
- 
-\pagebreak 
+
+\pagebreak
+
 ```{=latex}
 \tableofcontents
 ```
 
 \pagebreak
-\pagenumbering{arabic} 
+\pagenumbering{arabic}
+
 # Introduction
 
 Rade: TBD.
@@ -57,7 +60,7 @@ Non-Swiss residents, despite their significant share of the population, have lim
 
 ## 2023 Swiss Federal Elections
 
-The most recent parliamentary elections in Switzerland took place on October 22, 2023. Switzerland's bicameral parliament comprises the National Council, which proportionally represents the Swiss population with seats allocated to each canton based on its population, and the Council of States, where all cantons have equal representation. As the National Council reflects the population proportionally, its election results are often regarded as an indicator of trends in public opinion regarding politics and policy.  
+The most recent parliamentary elections in Switzerland took place on October 22, 2023. Switzerland's bicameral parliament comprises the National Council, which proportionally represents the Swiss population with seats allocated to each canton based on its population, and the Council of States, where all cantons have equal representation. As the National Council reflects the population proportionally, its election results are often regarded as an indicator of trends in public opinion regarding politics and policy.\
 Over the past several decades, the distribution of dominant political parties in Swiss national elections has remained relatively stable. The primary parties represented in the federal parliament, along with their respective campaign focuses in the most recent elections, are detailed below [@bpbde_hintergrund_2023] . For improved readability, this paper will rely on german-language party names.
 
 ```{r, echo=FALSE}
@@ -123,7 +126,7 @@ kable(dataset_info, caption = "Overview of Used Datasets")
 
 ```
 
-During prepocessing of data there were minor inconsistencies since the used datasets span from 2019 to 2024 and some smaller municipalities had merged with larger communes during those years. Therefore, some smaller communities can not be represented perfectly in the analysis. In 2020, the former municipalities of Vogorno, Sonogno, Corippo, Brione (Verzasca) and Frasco merged to form the new municipality of Verzasca.  In 2021 many small communes disappeared from the map: Haldenstein (merged into Chur), Bauen (merged into Seedorf), Surpierre (merged into Cheiry), Charrat (merged into Martigny), Montherod (merged into Aubonne), Casti-Wergenstein, Donat, Lohn and Mathon (merged together),Miège, Venthône and Veyras (merged together), municipalities of Gänsbrunnen and Welschenrohr (mmerged together),Obersteckholz (merged into Langenthal), Gettnau (merged into Willisau), Altwis (merged into Hitzkirch), Rohr (merged into Stüsslingen), Bagnes and Vollèges (merged together), Corcelles-Cormondrèche, Peseux and Valangin (merged into Neuchâtel), Les Brenets (merged into Le Locle), Bioley-Orjulaz (merged into Assens), Apples, Cottens, Pampigny, Sévery, Bussy-Chardonney and Reverolle merged into the new municipality of Hautemorges.  In 2022, the following communes were dissolved: Galmiz, Gempenach and Clavaleyres (merged into Murten), Essertes (merged into Oron), Bözen, Effingen, Elfingen and Hornussen (merged together), Bad Zurzach, Baldingen, Böbikon, Kaiserstuhl, Rekingen, Rietheim, Rümikon and Wislikofen (merged into the municipality of Zurzach), Rüte and Schwende (merged together), Blonay and Saint-Légier-La Chiésaz merged together. 2023 saw the dissolution of Herznach and Ueken (merged togehter), La Chaux-des-Breuleux (merged into Le Breleux), Burg (merged into Menziken), Adlikon and Humlikon (merged to form the municipality of Andelfingen (merged together), Hemberg and Oberhelfenschwil merged into the new municipality of Neckertal. In 2021, Lüterswil-Gächliwil merged into Buchegg, Turgi was merged into Baden. Bonfol merged with Beurnevésin, Wangenried merged into Wangen an der Aare. 
+During prepocessing of data there were minor inconsistencies since the used datasets span from 2019 to 2024 and some smaller municipalities had merged with larger communes during those years. Therefore, some smaller communities can not be represented perfectly in the analysis. In 2020, the former municipalities of Vogorno, Sonogno, Corippo, Brione (Verzasca) and Frasco merged to form the new municipality of Verzasca. In 2021 many small communes disappeared from the map: Haldenstein (merged into Chur), Bauen (merged into Seedorf), Surpierre (merged into Cheiry), Charrat (merged into Martigny), Montherod (merged into Aubonne), Casti-Wergenstein, Donat, Lohn and Mathon (merged together),Miège, Venthône and Veyras (merged together), municipalities of Gänsbrunnen and Welschenrohr (mmerged together),Obersteckholz (merged into Langenthal), Gettnau (merged into Willisau), Altwis (merged into Hitzkirch), Rohr (merged into Stüsslingen), Bagnes and Vollèges (merged together), Corcelles-Cormondrèche, Peseux and Valangin (merged into Neuchâtel), Les Brenets (merged into Le Locle), Bioley-Orjulaz (merged into Assens), Apples, Cottens, Pampigny, Sévery, Bussy-Chardonney and Reverolle merged into the new municipality of Hautemorges. In 2022, the following communes were dissolved: Galmiz, Gempenach and Clavaleyres (merged into Murten), Essertes (merged into Oron), Bözen, Effingen, Elfingen and Hornussen (merged together), Bad Zurzach, Baldingen, Böbikon, Kaiserstuhl, Rekingen, Rietheim, Rümikon and Wislikofen (merged into the municipality of Zurzach), Rüte and Schwende (merged together), Blonay and Saint-Légier-La Chiésaz merged together. 2023 saw the dissolution of Herznach and Ueken (merged togehter), La Chaux-des-Breuleux (merged into Le Breleux), Burg (merged into Menziken), Adlikon and Humlikon (merged to form the municipality of Andelfingen (merged together), Hemberg and Oberhelfenschwil merged into the new municipality of Neckertal. In 2021, Lüterswil-Gächliwil merged into Buchegg, Turgi was merged into Baden. Bonfol merged with Beurnevésin, Wangenried merged into Wangen an der Aare.
 
 Even tough the list of communes seems long, most of these munnicipalities do not affect the outcome of the weighted correlation since their population is in almost all cases below 1000 and in many cases below 100, with Corippo TI having a population of to 9 inhabitants at the time of the merger being the lowest populated commune ever recorded in Switzerland. Therefore these mergers do not affect the outcome of the analysis in any significant way.
 
@@ -153,7 +156,23 @@ Some tables.
 
 ## Plots
 
-Several elaborate plots with descriptions.
+```{r load-plot, echo=FALSE}
+library(plotly)
+
+demogr_scatter <- readRDS("Plots/demogr_scatter.rds")
+demogr_scatter
+
+
+cantons_scatter <- readRDS("Plots/cantons_scatter.rds")
+cantons_scatter
+
+regr_scatter <- readRDS("Plots/regr_scatter.rds")
+regr_scatter 
+
+regr_heatmap <-  readRDS("Plots/regr_heatmap.rds")
+regr_heatmap
+
+```
 
 \pagebreak
 

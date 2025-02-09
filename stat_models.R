@@ -80,7 +80,7 @@ model_interaction
 run_regression <- function(canton, party) {
   df <- data %>%
     filter(Kanton == canton) %>%
-    select(all_of(party), incomePerCapita, agequota_pct, edulow_pct, nswisspop_pct, vote_num) %>%
+    select(all_of(party), agequota_pct, edulow_pct, nswisspop_pct, vote_num) %>%
     na.omit()
   
   if (nrow(df) < 3) {
@@ -88,7 +88,7 @@ run_regression <- function(canton, party) {
     return(NULL)
   }
   
-  lm(as.formula(paste0(party, " ~ incomePerCapita + agequota_pct + edulow_pct + nswisspop_pct")),
+  lm(as.formula(paste0(party, " ~ agequota_pct + edulow_pct + nswisspop_pct")),
      data = df, weights = vote_num) %>%
     tidy() %>%
     mutate(Canton = canton, Party = party)
@@ -109,13 +109,13 @@ regression_results <- do.call(rbind, lapply(cantons, function(canton) {
   filter(!is.na(estimate)) %>%
   filter(!is.na(statistic)) %>%
   filter(!is.na(p.value)) %>%
-  mutate(term = factor(term, levels = c("nswisspop_pct", "edulow_pct", "agequota_pct", "incomePerCapita")))
+  mutate(term = factor(term, levels = c("nswisspop_pct", "edulow_pct", "agequota_pct")))
 regression_results
 
 # Regression function for all of Switzerland, adjusted for vote_num
 run_regression_switzerland <- function(party) {
   df <- data %>%
-    select(all_of(party), incomePerCapita, agequota_pct, edulow_pct, nswisspop_pct, vote_num) %>%
+    select(all_of(party), agequota_pct, edulow_pct, nswisspop_pct, vote_num) %>%
     na.omit()
   
   if (nrow(df) < 3) {  # Check if there is sufficient data
@@ -123,7 +123,7 @@ run_regression_switzerland <- function(party) {
     return(NULL)
   }
   
-  lm(as.formula(paste0(party, " ~ incomePerCapita + agequota_pct + edulow_pct + nswisspop_pct")),
+  lm(as.formula(paste0(party, " ~ agequota_pct + edulow_pct + nswisspop_pct")),
      data = df, weights = vote_num) %>%
     tidy() %>%
     mutate(Party = party)
@@ -137,7 +137,7 @@ regression_results_switzerland <- do.call(rbind, lapply(parties, function(party)
   filter(!is.na(statistic)) %>%
   filter(!is.na(p.value)) %>%
   mutate(
-    term = factor(term, levels = c("nswisspop_pct", "edulow_pct", "agequota_pct", "incomePerCapita")),
+    term = factor(term, levels = c("nswisspop_pct", "edulow_pct", "agequota_pct")),
     Canton = "CH"  
   )
 
@@ -220,3 +220,78 @@ ggplotly(p, tooltip = "text", width = 1000, height = 800) %>%
   )
 
 
+
+
+
+weighted_data <- data %>%
+  group_by(Kanton) %>%
+  summarise(
+    w_agequota_pct = sum(agequota_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
+    w_edulow_pct = sum(edulow_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
+    w_nswisspop_pct = sum(nswisspop_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
+    total_population = sum(population, na.rm = TRUE)  # To scale point sizes
+  )
+weighted_data
+
+
+# Reshape the data
+scatter_data <- weighted_data %>%
+  pivot_longer(
+    cols = c(w_agequota_pct, w_edulow_pct, w_nswisspop_pct),
+    names_to = "Factor",
+    values_to = "Value"
+  )
+
+p <- ggplot(scatter_data, aes(x = Kanton, y = Value, size = total_vote_num, text = paste("Canton:", Kanton, "<br>Value:", round(Value, 2)))) +
+  geom_point(alpha = 0.8, aes(color = Factor)) +
+  facet_wrap(~ Factor, scales = "free_y") +
+  labs(
+    title = "Weighted Demographic Factors by Canton",
+    x = "Canton",
+    y = "Weighted Percentage",
+    color = "Factor",
+    size = "Total Votes"
+  ) +
+  scale_size(range = c(2, 10)) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "right"
+  )
+
+interactive_scatterplot_dem <- ggplotly(p, tooltip = "text", width = 1000, height = 800)
+interactive_scatterplot_dem
+
+
+# Reshape the data to make demographic factors the x-axis
+scatter_data <- weighted_data %>%
+  pivot_longer(
+    cols = c(w_agequota_pct, w_edulow_pct, w_nswisspop_pct),
+    names_to = "Factor",
+    values_to = "Value"
+  )
+
+# Create the scatter plot with each canton as a facet and fixed y-axis
+p <- ggplot(scatter_data, aes(x = Factor, y = Value, size = total_vote_num, text = paste("Factor:", Factor, "<br>Value:", round(Value, 2)))) +
+  geom_point(alpha = 0.8, aes(color = Factor)) +
+  facet_wrap(~ Kanton, scales = "fixed") +  # Use fixed scales for the y-axis
+  labs(
+    title = "Weighted Demographic Factors by Canton",
+    x = "Demographic Factor",
+    y = "Weighted Percentage",
+    color = "Factor",
+    size = "Total Votes"
+  ) +
+  scale_y_continuous(limits = c(10, 50), breaks = seq(10, 50, by = 10)) +  # Set y-axis range
+  scale_size(range = c(1, 6)) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "right",
+    strip.text = element_text(size = 8, face = "bold")  # Adjust facet label size
+  )
+
+
+# Convert to interactive plot
+interactive_scatterplot_canton <- ggplotly(p, tooltip = "text", width = 1000, height = 800)
+interactive_scatterplot_canton

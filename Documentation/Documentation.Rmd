@@ -156,7 +156,7 @@ Some tables.
 
 ## Plots
 
-```{r load-plot, echo=FALSE}
+```{r load-plot, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
 
 demogr_scatter <- readRDS("Plots/demogr_scatter.rds")

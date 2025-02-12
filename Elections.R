@@ -143,15 +143,13 @@ column_names <- c(
 )
 
 colnames(import4) <- column_names
-
+import4
 citizenship <- import4 %>%
   dplyr::select(-ID, -citizenship, -sex) %>%
   filter(grepl("^\\.\\.\\.\\.\\.\\.", municipalityId)) %>%
   mutate(
     municipalityId = substr(municipalityId, 7, 10)
   )
-
-print(citizenship)
 
 ### DATASET 5: Age distribution
 # agequota_pct: statistical measurement for aged population in relation to middle age (20-65) population

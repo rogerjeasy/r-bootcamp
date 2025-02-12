@@ -18,10 +18,14 @@ data <- data %>%
     incomePerCapita_scl = as.numeric(scale(incomePerCapita, center = TRUE, scale = TRUE)),
     agequota_scl = as.numeric(scale(agequota_pct, center = TRUE, scale = TRUE)),
     edulow_scl = as.numeric(scale(edulow_pct, center = TRUE, scale = TRUE)),
-    nswisspop_scl = as.numeric(scale(nswisspop_pct, center = TRUE, scale = TRUE))
+    edusec_scl = as.numeric(scale(edusec_pct, center = TRUE, scale = TRUE)),
+    eduter_scl = as.numeric(scale(edulow_pct, center = TRUE, scale = TRUE)),
+    nswisspop_scl = as.numeric(scale(nswisspop_pct, center = TRUE, scale = TRUE)),
+    naturalization_pct = (100/nswisspop_num*naturalization_num),
+    naturalization_scl = as.numeric(scale((naturalization_pct), center = TRUE, scale = TRUE))
   )
 
-
+View(data)
 
 
 #############################
@@ -78,7 +82,7 @@ print(cor_by_canton[order(names(cor_by_canton))])
 print(wtd_cor_result)
 print(wtd_cor_by_canton[order(names(wtd_cor_by_canton))])
 
-model <- lm(SVP_23 ~ incomePerCapita + agequota_pct + edulow_pct + nswisspop_pct, 
+model <- lm(SVP_23 ~ incomePerCapita + agequota_pct + edusec_pct + nswisspop_pct + naturalization_pct, 
             data = data, 
             weights = vote_num)
 
@@ -86,7 +90,7 @@ model <- lm(SVP_23 ~ incomePerCapita + agequota_pct + edulow_pct + nswisspop_pct
 
 anova_result <- anova(model)
 anova_result
-model_interaction <- lm(SVP_23 ~ incomePerCapita * edulow_pct + incomePerCapita * nswisspop_pct + agequota_pct, 
+model_interaction <- lm(SVP_23 ~ incomePerCapita * edusec_pct + incomePerCapita * nswisspop_pct + agequota_pct  + naturalization_pct, 
                         data = data,
                         weights = vote_num)
 
@@ -116,7 +120,7 @@ valid_canton_party <- data %>%
 full_regression_df <- expand.grid(
   Canton = unique(valid_canton_party$Kanton),
   Party = unique(valid_canton_party$Party),
-  term = c("nswisspop_scl", "edulow_scl", "agequota_scl", "incomePerCapita_scl"),
+  term = c("nswisspop_scl", "edusec_scl", "agequota_scl", "incomePerCapita_scl", "naturalization_scl"),
   stringsAsFactors = FALSE
 ) %>%
   inner_join(valid_canton_party, by = c("Canton" = "Kanton", "Party")) %>%
@@ -130,12 +134,12 @@ full_regression_df <- expand.grid(
 run_regression <- function(canton, party) {
   df <- data %>%
     filter(Kanton == canton, !is.na(!!sym(party))) %>%
-    select(all_of(party), incomePerCapita_scl, agequota_scl, edulow_scl, nswisspop_scl, vote_num) %>%
+    select(all_of(party), naturalization_scl, incomePerCapita_scl, agequota_scl, edusec_scl, nswisspop_scl, vote_num) %>%
     na.omit()
   
   if (nrow(df) < 3) {
     return(tibble(
-      term = c("nswisspop_scl", "edulow_scl", "agequota_scl","incomePerCapita_scl"),
+      term = c("nswisspop_scl", "edusec_scl", "agequota_scl","incomePerCapita_scl", "naturalization_scl"),
       estimate = NA_real_,
       std.error = NA_real_,
       statistic = NA_real_,
@@ -145,7 +149,7 @@ run_regression <- function(canton, party) {
     ))
   }
   
-  lm(as.formula(paste0(party, " ~ incomePerCapita_scl + agequota_scl + edulow_scl + nswisspop_scl")),
+  lm(as.formula(paste0(party, " ~ naturalization_scl + incomePerCapita_scl + agequota_scl + edusec_scl + nswisspop_scl")),
      data = df, weights = vote_num) %>%
     tidy() %>%
     mutate(Canton = canton, Party = party)
@@ -168,12 +172,12 @@ regression_results <- full_regression_df %>%
 
 run_regression_switzerland <- function(party) {
   df <- data %>%
-    select(all_of(party), incomePerCapita_scl, agequota_scl, edulow_scl, nswisspop_scl, vote_num) %>%
+    select(all_of(party), naturalization_scl, incomePerCapita_scl, agequota_scl, edusec_scl, nswisspop_scl, vote_num) %>%
     na.omit()
   
   if (nrow(df) < 3) {
     return(tibble(
-      term = c("nswisspop_scl", "edulow_scl", "agequota_scl", "incomePerCapita_scl"),
+      term = c("nswisspop_scl", "edusec_scl", "agequota_scl", "incomePerCapita_scl", "naturalization_scl"),
       estimate = NA_real_,
       std.error = NA_real_,
       statistic = NA_real_,
@@ -182,7 +186,7 @@ run_regression_switzerland <- function(party) {
     ))
   }
   
-  lm(as.formula(paste0(party, " ~ incomePerCapita_scl + agequota_scl + edulow_scl + nswisspop_scl")),
+  lm(as.formula(paste0(party, " ~ naturalization_scl + incomePerCapita_scl + agequota_scl + edusec_scl + nswisspop_scl")),
      data = df, weights = vote_num) %>%
     tidy() %>%
     mutate(Party = party)
@@ -211,16 +215,18 @@ weighted_data <- data %>%
     w_incomePerCapita = sum(incomePerCapita * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
     w_agequota_pct = sum(agequota_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
     w_edulow_pct = sum(edulow_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
+    w_edusec_pct = sum(edusec_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
+    w_eduter_pct = sum(eduter_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
     w_nswisspop_pct = sum(nswisspop_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
+    w_naturalization_pct = sum(naturalization_pct * nswisspop_num, na.rm = TRUE ) / sum(nswisspop_num, na.rm = TRUE),
     total_population = sum(population, na.rm = TRUE)  # To scale point sizes
   )
 weighted_data
 
-
 # Reshape the data
 scatter_data <- weighted_data %>%
   pivot_longer(
-    cols = c(w_incomePerCapita, w_agequota_pct, w_edulow_pct, w_nswisspop_pct),
+    cols = c(w_incomePerCapita, w_agequota_pct, w_edusec_pct, w_nswisspop_pct, w_naturalization_pct),
     names_to = "Factor",
     values_to = "Value"
   )
@@ -231,14 +237,17 @@ weighted_data_switzerland <- data %>%
     w_incomePerCapita = sum(incomePerCapita * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
     w_agequota_pct = sum(agequota_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
     w_edulow_pct = sum(edulow_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
+    w_edusec_pct = sum(edusec_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
+    w_eduter_pct = sum(eduter_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
     w_nswisspop_pct = sum(nswisspop_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
+    w_naturalization_pct = sum(naturalization_pct * nswisspop_num, na.rm = TRUE ) / sum(nswisspop_num, na.rm = TRUE),
     total_population = sum(population, na.rm = TRUE)  # Total population
   ) %>%
   mutate(Kanton = "CH")  # Add "CH" for Switzerland
 
 scatter_data_switzerland <- weighted_data_switzerland %>%
   pivot_longer(
-    cols = c(w_incomePerCapita, w_agequota_pct, w_edulow_pct, w_nswisspop_pct),
+    cols = c(w_incomePerCapita, w_agequota_pct, w_edusec_pct, w_nswisspop_pct, w_naturalization_pct),
     names_to = "Factor",
     values_to = "Value"
   )
@@ -250,6 +259,37 @@ scatter_data <- bind_rows(scatter_data, scatter_data_switzerland)
 scatter_data <- scatter_data %>%
   mutate(Kanton = factor(Kanton, levels = c("CH", setdiff(unique(Kanton), "CH"))))
 
+##### EDUCATIONAL STRUCTURE ##### 
+# Compute Switzerland-wide weighted percentages
+weighted_data_switzerland <- weighted_data_switzerland %>%
+  mutate(Kanton = "CH")  # "CH" represents Switzerland
+
+# Bind Switzerland data to the cantonal dataset
+edustructure_cantons <- weighted_data %>%
+  select(Kanton, w_edulow_pct, w_edusec_pct, w_eduter_pct) %>%
+  bind_rows(weighted_data_switzerland) %>%  # Append Switzerland row
+  pivot_longer(cols = c(w_edulow_pct, w_edusec_pct, w_eduter_pct), 
+               names_to = "Education_Level", 
+               values_to = "Weighted_Percentage")
+
+edustructure_cantons <- edustructure_cantons %>%
+  group_by(Kanton) %>%
+  mutate(Weighted_Percentage = 100 * Weighted_Percentage / sum(Weighted_Percentage, na.rm = TRUE)) %>%
+  ungroup()
+
+edustructure_cantons <- edustructure_cantons %>%
+  mutate(Kanton = factor(Kanton, levels = c("CH", sort(setdiff(unique(Kanton), "CH")))))
+
+edustructure <- ggplot(edustructure_cantons, aes(x = Kanton, y = Weighted_Percentage, fill = Education_Level)) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(title = "Weighted Education Level Distribution by Canton",
+       x = "Canton",
+       y = "Weighted Percentage (%)",
+       fill = "Education Level") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+edustructure
 
 ##### PERCENTAGE OF DEMOGRAPHIC SUBSETS PER CANTON ##### 
 ##### FACETS: DEMOGRAPHIC SUBSETS ##### 
@@ -281,18 +321,20 @@ weighted_data <- bind_rows(weighted_data, weighted_data_switzerland)
 
 weighted_data <- weighted_data %>%
   mutate(Kanton = factor(Kanton, levels = c("CH", setdiff(unique(Kanton), "CH"))))
-View(scatter_data)
 
 # Reshape the data to make demographic factors the x-axis
 weighted_data <- weighted_data %>%
   pivot_longer(
-    cols = c(w_incomePerCapita, w_agequota_pct, w_edulow_pct, w_nswisspop_pct),
+    cols = c(w_incomePerCapita, w_agequota_pct, w_edusec_pct, w_nswisspop_pct, w_naturalization_pct ),
     names_to = "Factor",
     values_to = "Value"
   )
 
+scatterplot_cantons <- weighted_data %>%
+  filter(Factor %in% c("w_agequota_pct", "w_edusec_pct", "w_nswisspop_pct"))
+
 # Create the scatter plot with each canton as a facet and fixed y-axis
-p <- ggplot(weighted_data, aes(x = Factor, y = Value, size = total_population, text = paste("Factor:", Factor, "<br>Value:", round(Value, 2)))) +
+p <- ggplot(scatterplot_cantons, aes(x = Factor, y = Value, size = total_population, text = paste("Factor:", Factor, "<br>Value:", round(Value, 2)))) +
   geom_point(alpha = 0.8, aes(color = Factor)) +
   facet_wrap(~ Kanton, ncol = 4, scales="fixed" ) + 
   labs(
@@ -302,7 +344,7 @@ p <- ggplot(weighted_data, aes(x = Factor, y = Value, size = total_population, t
     color = "Factor",
     size = "Total Votes"
   ) +
-  scale_y_continuous(limits = c(10, 50), breaks = seq(10, 50, by = 10)) +  # Set y-axis range
+  scale_y_continuous(limits = c(0, 50), breaks = seq(0, 50, by = 10)) +  # Set y-axis range
   scale_size(range = c(3, 12)) +
   theme_minimal() +
   theme(

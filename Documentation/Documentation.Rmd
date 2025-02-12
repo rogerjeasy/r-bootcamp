@@ -2,10 +2,12 @@
 title: "Mapping Demographic Composition as a Predictor of Far-Right Success in the 2023 Swiss Federal Election"
 author: 'Bavibidila, R., Jevdenic, R.'
 output:
-  html_document:
-    df_print: paged
   pdf_document:
     number_sections: true
+  html_document:
+    df_print: paged
+
+always_allow_html: true
 bibliography: references.bib
 csl: apa-6th-edition.csl
 fontsize: 11pt
@@ -155,24 +157,58 @@ Some tables.
 \pagebreak
 
 ## Plots
+### Explanatory Analysis of the Dataset
 
-```{r load-plot, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r demogr_scatter, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
 
 demogr_scatter <- readRDS("Plots/demogr_scatter.rds")
 demogr_scatter
 
 
+```
+
+\pagebreak
+
+```{r cantons_scatter, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
+
 cantons_scatter <- readRDS("Plots/cantons_scatter.rds")
 cantons_scatter
 
+
+```
+
+\pagebreak
+### Election Results 2023
+
+Plots TBD
+
+
+
+\pagebreak
+### Regression Analysis
+
+```{r regr_scatter, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
+
 regr_scatter <- readRDS("Plots/regr_scatter.rds")
 regr_scatter 
+
+```
+
+
+\pagebreak
+
+```{r regr_heatmap, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
 
 regr_heatmap <-  readRDS("Plots/regr_heatmap.rds")
 regr_heatmap
 
 ```
+
+
 
 \pagebreak
 

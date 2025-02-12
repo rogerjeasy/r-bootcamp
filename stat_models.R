@@ -27,7 +27,6 @@ data <- data %>%
 
 View(data)
 
-
 #############################
 ####### Models ##############
 #############################
@@ -203,7 +202,6 @@ combined_regression_results$Canton <- factor(
   levels = c("CH", sort(setdiff(unique(combined_regression_results$Canton), "CH")))
 )
 
-
 #############################
 ##### DATA PLOTS ############
 #### (NOT MODELLED) #########
@@ -218,6 +216,7 @@ weighted_data <- data %>%
     w_edusec_pct = sum(edusec_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
     w_eduter_pct = sum(eduter_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
     w_nswisspop_pct = sum(nswisspop_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
+    w_swisspop_pct = sum(swisspop_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
     w_naturalization_pct = sum(naturalization_pct * nswisspop_num, na.rm = TRUE ) / sum(nswisspop_num, na.rm = TRUE),
     total_population = sum(population, na.rm = TRUE)  # To scale point sizes
   )
@@ -239,6 +238,7 @@ weighted_data_switzerland <- data %>%
     w_edulow_pct = sum(edulow_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
     w_edusec_pct = sum(edusec_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
     w_eduter_pct = sum(eduter_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
+    w_swisspop_pct = sum(swisspop_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
     w_nswisspop_pct = sum(nswisspop_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
     w_naturalization_pct = sum(naturalization_pct * nswisspop_num, na.rm = TRUE ) / sum(nswisspop_num, na.rm = TRUE),
     total_population = sum(population, na.rm = TRUE)  # Total population
@@ -253,31 +253,45 @@ scatter_data_switzerland <- weighted_data_switzerland %>%
   )
 
 # Join CH total into Cantons
-
 scatter_data <- bind_rows(scatter_data, scatter_data_switzerland)
 
 scatter_data <- scatter_data %>%
   mutate(Kanton = factor(Kanton, levels = c("CH", setdiff(unique(Kanton), "CH"))))
 
-##### EDUCATIONAL STRUCTURE ##### 
-# Compute Switzerland-wide weighted percentages
-weighted_data_switzerland <- weighted_data_switzerland %>%
-  mutate(Kanton = "CH")  # "CH" represents Switzerland
-
-# Bind Switzerland data to the cantonal dataset
-edustructure_cantons <- weighted_data %>%
-  select(Kanton, w_edulow_pct, w_edusec_pct, w_eduter_pct) %>%
-  bind_rows(weighted_data_switzerland) %>%  # Append Switzerland row
-  pivot_longer(cols = c(w_edulow_pct, w_edusec_pct, w_eduter_pct), 
-               names_to = "Education_Level", 
-               values_to = "Weighted_Percentage")
-
-edustructure_cantons <- edustructure_cantons %>%
+##### MIGRANT POPULATIONS ##### 
+migrstructure_cantons <- weighted_data %>%
+  select(Kanton, w_nswisspop_pct, w_swisspop_pct) %>%
+  bind_rows(weighted_data_switzerland %>% mutate(Kanton = "CH")) %>%  # Append Switzerland row
+  pivot_longer(cols = c(w_nswisspop_pct, w_swisspop_pct), 
+               names_to = "Migrant_Population", 
+               values_to = "Weighted_Percentage") %>%
   group_by(Kanton) %>%
   mutate(Weighted_Percentage = 100 * Weighted_Percentage / sum(Weighted_Percentage, na.rm = TRUE)) %>%
-  ungroup()
+  ungroup() %>%
+  mutate(Kanton = factor(Kanton, levels = c("CH", sort(setdiff(unique(Kanton), "CH")))))
 
-edustructure_cantons <- edustructure_cantons %>%
+migrstructure <- ggplot(migrstructure_cantons, aes(x = Kanton, y = Weighted_Percentage, fill = Migrant_Population)) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(title = "Weighted Migrant Population Distribution by Canton",
+       x = "Canton",
+       y = "Weighted Percentage (%)",
+       fill = "Migrant Population") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+migrstructure_interactive <- ggplotly(migrstructure)
+migrstructure_interactive
+
+##### EDUCATIONAL STRUCTURE ##### 
+edustructure_cantons <- weighted_data %>%
+  select(Kanton, w_edulow_pct, w_edusec_pct, w_eduter_pct) %>%
+  bind_rows(weighted_data_switzerland %>% mutate(Kanton = "CH")) %>%  # Append Switzerland row
+  pivot_longer(cols = c(w_edulow_pct, w_edusec_pct, w_eduter_pct), 
+               names_to = "Education_Level", 
+               values_to = "Weighted_Percentage") %>%
+  group_by(Kanton) %>%
+  mutate(Weighted_Percentage = 100 * Weighted_Percentage / sum(Weighted_Percentage, na.rm = TRUE)) %>%
+  ungroup() %>%
   mutate(Kanton = factor(Kanton, levels = c("CH", sort(setdiff(unique(Kanton), "CH")))))
 
 edustructure <- ggplot(edustructure_cantons, aes(x = Kanton, y = Weighted_Percentage, fill = Education_Level)) +
@@ -289,7 +303,8 @@ edustructure <- ggplot(edustructure_cantons, aes(x = Kanton, y = Weighted_Percen
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-edustructure
+edustructure_interactive <- ggplotly(edustructure)
+edustructure_interactive
 
 ##### PERCENTAGE OF DEMOGRAPHIC SUBSETS PER CANTON ##### 
 ##### FACETS: DEMOGRAPHIC SUBSETS ##### 
@@ -317,15 +332,10 @@ interactive_scatterplot_dem
 ##### PERCENTAGE OF DEMOGRAPHIC SUBSETS PER CANTON ##### 
 ##### FACETS: CANTONS ##### 
 
-weighted_data <- bind_rows(weighted_data, weighted_data_switzerland)
-
-weighted_data <- weighted_data %>%
-  mutate(Kanton = factor(Kanton, levels = c("CH", setdiff(unique(Kanton), "CH"))))
-
-# Reshape the data to make demographic factors the x-axis
-weighted_data <- weighted_data %>%
+weighted_data <- bind_rows(weighted_data, weighted_data_switzerland) %>%
+  mutate(Kanton = factor(Kanton, levels = c("CH", setdiff(unique(Kanton), "CH")))) %>%
   pivot_longer(
-    cols = c(w_incomePerCapita, w_agequota_pct, w_edusec_pct, w_nswisspop_pct, w_naturalization_pct ),
+    cols = c(w_incomePerCapita, w_agequota_pct, w_edusec_pct, w_nswisspop_pct, w_naturalization_pct),
     names_to = "Factor",
     values_to = "Value"
   )
@@ -333,6 +343,7 @@ weighted_data <- weighted_data %>%
 scatterplot_cantons <- weighted_data %>%
   filter(Factor %in% c("w_agequota_pct", "w_edusec_pct", "w_nswisspop_pct"))
 
+scatterplot_cantons
 # Create the scatter plot with each canton as a facet and fixed y-axis
 p <- ggplot(scatterplot_cantons, aes(x = Factor, y = Value, size = total_population, text = paste("Factor:", Factor, "<br>Value:", round(Value, 2)))) +
   geom_point(alpha = 0.8, aes(color = Factor)) +
@@ -356,7 +367,6 @@ p <- ggplot(scatterplot_cantons, aes(x = Factor, y = Value, size = total_populat
 # Convert to interactive plot
 interactive_scatterplot_canton <- ggplotly(p, tooltip = "text", width = 1000, height = 1000)
 interactive_scatterplot_canton
-
 
 #############################
 ##### DATA PLOTS ############
@@ -424,7 +434,7 @@ p <- ggplot(combined_regression_results, aes(
   y = term, 
   color = Party, 
   text = paste("Canton:", Canton, "<br>Party:", Party, "<br>Effect Size:", round(estimate, 2))
-)) +
+  )) +
   geom_jitter(width = 0.1, height = 0, size = 2) +  # Jitter instead of static points
   facet_wrap(~ Canton) +
   scale_x_continuous(
@@ -453,6 +463,8 @@ regr_scatter <- ggplotly(p, tooltip = "text", width = 1000, height = 1000) %>%
 regr_scatter
 
 ##### SAVONG THE PLOTS ##### 
+saveRDS(migrstructure_interactive, "Documentation/Plots/migrstructure.rds")
+saveRDS(edustructure_interactive, "Documentation/Plots/edustructure.rds")
 saveRDS(interactive_scatterplot_dem, "Documentation/Plots/demogr_scatter.rds")
 saveRDS(interactive_scatterplot_canton, "Documentation/Plots/cantons_scatter.rds")
 saveRDS(regr_scatter, "Documentation/Plots/regr_scatter.rds")

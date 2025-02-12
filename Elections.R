@@ -108,7 +108,8 @@ swisspop <- swisspop %>%
   filter(nchar(municipalityId) == 4 & municipalityId != "8001") %>%
   mutate(
     nswisspop_num = population - swisspop_num,
-    nswisspop_pct = round((nswisspop_num / population) * 100, 2)
+    nswisspop_pct = round((nswisspop_num / population) * 100, 2),
+    swisspop_pct = round((swisspop_num / population) * 100, 2) 
   )
 swisspop
 
@@ -214,7 +215,7 @@ View(votenums)
 ### JOINING THE DATASETS
 
 combined_data <- election2023 %>%
-  left_join(swisspop %>% dplyr::select(municipalityId, municipalityId, population, swisspop_num, nswisspop_num, nswisspop_pct), by = "municipalityId") %>%
+  left_join(swisspop %>% dplyr::select(municipalityId, municipalityId, population, swisspop_num, swisspop_pct, nswisspop_num, nswisspop_pct), by = "municipalityId") %>%
   left_join(citizenship %>% dplyr::select(municipalityId, naturalization_num), by = "municipalityId") %>%
   left_join(municipaldata %>% dplyr::select(municipalityId, Kanton, districtId, districtName), by = "municipalityId") %>%
   left_join(education %>% dplyr::select(districtId, edupop_num, edulow_num, edusec_num, eduter_num, edulow_pct, edusec_pct, eduter_pct), by = "districtId") %>%

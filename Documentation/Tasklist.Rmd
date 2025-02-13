@@ -29,6 +29,10 @@ To be clarified:
     -   Must Haves
         -   Demographic Composition (**Rade):**
             -   **4 Bar Charts with more detailed demography per Canton (Rade)** / 1 per demographic factor
+            -	Bivariate Graphs: SVP Success in % vs. Migrant Populations in %  (Rade)
+            -	Bivariate Graphs: SVP Success in % vs. Age Ratio  (Rade)
+            -	Bivariate Graphs: SVP Success in % vs. Citizenship Aquisition in %  (Rade)
+            -	Bivariate Graphs: SVP Success in % vs. Taxable IncomePerCapital in CHF  (Rade)
         -   Maps: General Plots with election results by shapefile **(Roger)**:
             -   On the basis of:
                 -   Maps: Plot the demographic factors per municipalities (or per canton)

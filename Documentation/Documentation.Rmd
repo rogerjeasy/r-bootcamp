@@ -138,12 +138,59 @@ Even tough the list of communes seems long, most of these munnicipalities do not
 -   Description of steps from research question to analysis.
 
 \pagebreak
+## Indicators
+
+### Election Indicators
+
+#### Partys
+Focus parties vs. the rest
+Mention local Parties (Lega, MCR)
+
+#### Elections 
+2019 vs. 2023
+
+
+### Geographic Indicators
+#### Switzerland
+TBD
+
+#### Cantons
+TBD
+
+#### Municipalities
+TBD
+
+### Demographic Indicators
+
+For our analysis we have focused on the following five demographic indicators below (s. Table). The five indicators are of particular interest for measuring their influence on far-right politics, since previous research has shown them to be a predictor of far-right party’s success.
+
+(here Table)
+
+#### Non-Swiss Population
+The indicator “Non-Swiss Population” represents the percentage of citizens holding another passport than the swiss one per XX.XX.DATE in relation to the base number of the entire population. Migrants that have acquired swiss citizenship count as swiss population are not disclosed or analysed separately.
+
+#### Citizenship Aquisition
+The indicator “Citizenship Aquisition” represents the percentage of citizens acquiring swiss passport in 202X in relation to the base number of the entire migrant population. The rate of absorption of foreign nationals into the swiss society indicates both willingness to become Swiss citizen from a migrant perspective as well as the willingness of local communities to support non-swiss population’s aim to integrate on a citizenship level.
+
+#### Income Per Capita
+The Income per capita is a normalized measure used by the Bundesamt für Statistik to compare income across Switzerland. It represents the income (minus deductibles on federal level) that is recorded by the federal tax office in collaboration with the cantonal tax administrations. Therefore it does not represent the net income, but rather the taxable income.
+
+#### Education Level
+The three indicators are as follows:
+-	Low Education: Only obligatory school education, which in Switzerland represents usually 9 school years.
+-	Secondary Education: A professional college degree, usually acquired as a result of an apprenticeship (Berufslehre, Apprentissage)
+-	Tertiary Education: An academic university degree, acquired as a result of a university study program but also includes higher degrees from professional colleges (Höhere Fachschule, Ecole Superieure)
+
+#### Age ratio
+The age ratio is a standardized measure of the Bundesamt für Statistik, that measures the percentage of aged populations (65 and above) in relation to the adult respectively working-age population (18-64). Therefore, high number indicates an outsized aged population.
+
 
 ## Statistical Methods
 
 Initially the correlation between migrant population and far-right election success was calculated both weighted and unweighted, meaning each municipality counts as one unit nevertheless of the population size. The unajusted analysis did not produce a significiant correlation, presumebly, because both left-wing votership and migrant populations tend to be concentrated in larger cities and therefore could not be represented in an unweighted statistical design. But when adjusted for population size, there were clear correlations visible.
 
 -   Statistical methods applied (e.g., Correlation, Multiple Linear Regression).
+
 
 \pagebreak
 
@@ -158,21 +205,31 @@ Some tables.
 ## Plots
 ### Explanatory Analysis of the Dataset
 
+Explanatory Analysis
+
+In order to better understand the results of the analysis we assessed the data set. The main goal was to get an idea of the existing trends and distributions to reason why certain effects might cause correlations or regressions. 
+
+The graph visualises the proportion of non-swiss citizens per canton as well as all of Switzerland. This information is of importance since previous studies (Sources) show that areas, which do not have large populations of migrants, tend to vote for partys that run on anti-migration campaigns. This highlights an important contradiction, meaning that people who are not exposed to migrant populations tend to be more critical towards migrations, than votes in areas with higher ethno-cultural diversity.
+
+
 ```{r migrstructure, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
 
-demogr_scatter <- readRDS("Plots/migrstructure.rds")
-demogr_scatter
+migrstructure <- readRDS("Plots/migrstructure.rds")
+migrstructure
 
 
 ```
 \pagebreak
 
+The graph visualises the proportion of different educational layers in the demography. We know from other studies (Source here) that most swiss people do have in fact a Secondary Education degree, which leads us to the assumption that the demographic segment only in possession of a obligratory education might contain a high percentage of non-swiss populations, particularly refugees which could not complete their schooling programme since they have been forced to leave by war and conflict. Therefore the swiss population can be divided roughly in secondary and tertiary educated people. The populations having a secondary-level education are of particular interest since they represent mostly swiss and swiss-born migrants, with or without swiss citizenship, that did not further continue education after receiving  their professional degree. From prior studies on this topic, we know that they might be more likely to vote in favour of the far-right party SVP and less likely to vote in favour of left-wing SP and Greens as well as centrist parties GLP and FDP. From the graph we can extract the information that we see some consistency in educational level across Switzerland with some fluctuations from XX on the lower end up to XX on the higher end.
+
+
 ```{r edustructure, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
 
-demogr_scatter <- readRDS("Plots/edustructure.rds")
-demogr_scatter
+edustructure <- readRDS("Plots/edustructure.rds")
+edustructure
 
 
 ```

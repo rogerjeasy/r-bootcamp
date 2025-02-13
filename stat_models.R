@@ -2,14 +2,15 @@
 ####### Import ##############
 #############################
 
+library(tidyr)
 library(dplyr)
 library(purrr)
 library(Hmisc)
 library(ggplot2)
 library(plotly)
 library(broom)
-library(plotly)
 library(weights)
+library(scales) 
 
 data <- read.csv("Data/datatable.csv", stringsAsFactors = FALSE)
 data <- data %>% filter(!is.na(Kanton))
@@ -25,7 +26,24 @@ data <- data %>%
     naturalization_scl = as.numeric(scale((naturalization_pct), center = TRUE, scale = TRUE))
   )
 
-View(data)
+
+# Party Colors
+party_colors <- c(
+  "SVP_23" = "#008000",
+  "SP_23" = "#BB0000",
+  "FDP_23" = "#00529F",
+  "Mitte_23" = "#E39D2B",
+  "GRUENE_23" = "#83AD20",
+  "GLP_23" = "#C4D600",
+  "EVP_23" = "#FFD700",
+  "Lega_23" = "#4876FF",
+  "CSP_23" = "#008B8B", 
+  "PdA_Sol_23" = "#FF4500",
+  "MCR_23" = "#DAA520",
+  "Sol_23" = "#DC143C",
+  "EDU_23" = "#C71585"
+)
+
 
 #############################
 ####### Models ##############
@@ -99,15 +117,13 @@ model_interaction
 
 # Unified regression function
 
-library(dplyr)
-library(broom)
-library(tidyr)
-
+# Unique Cantons & Parties
 cantons <- unique(data$Kanton)
-parties <- c("CSP_23","EDU_23", "EVP_23","FDP_23","FGA_23","GLP_23",         
+parties <- c("CSP_23","EDU_23", "EVP_23","FDP_23","FGA_23","GLP_23",
              "GRUENE_23","Lega_23","LPS_23","MCR_23", "Mitte_23",
              "PdA_Sol_23","SD_23","SP_23", "SVP_23","Uebrige_23")
 
+# Filter valid canton-party pairs
 valid_canton_party <- data %>%
   select(Kanton, all_of(parties)) %>%
   pivot_longer(-Kanton, names_to = "Party", values_to = "Votes") %>%
@@ -116,152 +132,85 @@ valid_canton_party <- data %>%
   filter(Total_Votes > 0) %>%
   select(Kanton, Party)
 
-full_regression_df <- expand.grid(
-  Canton = unique(valid_canton_party$Kanton),
-  Party = unique(valid_canton_party$Party),
-  term = c("nswisspop_scl", "edusec_scl", "agequota_scl", "incomePerCapita_scl", "naturalization_scl"),
-  stringsAsFactors = FALSE
-) %>%
-  inner_join(valid_canton_party, by = c("Canton" = "Kanton", "Party")) %>%
-  mutate(
-    estimate = NA_real_,
-    std.error = NA_real_,
-    statistic = NA_real_,
-    p.value = NA_real_
-  )
-
-run_regression <- function(canton, party) {
-  df <- data %>%
-    filter(Kanton == canton, !is.na(!!sym(party))) %>%
+# Regression function (handles both Switzerland & Cantons)
+run_regression <- function(df, party, canton = NULL) {
+  df <- df %>%
+    filter(if (!is.null(canton)) Kanton == canton else TRUE, !is.na(!!sym(party))) %>%
     select(all_of(party), naturalization_scl, incomePerCapita_scl, agequota_scl, edusec_scl, nswisspop_scl, vote_num) %>%
     na.omit()
   
-  if (nrow(df) < 3) {
-    return(tibble(
-      term = c("nswisspop_scl", "edusec_scl", "agequota_scl","incomePerCapita_scl", "naturalization_scl"),
-      estimate = NA_real_,
-      std.error = NA_real_,
-      statistic = NA_real_,
-      p.value = NA_real_,
-      Canton = canton,
-      Party = party
-    ))
-  }
+  if (nrow(df) < 3) return(tibble(term = names(df)[-c(1, length(df))], estimate = NA, std.error = NA, statistic = NA, p.value = NA, Party = party, Canton = canton %||% "CH"))
   
   lm(as.formula(paste0(party, " ~ naturalization_scl + incomePerCapita_scl + agequota_scl + edusec_scl + nswisspop_scl")),
      data = df, weights = vote_num) %>%
     tidy() %>%
-    mutate(Canton = canton, Party = party)
+    mutate(Party = party, Canton = canton %||% "CH")
 }
 
-regression_results <- bind_rows(lapply(unique(valid_canton_party$Kanton), function(canton) {
-  bind_rows(lapply(valid_canton_party$Party[valid_canton_party$Kanton == canton], function(party) run_regression(canton, party)))
-})) %>%
-  filter(term != "(Intercept)")
+# Run regressions for all Canton-Party combinations
+regression_results <- valid_canton_party %>%
+  group_by(Kanton, Party) %>%
+  group_split() %>%
+  map_dfr(~ run_regression(data, .x$Party[1], .x$Kanton[1]))
+View(regression_results)
+# Run regressions for all of Switzerland
+regression_results_switzerland <- map_dfr(parties, ~ run_regression(data, .x))
 
-regression_results <- full_regression_df %>%
-  left_join(regression_results, by = c("Canton", "Party", "term")) %>%
-  mutate(
-    estimate = coalesce(estimate.y, estimate.x),
-    std.error = coalesce(std.error.y, std.error.x),
-    statistic = coalesce(statistic.y, statistic.x),
-    p.value = coalesce(p.value.y, p.value.x)
-  ) %>%
-  select(-ends_with(".x"), -ends_with(".y"))
-
-run_regression_switzerland <- function(party) {
-  df <- data %>%
-    select(all_of(party), naturalization_scl, incomePerCapita_scl, agequota_scl, edusec_scl, nswisspop_scl, vote_num) %>%
-    na.omit()
-  
-  if (nrow(df) < 3) {
-    return(tibble(
-      term = c("nswisspop_scl", "edusec_scl", "agequota_scl", "incomePerCapita_scl", "naturalization_scl"),
-      estimate = NA_real_,
-      std.error = NA_real_,
-      statistic = NA_real_,
-      p.value = NA_real_,
-      Party = party
-    ))
-  }
-  
-  lm(as.formula(paste0(party, " ~ naturalization_scl + incomePerCapita_scl + agequota_scl + edusec_scl + nswisspop_scl")),
-     data = df, weights = vote_num) %>%
-    tidy() %>%
-    mutate(Party = party)
-}
-
-regression_results_switzerland <- bind_rows(lapply(parties, function(party) run_regression_switzerland(party))) %>%
+# Combine results
+combined_regression_results <- bind_rows(regression_results, regression_results_switzerland) %>%
   filter(term != "(Intercept)") %>%
-  mutate(Canton = "CH")
+  mutate(Canton = factor(Canton, levels = c("CH", sort(setdiff(unique(Canton), "CH")))))
 
-combined_regression_results <- bind_rows(regression_results, regression_results_switzerland)
-
-combined_regression_results$Canton <- factor(
-  combined_regression_results$Canton, 
-  levels = c("CH", sort(setdiff(unique(combined_regression_results$Canton), "CH")))
-)
 
 #############################
 ##### DATA PLOTS ############
 #### (NOT MODELLED) #########
 #############################
 
+# Compute weighted demographic factors for both Cantons and Switzerland
 weighted_data <- data %>%
   group_by(Kanton) %>%
   summarise(
-    w_incomePerCapita = sum(incomePerCapita * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
-    w_agequota_pct = sum(agequota_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
-    w_edulow_pct = sum(edulow_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
-    w_edusec_pct = sum(edusec_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
-    w_eduter_pct = sum(eduter_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
-    w_nswisspop_pct = sum(nswisspop_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
-    w_swisspop_pct = sum(swisspop_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
-    w_naturalization_pct = sum(naturalization_pct * nswisspop_num, na.rm = TRUE ) / sum(nswisspop_num, na.rm = TRUE),
-    total_population = sum(population, na.rm = TRUE)  # To scale point sizes
+    across(
+      c(incomePerCapita, agequota_pct, edulow_pct, edusec_pct, eduter_pct, nswisspop_pct, swisspop_pct),
+      ~ sum(.x * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
+      .names = "w_{.col}"
+    ),
+    w_naturalization_pct = sum(naturalization_pct * nswisspop_num, na.rm = TRUE) / sum(nswisspop_num, na.rm = TRUE),
+    total_population = sum(population, na.rm = TRUE),
+    .groups = "drop"
   )
-weighted_data
 
-# Reshape the data
+# Compute weighted data for all of Switzerland and append it
+weighted_data <- weighted_data %>%
+  bind_rows(
+    data %>%
+      summarise(
+        across(
+          c(incomePerCapita, agequota_pct, edulow_pct, edusec_pct, eduter_pct, nswisspop_pct, swisspop_pct),
+          ~ sum(.x * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
+          .names = "w_{.col}"
+        ),
+        w_naturalization_pct = sum(naturalization_pct * nswisspop_num, na.rm = TRUE) / sum(nswisspop_num, na.rm = TRUE),
+        total_population = sum(population, na.rm = TRUE),
+        .groups = "drop"
+      ) %>%
+      mutate(Kanton = "CH")
+  ) %>%
+  mutate(Kanton = factor(Kanton, levels = c("CH", setdiff(unique(Kanton), "CH"))))
+
+# Reshape the data into long format
 scatter_data <- weighted_data %>%
   pivot_longer(
-    cols = c(w_incomePerCapita, w_agequota_pct, w_edusec_pct, w_nswisspop_pct, w_naturalization_pct),
+    cols = starts_with("w_"),
     names_to = "Factor",
     values_to = "Value"
   )
 
-# Weighted data for all of Switzerland
-weighted_data_switzerland <- data %>%
-  summarise(
-    w_incomePerCapita = sum(incomePerCapita * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
-    w_agequota_pct = sum(agequota_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
-    w_edulow_pct = sum(edulow_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
-    w_edusec_pct = sum(edusec_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
-    w_eduter_pct = sum(eduter_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
-    w_swisspop_pct = sum(swisspop_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
-    w_nswisspop_pct = sum(nswisspop_pct * population, na.rm = TRUE) / sum(population, na.rm = TRUE),
-    w_naturalization_pct = sum(naturalization_pct * nswisspop_num, na.rm = TRUE ) / sum(nswisspop_num, na.rm = TRUE),
-    total_population = sum(population, na.rm = TRUE)  # Total population
-  ) %>%
-  mutate(Kanton = "CH")  # Add "CH" for Switzerland
-
-scatter_data_switzerland <- weighted_data_switzerland %>%
-  pivot_longer(
-    cols = c(w_incomePerCapita, w_agequota_pct, w_edusec_pct, w_nswisspop_pct, w_naturalization_pct),
-    names_to = "Factor",
-    values_to = "Value"
-  )
-
-# Join CH total into Cantons
-scatter_data <- bind_rows(scatter_data, scatter_data_switzerland)
-
-scatter_data <- scatter_data %>%
-  mutate(Kanton = factor(Kanton, levels = c("CH", setdiff(unique(Kanton), "CH"))))
 
 ##### MIGRANT POPULATIONS ##### 
 migrstructure_cantons <- weighted_data %>%
   select(Kanton, w_nswisspop_pct, w_swisspop_pct) %>%
-  bind_rows(weighted_data_switzerland %>% mutate(Kanton = "CH")) %>%  # Append Switzerland row
   pivot_longer(cols = c(w_nswisspop_pct, w_swisspop_pct), 
                names_to = "Migrant_Population", 
                values_to = "Weighted_Percentage") %>%
@@ -282,10 +231,11 @@ migrstructure <- ggplot(migrstructure_cantons, aes(x = Kanton, y = Weighted_Perc
 migrstructure_interactive <- ggplotly(migrstructure)
 migrstructure_interactive
 
+
+
 ##### EDUCATIONAL STRUCTURE ##### 
 edustructure_cantons <- weighted_data %>%
   select(Kanton, w_edulow_pct, w_edusec_pct, w_eduter_pct) %>%
-  bind_rows(weighted_data_switzerland %>% mutate(Kanton = "CH")) %>%  # Append Switzerland row
   pivot_longer(cols = c(w_edulow_pct, w_edusec_pct, w_eduter_pct), 
                names_to = "Education_Level", 
                values_to = "Weighted_Percentage") %>%
@@ -326,13 +276,13 @@ p <- ggplot(scatter_data, aes(x = Kanton, y = Value, size = total_population, te
     legend.position = "right"
   )
 
-interactive_scatterplot_dem <- ggplotly(p, tooltip = "text", width = 1000, height = 1000)
+interactive_scatterplot_dem <- ggplotly(p, tooltip = "text", width = 800, height = 800)
 interactive_scatterplot_dem
 
 ##### PERCENTAGE OF DEMOGRAPHIC SUBSETS PER CANTON ##### 
 ##### FACETS: CANTONS ##### 
 
-weighted_data <- bind_rows(weighted_data, weighted_data_switzerland) %>%
+weighted_data <- weighted_data %>%
   mutate(Kanton = factor(Kanton, levels = c("CH", setdiff(unique(Kanton), "CH")))) %>%
   pivot_longer(
     cols = c(w_incomePerCapita, w_agequota_pct, w_edusec_pct, w_nswisspop_pct, w_naturalization_pct),
@@ -365,8 +315,64 @@ p <- ggplot(scatterplot_cantons, aes(x = Factor, y = Value, size = total_populat
   )
 
 # Convert to interactive plot
-interactive_scatterplot_canton <- ggplotly(p, tooltip = "text", width = 1000, height = 1000)
+interactive_scatterplot_canton <- ggplotly(p, tooltip = "text", width = 800, height = 800)
 interactive_scatterplot_canton
+
+##### SVP Success versus demographic indicators (not modelled) ##### 
+##### FACETS: MUNICIPALITES ##### 
+
+create_interactive_plot <- function(data, x_var, y_var, group_var = NULL, title, tooltip_vars = c("municipality", "Canton"), 
+                                    jitter = FALSE, log_scale = FALSE, fix_negative = FALSE, y_range = NULL) {
+  
+  data <- data %>% mutate(across(all_of(group_var), as.factor))  # Convert group_var to factor if provided
+  
+  # Construct tooltip text dynamically
+  tooltip_text <- paste0(tooltip_vars[1], ": ", data[[tooltip_vars[1]]], "<br>",
+                         tooltip_vars[2], ": ", data[[tooltip_vars[2]]], "<br>",
+                         x_var, ": ", round(data[[x_var]], 2), "<br>",
+                         y_var, ": ", round(data[[y_var]], 2))
+  
+  p <- ggplot(data, aes_string(x = x_var, y = y_var, text = "tooltip_text")) +
+    geom_point(aes(color = if (!is.null(group_var)) as.factor(get(group_var)) else NULL), 
+               alpha = 0.5, 
+               position = if (jitter) position_jitter(width = 0.2, height = 0.2) else position_identity()) +
+    labs(title = title, x = x_var, y = y_var) +  
+    theme_minimal() +
+    theme(
+      legend.position = "bottom",
+      panel.grid.major = element_line(color = "gray80", size = 0.5),  # Subtle grid lines
+      panel.grid.minor = element_blank(),
+      panel.border = element_blank()
+    )
+
+  ggplotly(p, tooltip = "text", width = 600, height = 400)
+}
+
+# Adjusting y-axis focus ranges for specific plots
+plot_SVP23vsAge <- create_interactive_plot(data, "SVP_23", "agequota_pct", NULL, "SVP_23 vs Age Quota (%)", 
+                                 tooltip_vars = c("municipality", "Canton"), jitter = TRUE)
+
+plot_SVP23vsIncome <- create_interactive_plot(data, "SVP_23", "incomePerCapita", NULL, "SVP_23 vs Income Per Capita", 
+                                 tooltip_vars = c("municipality", "Canton"), jitter = TRUE, y_range = c(0, 50000))
+
+plot_SVP23vsNSwissPop <- create_interactive_plot(data, "SVP_23", "nswisspop_pct", NULL, "SVP_23 vs Non-Swiss Population (%)", 
+                                 tooltip_vars = c("municipality", "Canton"), jitter = TRUE)
+
+plot_SVP23vsNaturalization <- create_interactive_plot(data, "SVP_23", "naturalization_pct", NULL, "SVP_23 vs Naturalization Rate (%)", 
+                                 tooltip_vars = c("municipality", "Canton"), jitter = TRUE, fix_negative = TRUE, y_range = c(0, 5))
+
+plot_SVPvsPopSize <- create_interactive_plot(data, "SVP_23", "population", NULL, "SVP_23 vs Population", 
+                                 tooltip_vars = c("municipality", "Canton"), log_scale = TRUE, y_range = c(0, 10000))
+
+data_district <- data %>%
+  group_by(districtId) %>%
+  summarise(SVP_23 = mean(SVP_23, na.rm = TRUE),
+            edusec_pct = mean(edusec_pct, na.rm = TRUE)) %>%
+  ungroup()
+
+plot_SVPvsEduLvl <- create_interactive_plot(data_district, "SVP_23", "edusec_pct", NULL, 
+                                 "SVP_23 vs Secondary Education (%) (Grouped by District)", tooltip_vars = c("districtId", "Canton"))
+
 
 #############################
 ##### DATA PLOTS ############
@@ -410,7 +416,7 @@ heatmap <- ggplot(combined_regression_results %>% filter(term != "(Intercept)"),
     plot.subtitle = element_text(size = 8, hjust = 0.5) 
   )
 
-regr_heatmap <- ggplotly(heatmap, tooltip = c("x", "y", "fill"), width = 1000, height = 1000) %>%
+regr_heatmap <- ggplotly(heatmap, tooltip = c("x", "y", "fill"), width = 800, height = 800) %>%
   layout(
     hoverlabel = list(
       bgcolor = "white",
@@ -441,11 +447,12 @@ p <- ggplot(combined_regression_results, aes(
     trans = scales::pseudo_log_trans(base = 2),  # Use base 2 for smoother scaling
     limits = c(-10, 10)
   ) +
+  scale_color_manual(values = party_colors) +  
   labs(title = "Regression Results Across Cantons", x = "Effect Size (Log Scaled)", y = "Factor") +
   theme_minimal()
 
 
-regr_scatter <- ggplotly(p, tooltip = "text", width = 1000, height = 1000) %>%
+regr_scatter <- ggplotly(p, tooltip = "text", width = 800, height = 800) %>%
   layout(
     hoverlabel = list(
       bgcolor = "white",
@@ -463,6 +470,12 @@ regr_scatter <- ggplotly(p, tooltip = "text", width = 1000, height = 1000) %>%
 regr_scatter
 
 ##### SAVONG THE PLOTS ##### 
+saveRDS(plot_SVP23vsAge, "Documentation/Plots/plot_SVP23vsAge.rds")
+saveRDS(plot_SVP23vsIncome, "Documentation/Plots/plot_SVP23vsIncome.rds")
+saveRDS(plot_SVP23vsNSwissPop, "Documentation/Plots/plot_SVP23vsNSwissPop.rds")
+saveRDS(plot_SVP23vsNaturalization, "Documentation/Plots/plot_SVP23vsNaturalization.rds")
+saveRDS(plot_SVPvsPopSize, "Documentation/Plots/plot_SVPvsPopSize.rds")
+saveRDS(plot_SVPvsEduLvl, "Documentation/Plots/plot_SVPvsEduLvl.rds")
 saveRDS(migrstructure_interactive, "Documentation/Plots/migrstructure.rds")
 saveRDS(edustructure_interactive, "Documentation/Plots/edustructure.rds")
 saveRDS(interactive_scatterplot_dem, "Documentation/Plots/demogr_scatter.rds")

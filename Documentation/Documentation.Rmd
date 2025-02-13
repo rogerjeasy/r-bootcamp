@@ -143,22 +143,29 @@ Even tough the list of communes seems long, most of these munnicipalities do not
 ### Election Indicators
 
 #### Partys
+
 Focus parties vs. the rest
 Mention local Parties (Lega, MCR)
 
 #### Elections 
+
 2019 vs. 2023
 
-
+\pagebreak
 ### Geographic Indicators
 #### Switzerland
+
 TBD
 
 #### Cantons
+
 TBD
 
 #### Municipalities
+
 TBD
+
+\pagebreak
 
 ### Demographic Indicators
 
@@ -167,15 +174,19 @@ For our analysis we have focused on the following five demographic indicators be
 (here Table)
 
 #### Non-Swiss Population
+
 The indicator “Non-Swiss Population” represents the percentage of citizens holding another passport than the swiss one per XX.XX.DATE in relation to the base number of the entire population. Migrants that have acquired swiss citizenship count as swiss population are not disclosed or analysed separately.
 
 #### Citizenship Aquisition
+
 The indicator “Citizenship Aquisition” represents the percentage of citizens acquiring swiss passport in 202X in relation to the base number of the entire migrant population. The rate of absorption of foreign nationals into the swiss society indicates both willingness to become Swiss citizen from a migrant perspective as well as the willingness of local communities to support non-swiss population’s aim to integrate on a citizenship level.
 
 #### Income Per Capita
+
 The Income per capita is a normalized measure used by the Bundesamt für Statistik to compare income across Switzerland. It represents the income (minus deductibles on federal level) that is recorded by the federal tax office in collaboration with the cantonal tax administrations. Therefore it does not represent the net income, but rather the taxable income.
 
 #### Education Level
+
 The three indicators are as follows:
 -	Low Education: Only obligatory school education, which in Switzerland represents usually 9 school years.
 -	Secondary Education: A professional college degree, usually acquired as a result of an apprenticeship (Berufslehre, Apprentissage)
@@ -184,7 +195,7 @@ The three indicators are as follows:
 #### Age ratio
 The age ratio is a standardized measure of the Bundesamt für Statistik, that measures the percentage of aged populations (65 and above) in relation to the adult respectively working-age population (18-64). Therefore, high number indicates an outsized aged population.
 
-
+\pagebreak
 ## Statistical Methods
 
 Initially the correlation between migrant population and far-right election success was calculated both weighted and unweighted, meaning each municipality counts as one unit nevertheless of the population size. The unajusted analysis did not produce a significiant correlation, presumebly, because both left-wing votership and migrant populations tend to be concentrated in larger cities and therefore could not be represented in an unweighted statistical design. But when adjusted for population size, there were clear correlations visible.
@@ -256,9 +267,87 @@ cantons_scatter
 ```
 
 \pagebreak
-### Election Results 2023
+### General Election Results 2023
 
 Plots TBD
+
+### Demographic Indicators of Far-Right Success
+
+```{r plot_SVP23vsAge, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
+
+plot_SVP23vsAge <- readRDS("Plots/plot_SVP23vsAge.rds")
+
+htmltools::div(
+  style = "text-align: center;",
+  plot_SVP23vsAge
+) 
+
+```
+
+
+
+
+```{r plot_SVP23vsIncome, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
+
+plot_SVP23vsIncome <- readRDS("Plots/plot_SVP23vsIncome.rds")
+plot_SVP23vsIncome 
+
+```
+
+
+
+```{r plot_SVP23vsNSwissPop, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
+
+plot_SVP23vsNSwissPop <- readRDS("Plots/plot_SVP23vsNSwissPop.rds")
+plot_SVP23vsNSwissPop 
+
+```
+
+
+
+
+```{r plot_SVP23vsNaturalization, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
+
+plot_SVP23vsNaturalization <- readRDS("Plots/plot_SVP23vsNaturalization.rds")
+plot_SVP23vsNaturalization 
+
+```
+
+
+
+
+
+
+```{r plot_SVPvsPopSize, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
+
+plot_SVPvsPopSize <- readRDS("Plots/plot_SVPvsPopSize.rds")
+plot_SVPvsPopSize 
+
+```
+
+
+
+
+
+
+```{r plot_SVPvsEduLvl, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
+
+plot_SVPvsEduLvl <- readRDS("Plots/plot_SVPvsEduLvl.rds")
+plot_SVPvsEduLvl 
+
+```
+
+
+
+
+
+
 
 
 

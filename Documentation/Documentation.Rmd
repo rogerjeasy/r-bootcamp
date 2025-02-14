@@ -61,9 +61,13 @@ Non-Swiss residents, despite their significant share of the population, have lim
 While many European countries have seen an extraordinary rise of right-wing politics throughout the 2010s, not much had shifted in Switzerland. The right-wing SVP (Schweizerische Volkspartei, in french: Union démocratique du centre UDC) has been part of the governing coalition since the 1990s. Certain segments of the party have been classified as far-right and right-wing extremist, most notably due to the party's hardline positions on migration and strict opposition to any legal protection of social, cultural and religious minorities like swiss muslims or LGBT citizens [@jansesberger_different_2024, pp. 3-5; @ellermann_comparative_2021, p.3 & p.102].\
 The relationship between regional demographic composition and voting behavior has been a subject of ongoing research and debate, particularly if areas with lower proportions of migrants tend to support stricter immigration policies compared to ethnoculturally diverse regions. In this study, we examine the most recent Swiss election to analyze potential correlations between the percentage of non-Swiss residents and the electoral performance of the Swiss People's Party (SVP), which centered its campaign on an anti-immigration platform. To control for cofounding variables, other demographic markers as age and education will be included.
 
-## Research Question and Hypothesis
+## Research Questions and Hypothesis
 
--   "There is a positive correlation between ethnocultural homogeneity and success of far-right party in the 2023 Swiss elections."
+The underlying hypothesis posits a positive correlation between ethnocultural homogeneity and the electoral success of the far-right Swiss People's Party (SVP) in the 2023 Swiss federal elections. Specifically, municipalities with a higher proportion of foreign residents are expected to exhibit lower support for the SVP than those with a more homogeneous Swiss population.
+
+Defining what constitutes a “high” or “low” proportion of the non-Swiss population is inherently subjective. However, current demographic data indicate that 27% of Switzerland’s total population is non-Swiss, with canton-level proportions ranging from 12.9% (Appenzell Innerrhoden) to 42.2% (Geneva). Based on this distribution, a low share of the migrant population can be approximated as below 20%, while a high share is anything above 30%.
+
+To better understand the multitude of factors influencing electoral behaviour, additional variables are incorporated into the analysis, including: citizenship acquisition rate, taxable income per capita, educational attainment levels, and  age distribution. These factors help to contextualise the observable effects and differentiate between correlation and causation. Furthermore, to comprehensively examine the SVP’s 2023 electoral success, the analysis includes other political parties to highlight electoral dynamics and explore how voter distributions vary across demographic markers. The derived research question is as follows: "Which demographic factors exhibit a strong relationship with the 2023 Swiss federal election results?" The question can be divided into looking at specific aspects between parties and their respective election performance.
 
 \pagebreak
 
@@ -110,6 +114,7 @@ kable(dataset_info, caption = "Overview of Used Datasets")
 -   Description of steps from research question to analysis.
 
 \pagebreak
+
 ## Indicators
 
 ### Election Indicators
@@ -138,13 +143,14 @@ kable(party_table, caption = "Overview of Parties and Campaign Focus")
 
 Regional parties like the far-right Lega in the Canton of Ticino or Movement Citoyen Romande in Geneva have been taken into account for some analysis. Due to their regionality the data for them is scarse and might not yield very reliable results.
 
-#### Elections 
+#### Elections
 
 ## 2023 Swiss Federal Elections
 
 The most recent parliamentary elections in Switzerland took place on October 22, 2023. Switzerland's bicameral parliament comprises the National Council, which proportionally represents the Swiss population with seats allocated to each canton based on its population, and the Council of States, where all cantons have equal representation. As the National Council reflects the population proportionally, its election results are often regarded as an indicator of trends in public opinion regarding politics and policy.\
 
 \pagebreak
+
 ### Geographic Indicators
 
 #### Municipalities
@@ -165,7 +171,40 @@ All the data points (apart from education level) were available on municipality-
 
 For our analysis we have focused on the following five demographic indicators below (s. Table). The five indicators are of particular interest for measuring their influence on far-right politics, since previous research has shown them to be a predictor of far-right party’s success.
 
-(here Table)
+
+```{r, echo=FALSE}
+library(knitr)
+
+dataset_info <- data.frame(
+    "Indicator" = c(
+    "Non-Swiss Population",
+    "Citizenship Aquisition",
+    "Income per Capita",
+    "Education Level",
+    "Age Ratio"
+  ),
+    "Description" = c(
+    "People residing in Switzerland without holding Swiss Citizenship",
+    "Rate of Migrants acquiring Swiss citizenship in 2023",
+    "Normalized taxable income.",
+    "Highest educational achievement.",
+    "Percentage of people aged >64 in relation to population aged 18-64"
+  ),
+  "Metric" = c(
+    "% of total population",
+    "% of migrant population",
+    "in Swiss Francs",
+    "3 Grades (Low, Secondary, Tertiary)",
+    "% of working age population"
+  )
+
+)
+colnames(dataset_info) <- c("Indicator","Descrption","Metric")
+
+kable(dataset_info, caption = "Overview of Demographic Indicators")
+
+```
+
 
 #### Non-Swiss Population
 
@@ -181,22 +220,21 @@ The Income per capita is a normalized measure used by the Bundesamt für Statist
 
 #### Education Level
 
-Education levels, usually measured in form of the highest achieved school degree, are crucial for economical and social development of populations. They significantly impact individuals' perception of life and political leanings. The three indicators are as follows:
--	Low Education: Only obligatory school education, which in Switzerland represents usually 9 school years.
--	Secondary Education: A professional college degree, usually acquired as a result of an apprenticeship (Berufslehre, Apprentissage)
--	Tertiary Education: An academic university degree, acquired as a result of a university study program but also includes higher degrees from professional colleges (Höhere Fachschule, Ecole Superieure)
+Education levels, usually measured in form of the highest achieved school degree, are crucial for economical and social development of populations. They significantly impact individuals' perception of life and political leanings. The three indicators are as follows: - Low Education: Only obligatory school education, which in Switzerland represents usually 9 school years. - Secondary Education: A professional college degree, usually acquired as a result of an apprenticeship (Berufslehre, Apprentissage) - Tertiary Education: An academic university degree, acquired as a result of a university study program but also includes higher degrees from professional colleges (Höhere Fachschule, Ecole Superieure)
 
 #### Age ratio
+
 The age ratio is a standardized measure of the Bundesamt für Statistik, that measures the percentage of aged populations (65 and above) in relation to the adult respectively working-age population (18-64). Therefore, high number indicates an outsized aged population.
 
 \pagebreak
+
 ## Statistical Methods
 
 Initially the correlation between migrant population and far-right election success was calculated both weighted and unweighted, meaning each municipality counts as one unit nevertheless of the population size. The unajusted analysis did not produce a significiant correlation, presumebly, because both left-wing votership and migrant populations tend to be concentrated in larger cities and therefore could not be represented in an unweighted statistical design. But when adjusted for population size, there were clear correlations visible.
 
 The statistical analysis relies on correlation and linear models. In orner to improve the model's performance, the demographic indicators were scaled and weighted. The scaling improves interpretability, numerical stability and measureability of smaller differences while eradicating the influence of outliers. The weighting was necessary for practical reasons since the size of a municipality also can be an predictor of election outcomes and if every municpality couunted as one unit this would suppress the outcomes of bigger citites.
 
-Most of the plots did not include statistical models but do rather visalise the election outcome unmodelled. 
+Most of the plots did not include statistical models but do rather visalise the election outcome unmodelled.
 
 \pagebreak
 
@@ -205,11 +243,12 @@ Most of the plots did not include statistical models but do rather visalise the 
 \pagebreak
 
 ## Plots
+
 ### Explanatory Analysis of the Dataset
 
 Explanatory Analysis
 
-In order to better understand the results of the analysis we assessed the data set. The main goal was to get an idea of the existing trends and distributions to reason why certain effects might cause correlations or regressions. 
+In order to better understand the results of the analysis we assessed the data set. The main goal was to get an idea of the existing trends and distributions to reason why certain effects might cause correlations or regressions.
 
 The graph visualises the proportion of non-Swiss citizens per canton as well as all of Switzerland. This information is of importance since previous studies (Sources) show that areas, which do not have large populations of migrants, tend to vote for parties that run on anti-migration campaigns. This highlights an important contradiction, meaning that people who are not exposed to migrant populations tend to be more critical towards migrations, than votes in areas with higher ethno-cultural diversity.
 
@@ -218,11 +257,12 @@ library(plotly)
 migrstructure <- readRDS("Plots/migrstructure.rds")
 migrstructure
 ```
+
 \pagebreak
 
 The graph visualises the proportion of different educational layers in the demography. We know from other studies (Source here) that most Swiss people do have in fact a Secondary Education degree, which leads us to the assumption that the demographic segment only in possession of an obligatory education might contain a high percentage of non-Swiss populations, particularly refugees which could not complete their schooling programme since they have been forced to leave by war and conflict. Therefore, the Swiss population can be divided roughly in secondary and tertiary educated people. The populations having a secondary-level education are of particular interest since they represent mostly Swiss and Swiss-born migrants, with or without Swiss citizenship, which did not further continue education after receiving their professional degree. From prior studies on this topic, we know that they might be more likely to vote in favour of the far-right party SVP and less likely to vote in favour of left-wing SP and Greens as well as centrist parties GLP and FDP. From the graph we can extract the information that we see some consistency in educational level across Switzerland with some fluctuations from XX on the lower end up to XX on the higher end.
 
-https://www.bfs.admin.ch/bfs/de/home/statistiken/wirtschaftliche-soziale-situation-bevoelkerung/gleichstellung-frau-mann/bildung/bildungsstand.assetdetail.30625351.html
+<https://www.bfs.admin.ch/bfs/de/home/statistiken/wirtschaftliche-soziale-situation-bevoelkerung/gleichstellung-frau-mann/bildung/bildungsstand.assetdetail.30625351.html>
 
 ```{r edustructure, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
@@ -247,11 +287,24 @@ cantons_scatter
 ```
 
 \pagebreak
+
 ### General Election Results 2023
 
 Plots TBD
 
 ### Demographic Indicators of Far-Right Success
+
+
+
+```{r plot_SVP_Change, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
+plot_SVP_Change <- readRDS("Plots/plot_SVP_Change.rds")
+plot_SVP_Change 
+```
+
+
+
+...
 
 ```{r plot_SVP23vsAge, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
@@ -261,12 +314,12 @@ plot_SVP23vsAge
 
 The plot shows the age ratio of the municpalities and the election outcome of SVP in 2023.
 
-
 ```{r plot_SVP23vsIncome, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
 plot_SVP23vsIncome <- readRDS("Plots/plot_SVP23vsIncome.rds")
 plot_SVP23vsIncome 
 ```
+
 The plot shows the taxable income of the municpalities and the election outcome of SVP in 2023.
 
 ```{r plot_SVP23vsNSwissPop, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -285,7 +338,6 @@ plot_SVP23vsNaturalization
 
 The plot shows the naturalization rate in percent of the municpalities and the election outcome of SVP in 2023.
 
-
 ```{r plot_SVPvsPopSize, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
 plot_SVPvsPopSize <- readRDS("Plots/plot_SVPvsPopSize.rds")
@@ -293,7 +345,6 @@ plot_SVPvsPopSize
 ```
 
 The plot shows the population size in number of inhabitants of the municpalities and the election outcome of SVP in 2023.
-
 
 ```{r plot_SVPvsEduLvl, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
@@ -304,8 +355,8 @@ plot_SVPvsEduLvl
 The plot shows the education level in percentage of inhabitants only holding a secondary eductation degree of the municpalities and the election outcome of SVP in 2023.
 
 
-
 \pagebreak
+
 ### Regression Analysis
 
 ```{r regr_scatter, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -314,17 +365,8 @@ regr_scatter <- readRDS("Plots/regr_scatter.rds")
 regr_scatter 
 ```
 
-
 \pagebreak
 
-```{r regr_heatmap, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
-library(plotly)
-regr_heatmap <-  readRDS("Plots/regr_heatmap.rds")
-regr_heatmap
-```
-
-
-\pagebreak
 
 ## Maps
 

@@ -27,7 +27,7 @@ data <- data %>%
   )
 
 
-# Party Colors
+
 party_colors <- c(
   "SVP_23" = "#008000",
   "SP_23" = "#BB0000",
@@ -44,6 +44,64 @@ party_colors <- c(
   "EDU_23" = "#C71585"
 )
 
+
+canton_colors <- c(
+  "GE" = "#8B0000",
+  "VD" = "#A52A2A",
+  "NE" = "#B22222",
+  "JU" = "#C71585",
+  "FR" = "#DC143C",
+  "BE" = "#FF8C00",
+  "AG" = "#DAA520",
+  "SO" = "#B8860B",
+  "BL" = "#ADFF2F",
+  "BS" = "#FFD700",
+  "TG" = "#9ACD32",
+  "ZH" = "#FFFF00",
+  "SH" = "#7FFF00",
+  "LU" = "#4682B4",
+  "ZG" = "#5F9EA0",
+  "SZ" = "#1E90FF",
+  "UR" = "#4169E1",
+  "OW" = "#6495ED",
+  "NW" = "#87CEFA",
+  "SG" = "#32CD32",
+  "GR" = "#228B22",
+  "GL" = "#2E8B57",
+  "AR" = "#66CDAA",
+  "AI" = "#20B2AA",
+  "TI" = "#800080",
+  "VS" = "#B22222"
+)
+
+
+column_labels <- c(
+  "population" = "Population",
+  "w_agequota_pct" = "Age Quota",
+  "agequota_pct" = "Age Quota",
+  "agequota_scl" = "Age Quota",
+  "w_edulow_pct" = "Low Education",
+  "edulow_pct" = "Low Education",
+  "edulow_scl" = "Low Education",
+  "w_edusec_pct" = "Secondary Education",
+  "edusec_pct" = "Secondary Education",
+  "edusec_scl" = "Secondary Education", 
+  "w_eduter_pct" = "Tertiary Education",
+  "eduter_pct" = "Tertiary Education",
+  "eduter_scl" = "Tertiary Education",
+  "w_incomePerCapita" = "Tax Income per Capita",
+  "incomePerCapita" = "Tax Income per Capita",
+  "incomePerCapita_scl" = "Tax Income per Capita", 
+  "w_naturalization_pct" = "Naturalization Rate",
+  "naturalization_pct" = "Naturalization Rate",
+  "naturalization_pct" = "Naturalization Rate", 
+  "naturalization_scl" = "Naturalization Rate",
+  "w_swisspop_pct" = "Swiss Population",
+  "swisspop_pct" = "Swiss Population",
+  "w_nswisspop_pct" = "Non-Swiss Population",
+  "nswisspop_scl" = "Non-Swiss Population", 
+  "nswisspop_pct" = "Non-Swiss Population"
+)
 
 #############################
 ####### Models ##############
@@ -207,13 +265,15 @@ scatter_data <- weighted_data %>%
     values_to = "Value"
   )
 
-
 ##### MIGRANT POPULATIONS ##### 
+
 migrstructure_cantons <- weighted_data %>%
   select(Kanton, w_nswisspop_pct, w_swisspop_pct) %>%
   pivot_longer(cols = c(w_nswisspop_pct, w_swisspop_pct), 
                names_to = "Migrant_Population", 
                values_to = "Weighted_Percentage") %>%
+  mutate(Migrant_Population = ifelse(Migrant_Population %in% names(column_labels), 
+                                     column_labels[Migrant_Population], Migrant_Population)) %>%  # Apply labels
   group_by(Kanton) %>%
   mutate(Weighted_Percentage = 100 * Weighted_Percentage / sum(Weighted_Percentage, na.rm = TRUE)) %>%
   ungroup() %>%
@@ -228,17 +288,18 @@ migrstructure <- ggplot(migrstructure_cantons, aes(x = Kanton, y = Weighted_Perc
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-migrstructure_interactive <- ggplotly(migrstructure)
+migrstructure_interactive <- ggplotly(migrstructure, width = 1000, height = 600)
 migrstructure_interactive
 
-
-
 ##### EDUCATIONAL STRUCTURE ##### 
+
 edustructure_cantons <- weighted_data %>%
   select(Kanton, w_edulow_pct, w_edusec_pct, w_eduter_pct) %>%
   pivot_longer(cols = c(w_edulow_pct, w_edusec_pct, w_eduter_pct), 
                names_to = "Education_Level", 
                values_to = "Weighted_Percentage") %>%
+  mutate(Education_Level = ifelse(Education_Level %in% names(column_labels), 
+                                  column_labels[Education_Level], Education_Level)) %>%  # Apply labels
   group_by(Kanton) %>%
   mutate(Weighted_Percentage = 100 * Weighted_Percentage / sum(Weighted_Percentage, na.rm = TRUE)) %>%
   ungroup() %>%
@@ -253,15 +314,24 @@ edustructure <- ggplot(edustructure_cantons, aes(x = Kanton, y = Weighted_Percen
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-edustructure_interactive <- ggplotly(edustructure)
+edustructure_interactive <- ggplotly(edustructure, width = 1000, height = 600)
 edustructure_interactive
+
 
 ##### PERCENTAGE OF DEMOGRAPHIC SUBSETS PER CANTON ##### 
 ##### FACETS: DEMOGRAPHIC SUBSETS ##### 
 
-p <- ggplot(scatter_data, aes(x = Kanton, y = Value, size = total_population, text = paste("Canton:", Kanton, "<br>Value:", round(Value, 2)))) +
+scatter_data <- scatter_data %>%
+  mutate(Factor = ifelse(Factor %in% names(column_labels), column_labels[Factor], Factor))
+
+p <- ggplot(scatter_data, aes(
+  x = Kanton, 
+  y = Value, 
+  size = total_population, 
+  text = paste("Canton:", Kanton, "<br>Factor:", Factor, "<br>Value:", round(Value, 2))
+)) +
   geom_point(alpha = 0.8, aes(color = Factor)) +
-  facet_wrap(~ Factor, ncol = 1, scales = "free_y") +  
+  facet_wrap(~ Factor, ncol = 1, scales = "free_y") +  # Facet labels now display readable names
   labs(
     title = "Weighted Demographic Factors by Canton",
     x = "Canton",
@@ -276,28 +346,36 @@ p <- ggplot(scatter_data, aes(x = Kanton, y = Value, size = total_population, te
     legend.position = "right"
   )
 
-interactive_scatterplot_dem <- ggplotly(p, tooltip = "text", width = 800, height = 800)
+interactive_scatterplot_dem <- ggplotly(p, tooltip = "text", width = 1000, height = 900)
 interactive_scatterplot_dem
+
 
 ##### PERCENTAGE OF DEMOGRAPHIC SUBSETS PER CANTON ##### 
 ##### FACETS: CANTONS ##### 
 
+# Apply readable labels to `Factor`
 weighted_data <- weighted_data %>%
   mutate(Kanton = factor(Kanton, levels = c("CH", setdiff(unique(Kanton), "CH")))) %>%
   pivot_longer(
     cols = c(w_incomePerCapita, w_agequota_pct, w_edusec_pct, w_nswisspop_pct, w_naturalization_pct),
     names_to = "Factor",
     values_to = "Value"
-  )
+  ) %>%
+  mutate(Factor = ifelse(Factor %in% names(column_labels), column_labels[Factor], Factor))  # Apply labels
 
+# Filter for selected factors
 scatterplot_cantons <- weighted_data %>%
-  filter(Factor %in% c("w_agequota_pct", "w_edusec_pct", "w_nswisspop_pct"))
+  filter(Factor %in% c(column_labels["w_agequota_pct"], column_labels["w_edusec_pct"], column_labels["w_nswisspop_pct"]))
 
-scatterplot_cantons
-# Create the scatter plot with each canton as a facet and fixed y-axis
-p <- ggplot(scatterplot_cantons, aes(x = Factor, y = Value, size = total_population, text = paste("Factor:", Factor, "<br>Value:", round(Value, 2)))) +
+# Create the scatter plot
+p <- ggplot(scatterplot_cantons, aes(
+  x = Factor, 
+  y = Value, 
+  size = total_population, 
+  text = paste("Factor:", Factor, "<br>Value:", round(Value, 2))
+)) +
   geom_point(alpha = 0.8, aes(color = Factor)) +
-  facet_wrap(~ Kanton, ncol = 4, scales="fixed" ) + 
+  facet_wrap(~ Kanton, ncol = 4, scales = "fixed") + 
   labs(
     title = "Weighted Demographic Factors by Canton",
     x = "Demographic Factor",
@@ -315,70 +393,107 @@ p <- ggplot(scatterplot_cantons, aes(x = Factor, y = Value, size = total_populat
   )
 
 # Convert to interactive plot
-interactive_scatterplot_canton <- ggplotly(p, tooltip = "text", width = 800, height = 800)
+interactive_scatterplot_canton <- ggplotly(p, tooltip = "text", width = 1000, height = 900)
 interactive_scatterplot_canton
+
 
 ##### SVP Success versus demographic indicators (not modelled) ##### 
 ##### FACETS: MUNICIPALITES ##### 
-
-create_interactive_plot <- function(data, x_var, y_var, group_var = NULL, title, tooltip_vars = c("municipality", "Canton"), 
+create_interactive_plot <- function(data, x_var, y_var, group_var = "Kanton", title, tooltip_vars = c("municipality", "Kanton"), 
                                     jitter = FALSE, log_scale = FALSE, fix_negative = FALSE, y_range = NULL) {
   
-  data <- data %>% mutate(across(all_of(group_var), as.factor))  # Convert group_var to factor if provided
+  data <- data %>%
+    mutate(across(all_of(group_var), as.factor))  # Convert Kanton to factor
   
-  # Construct tooltip text dynamically
+  # Use column_labels to get readable labels
+  x_label <- ifelse(x_var %in% names(column_labels), column_labels[[x_var]], x_var)
+  y_label <- ifelse(y_var %in% names(column_labels), column_labels[[y_var]], y_var)
+  
+  # Construct tooltip text dynamically with readable labels
   tooltip_text <- paste0(tooltip_vars[1], ": ", data[[tooltip_vars[1]]], "<br>",
                          tooltip_vars[2], ": ", data[[tooltip_vars[2]]], "<br>",
-                         x_var, ": ", round(data[[x_var]], 2), "<br>",
-                         y_var, ": ", round(data[[y_var]], 2))
+                         x_label, ": ", round(data[[x_var]], 2), "<br>",
+                         y_label, ": ", round(data[[y_var]], 2))
   
   p <- ggplot(data, aes_string(x = x_var, y = y_var, text = "tooltip_text")) +
-    geom_point(aes(color = if (!is.null(group_var)) as.factor(get(group_var)) else NULL), 
-               alpha = 0.5, 
-               position = if (jitter) position_jitter(width = 0.2, height = 0.2) else position_identity()) +
-    labs(title = title, x = x_var, y = y_var) +  
+    geom_point(aes(
+      color = Kanton,  
+      size = !!sym("population")  
+    ), 
+    alpha = 0.5, 
+    position = if (jitter) position_jitter(width = 0.2, height = 0.2) else position_identity()) +
+    scale_size(range = c(1, 10)) +  
+    scale_color_manual(values = canton_colors) +  
+    labs(x = x_label, y = y_label, title = title) +  # Apply readable labels
     theme_minimal() +
     theme(
       legend.position = "bottom",
-      panel.grid.major = element_line(color = "gray80", size = 0.5),  # Subtle grid lines
+      panel.grid.major = element_line(color = "gray80", size = 0.5),
       panel.grid.minor = element_blank(),
       panel.border = element_blank()
     )
-
-  ggplotly(p, tooltip = "text", width = 600, height = 400)
+  
+  # Apply log scale only if log_scale = TRUE
+  if (log_scale) {
+    p <- p + scale_y_log10(labels = scales::comma)  # Ensures raw numbers display in log scale
+  } else {
+    p <- p + scale_y_continuous(labels = scales::comma)  # Keeps normal numeric labels
+  }
+  
+  ggplotly(p, tooltip = "text", width = 1000, height = 400)
 }
 
 # Adjusting y-axis focus ranges for specific plots
-plot_SVP23vsAge <- create_interactive_plot(data, "SVP_23", "agequota_pct", NULL, "SVP_23 vs Age Quota (%)", 
-                                 tooltip_vars = c("municipality", "Canton"), jitter = TRUE)
+plot_SVP23vsAge <- create_interactive_plot(data, "SVP_23", "agequota_pct", NULL, "SVP Election Result 2023 and Age Quota by Municipality", 
+                                           tooltip_vars = c("municipality", "Kanton"), jitter = TRUE)
 
-plot_SVP23vsIncome <- create_interactive_plot(data, "SVP_23", "incomePerCapita", NULL, "SVP_23 vs Income Per Capita", 
-                                 tooltip_vars = c("municipality", "Canton"), jitter = TRUE, y_range = c(0, 50000))
+plot_SVP23vsIncome <- create_interactive_plot(data, "SVP_23", "incomePerCapita", NULL, "SVP Election Result 2023 and Income Per Capita by Municipality", 
+                                              tooltip_vars = c("municipality", "Kanton"), jitter = TRUE, y_range = c(0, 50000))
 
-plot_SVP23vsNSwissPop <- create_interactive_plot(data, "SVP_23", "nswisspop_pct", NULL, "SVP_23 vs Non-Swiss Population (%)", 
-                                 tooltip_vars = c("municipality", "Canton"), jitter = TRUE)
+plot_SVP23vsNSwissPop <- create_interactive_plot(data, "SVP_23", "nswisspop_pct", NULL, "SVP Election Result 2023 and Non-Swiss Population (%) by Municipality", 
+                                                 tooltip_vars = c("municipality", "Kanton"), jitter = TRUE)
 
-plot_SVP23vsNaturalization <- create_interactive_plot(data, "SVP_23", "naturalization_pct", NULL, "SVP_23 vs Naturalization Rate (%)", 
-                                 tooltip_vars = c("municipality", "Canton"), jitter = TRUE, fix_negative = TRUE, y_range = c(0, 5))
+plot_SVP23vsNaturalization <- create_interactive_plot(data, "SVP_23", "naturalization_pct", NULL, "SVP Election Result 2023 and Naturalization Rate (%) by Municipality", 
+                                                      tooltip_vars = c("municipality", "Kanton"), jitter = TRUE, fix_negative = TRUE, y_range = c(0, 5))
 
-plot_SVPvsPopSize <- create_interactive_plot(data, "SVP_23", "population", NULL, "SVP_23 vs Population", 
-                                 tooltip_vars = c("municipality", "Canton"), log_scale = TRUE, y_range = c(0, 10000))
+plot_SVPvsPopSize <- create_interactive_plot(data, "SVP_23", "population", NULL, "SVP Election Result 2023 and Population by Municipality", 
+                                             tooltip_vars = c("municipality", "Kanton"), log_scale = TRUE, y_range = c(0, 10000))
+plot_SVPvsPopSize
 
 data_district <- data %>%
-  group_by(districtId) %>%
-  summarise(SVP_23 = mean(SVP_23, na.rm = TRUE),
-            edusec_pct = mean(edusec_pct, na.rm = TRUE)) %>%
-  ungroup()
+  group_by(districtId, districtName, Kanton) %>%
+  summarise(
+    SVP_23 = mean(SVP_23, na.rm = TRUE),
+    edusec_pct = mean(edusec_pct, na.rm = TRUE),
+    population = sum(population, na.rm = TRUE)  # Summing population for districts
+  ) %>%
+  ungroup() %>%
+  mutate(Kanton = as.factor(Kanton))  # Ensure Kanton remains a factor
 
 plot_SVPvsEduLvl <- create_interactive_plot(data_district, "SVP_23", "edusec_pct", NULL, 
-                                 "SVP_23 vs Secondary Education (%) (Grouped by District)", tooltip_vars = c("districtId", "Canton"))
+                                            "SVP Election Result 2023 and Secondary Education (%) by District", tooltip_vars = c("districtId","districtName", "Kanton"))
+plot_SVPvsEduLvl
+data <- data %>%
+  filter(SVP_19 > 0 & SVP_23 > 0) %>% 
+  mutate(Change_SVP = SVP_23 - SVP_19)  
 
+plot_SVP_Change <- create_interactive_plot(
+  data, 
+  x_var = "SVP_23", 
+  y_var = "Change_SVP", 
+  group_var = "Kanton", 
+  title = "SVP Vote Gains and Losses by Municipality (2019 vs. 2023)", 
+  tooltip_vars = c("municipality", "Kanton")
+)
+
+plot_SVP_Change
 
 #############################
 ##### DATA PLOTS ############
 #### (STAT. MODELS) #########
 #############################
 
+# Handle missing estimates
 missing_income <- combined_regression_results %>%
   filter(term == "incomePerCapita" & is.na(estimate))
 print(missing_income)
@@ -386,15 +501,19 @@ print(missing_income)
 combined_regression_results <- combined_regression_results %>%
   mutate(estimate = ifelse(is.na(estimate), 0, estimate))
 
-##### HEAT MAP ALL CANTONS ##### 
+##### HEATMAP WITH LABELS #####
 
-heatmap <- ggplot(combined_regression_results %>% filter(term != "(Intercept)"), 
+heatmap_data <- combined_regression_results %>% 
+  filter(term != "(Intercept)") %>%
+  mutate(term = ifelse(term %in% names(column_labels), column_labels[term], term))  # Apply readable labels
+
+heatmap <- ggplot(heatmap_data, 
                   aes(x = Party, y = term, fill = estimate)) +
   geom_tile(color = "white") +
   scale_fill_gradient2(
     low = "red", mid = "white", high = "blue", midpoint = 0,
-    limits = c(-2, 2),  # Set meaningful limits for the color scale
-    oob = scales::squish,  # Squish extreme values to the limits
+    limits = c(-2, 2),  
+    oob = scales::squish,  
     name = "Weighted Effect Size"
   ) +
   facet_wrap(~ Canton, ncol = 4 ) + 
@@ -416,7 +535,7 @@ heatmap <- ggplot(combined_regression_results %>% filter(term != "(Intercept)"),
     plot.subtitle = element_text(size = 8, hjust = 0.5) 
   )
 
-regr_heatmap <- ggplotly(heatmap, tooltip = c("x", "y", "fill"), width = 800, height = 800) %>%
+regr_heatmap <- ggplotly(heatmap, tooltip = c("x", "y", "fill"), width = 1000, height = 600) %>%
   layout(
     hoverlabel = list(
       bgcolor = "white",
@@ -432,42 +551,44 @@ regr_heatmap <- ggplotly(heatmap, tooltip = c("x", "y", "fill"), width = 800, he
 
 regr_heatmap
 
+##### FACET SCATTER PLOT WITH LABELS #####
 
-##### FACET SCATTER PLOT ##### 
+scatter_data <- combined_regression_results %>%
+  mutate(term = ifelse(term %in% names(column_labels), column_labels[term], term))  # Apply readable labels
 
-p <- ggplot(combined_regression_results, aes(
+p <- ggplot(scatter_data, aes(
   x = estimate, 
-  y = term, 
+  y = term,  
   color = Party, 
   text = paste("Canton:", Canton, "<br>Party:", Party, "<br>Effect Size:", round(estimate, 2))
-  )) +
-  geom_jitter(width = 0.1, height = 0, size = 2) +  # Jitter instead of static points
+)) +
+  geom_jitter(width = 0.1, height = 0, size = 2) +  
   facet_wrap(~ Canton) +
   scale_x_continuous(
-    trans = scales::pseudo_log_trans(base = 2),  # Use base 2 for smoother scaling
+    trans = scales::pseudo_log_trans(base = 2),  
     limits = c(-10, 10)
   ) +
   scale_color_manual(values = party_colors) +  
   labs(title = "Regression Results Across Cantons", x = "Effect Size (Log Scaled)", y = "Factor") +
   theme_minimal()
 
-
-regr_scatter <- ggplotly(p, tooltip = "text", width = 800, height = 800) %>%
+regr_scatter <- ggplotly(p, tooltip = "text", width = 1000, height = 600) %>%
   layout(
     hoverlabel = list(
       bgcolor = "white",
       font = list(size = 12)
     ),
     legend = list(
-      orientation = "v", # Vertical legend
-      x = 1.05,          # Place legend to the right of the plot
-      y = 0.5,           # Center the legend vertically
-      xanchor = "left"   # Align legend to the left
+      orientation = "v",  
+      x = 1.05,          
+      y = 0.5,           
+      xanchor = "left"   
     ),
-    margin = list(l = 50, r = 200, t = 50, b = 50) # Add space for the legend
+    margin = list(l = 50, r = 200, t = 50, b = 50) 
   )
 
 regr_scatter
+
 
 ##### SAVONG THE PLOTS ##### 
 saveRDS(plot_SVP23vsAge, "Documentation/Plots/plot_SVP23vsAge.rds")
@@ -476,10 +597,11 @@ saveRDS(plot_SVP23vsNSwissPop, "Documentation/Plots/plot_SVP23vsNSwissPop.rds")
 saveRDS(plot_SVP23vsNaturalization, "Documentation/Plots/plot_SVP23vsNaturalization.rds")
 saveRDS(plot_SVPvsPopSize, "Documentation/Plots/plot_SVPvsPopSize.rds")
 saveRDS(plot_SVPvsEduLvl, "Documentation/Plots/plot_SVPvsEduLvl.rds")
+saveRDS(plot_SVP_Change, "Documentation/Plots/plot_SVP_Change.rds")
 saveRDS(migrstructure_interactive, "Documentation/Plots/migrstructure.rds")
 saveRDS(edustructure_interactive, "Documentation/Plots/edustructure.rds")
 saveRDS(interactive_scatterplot_dem, "Documentation/Plots/demogr_scatter.rds")
 saveRDS(interactive_scatterplot_canton, "Documentation/Plots/cantons_scatter.rds")
 saveRDS(regr_scatter, "Documentation/Plots/regr_scatter.rds")
-saveRDS(regr_heatmap, "Documentation/Plots/regr_heatmap.rds")
+#saveRDS(regr_heatmap, "Documentation/Plots/regr_heatmap.rds")
 

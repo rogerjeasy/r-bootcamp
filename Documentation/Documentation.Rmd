@@ -157,7 +157,7 @@ Even tough the list of communes seems long, most of these munnicipalities do not
 
 #### Cantons and Switzerland
 
-All the data points (apart from education level) were available on municipality-level. To calculate the corresponding values for each canton, the municipal values were grouped by canton and weighted by population size of the municipality in case of the demographic values or by vote numbers in the case of the election results.
+All the data points (apart from education level) were available on municipality-level. To calculate the corresponding values for each canton, the municipal values were grouped by canton and weighted by population size of the municipality in case of the demographic values or by vote numbers in the case of the election results. In the same way a total for all of Switzerland was calculateds and included in some plots to better compare the cantons not only in relation to one another but to the swiss average values.
 
 \pagebreak
 
@@ -201,10 +201,6 @@ Most of the plots did not include statistical models but do rather visalise the 
 \pagebreak
 
 # Results
-
-## Tables
-
-Some tables.
 
 \pagebreak
 

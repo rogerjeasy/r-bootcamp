@@ -46,33 +46,34 @@ party_colors <- c(
 
 
 canton_colors <- c(
-  "GE" = "#8B0000",
-  "VD" = "#A52A2A",
-  "NE" = "#B22222",
-  "JU" = "#C71585",
-  "FR" = "#DC143C",
-  "BE" = "#FF8C00",
-  "AG" = "#DAA520",
-  "SO" = "#B8860B",
-  "BL" = "#ADFF2F",
-  "BS" = "#FFD700",
-  "TG" = "#9ACD32",
-  "ZH" = "#FFFF00",
-  "SH" = "#7FFF00",
-  "LU" = "#4682B4",
+  "GE" = "#7B001C",  
+  "VD" = "#9E2A1F",  
+  "NE" = "#C04000",  
+  "JU" = "#C71585", 
+  "FR" = "#DC143C",  
+  "BE" = "#FF8C00",  
+  "AG" = "#DAA520",  
+  "SO" = "#B8860B",  
+  "BL" = "#6B8E23", 
+  "BS" = "#FFC107",  
+  "TG" = "#6CA82E",  
+  "ZH" = "#FFD700",  
+  "SH" = "#008000", 
+  "LU" = "#4682B4",  
   "ZG" = "#5F9EA0",
-  "SZ" = "#1E90FF",
-  "UR" = "#4169E1",
-  "OW" = "#6495ED",
-  "NW" = "#87CEFA",
-  "SG" = "#32CD32",
-  "GR" = "#228B22",
-  "GL" = "#2E8B57",
-  "AR" = "#66CDAA",
-  "AI" = "#20B2AA",
-  "TI" = "#800080",
-  "VS" = "#B22222"
+  "SZ" = "#0073E6", 
+  "UR" = "#4169E1", 
+  "OW" = "#6495ED", 
+  "NW" = "#4682B4",  
+  "SG" = "#228B22",  
+  "GR" = "#006400", 
+  "GL" = "#2E8B57", 
+  "AR" = "#20B2AA",  
+  "AI" = "#008B8B",  
+  "TI" = "#800080",  
+  "VS" = "#8B0000"   
 )
+
 
 
 column_labels <- c(
@@ -288,7 +289,7 @@ migrstructure <- ggplot(migrstructure_cantons, aes(x = Kanton, y = Weighted_Perc
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-migrstructure_interactive <- ggplotly(migrstructure, width = 1000, height = 600)
+migrstructure_interactive <- ggplotly(migrstructure, width = 800, height = 300)
 migrstructure_interactive
 
 ##### EDUCATIONAL STRUCTURE ##### 
@@ -314,7 +315,7 @@ edustructure <- ggplot(edustructure_cantons, aes(x = Kanton, y = Weighted_Percen
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-edustructure_interactive <- ggplotly(edustructure, width = 1000, height = 600)
+edustructure_interactive <- ggplotly(edustructure, width = 800, height = 300)
 edustructure_interactive
 
 
@@ -346,7 +347,7 @@ p <- ggplot(scatter_data, aes(
     legend.position = "right"
   )
 
-interactive_scatterplot_dem <- ggplotly(p, tooltip = "text", width = 1000, height = 900)
+interactive_scatterplot_dem <- ggplotly(p, tooltip = "text", width = 800, height = 900)
 interactive_scatterplot_dem
 
 
@@ -393,7 +394,7 @@ p <- ggplot(scatterplot_cantons, aes(
   )
 
 # Convert to interactive plot
-interactive_scatterplot_canton <- ggplotly(p, tooltip = "text", width = 1000, height = 900)
+interactive_scatterplot_canton <- ggplotly(p, tooltip = "text", width = 800, height = 900)
 interactive_scatterplot_canton
 
 
@@ -440,7 +441,7 @@ create_interactive_plot <- function(data, x_var, y_var, group_var = "Kanton", ti
     p <- p + scale_y_continuous(labels = scales::comma)  # Keeps normal numeric labels
   }
   
-  ggplotly(p, tooltip = "text", width = 1000, height = 400)
+  ggplotly(p, tooltip = "text", width = 800, height = 400)
 }
 
 # Adjusting y-axis focus ranges for specific plots
@@ -535,7 +536,7 @@ heatmap <- ggplot(heatmap_data,
     plot.subtitle = element_text(size = 8, hjust = 0.5) 
   )
 
-regr_heatmap <- ggplotly(heatmap, tooltip = c("x", "y", "fill"), width = 1000, height = 600) %>%
+regr_heatmap <- ggplotly(heatmap, tooltip = c("x", "y", "fill"), width = 800, height = 600) %>%
   layout(
     hoverlabel = list(
       bgcolor = "white",
@@ -563,16 +564,20 @@ p <- ggplot(scatter_data, aes(
   text = paste("Canton:", Canton, "<br>Party:", Party, "<br>Effect Size:", round(estimate, 2))
 )) +
   geom_jitter(width = 0.1, height = 0, size = 2) +  
-  facet_wrap(~ Canton) +
+  facet_wrap(~ Canton, ncol = 4 ) +
   scale_x_continuous(
     trans = scales::pseudo_log_trans(base = 2),  
     limits = c(-10, 10)
   ) +
   scale_color_manual(values = party_colors) +  
   labs(title = "Regression Results Across Cantons", x = "Effect Size (Log Scaled)", y = "Factor") +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(size = 8),  # Reduce x-axis text size
+    axis.text.y = element_text(size = 8)   # Reduce y-axis text size
+  )
 
-regr_scatter <- ggplotly(p, tooltip = "text", width = 1000, height = 600) %>%
+regr_scatter <- ggplotly(p, tooltip = "text", width = 800, height = 800) %>%
   layout(
     hoverlabel = list(
       bgcolor = "white",

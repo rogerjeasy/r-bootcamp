@@ -136,7 +136,7 @@ colnames(party_table) <- c("Party", "2023 Campaign Focus")
 kable(party_table, caption = "Overview of Parties and Campaign Focus")
 ```
 
-Regional parties like the far-right Lega in the Canton of Ticino or Movement Citoyen Romande in Geneva have been taken into account for some analysis. Due to their regionality the data for them is sparse and might not yield very reliable results.
+Regional parties like the far-right Lega in the Canton of Ticino or Movement Citoyen Romande in Geneva have been taken into account for some analysis. Due to their regionality the data for them is scarse and might not yield very reliable results.
 
 #### Elections 
 
@@ -218,50 +218,38 @@ Explanatory Analysis
 
 In order to better understand the results of the analysis we assessed the data set. The main goal was to get an idea of the existing trends and distributions to reason why certain effects might cause correlations or regressions. 
 
-The graph visualises the proportion of non-swiss citizens per canton as well as all of Switzerland. This information is of importance since previous studies (Sources) show that areas, which do not have large populations of migrants, tend to vote for partys that run on anti-migration campaigns. This highlights an important contradiction, meaning that people who are not exposed to migrant populations tend to be more critical towards migrations, than votes in areas with higher ethno-cultural diversity.
-
+The graph visualises the proportion of non-Swiss citizens per canton as well as all of Switzerland. This information is of importance since previous studies (Sources) show that areas, which do not have large populations of migrants, tend to vote for parties that run on anti-migration campaigns. This highlights an important contradiction, meaning that people who are not exposed to migrant populations tend to be more critical towards migrations, than votes in areas with higher ethno-cultural diversity.
 
 ```{r migrstructure, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-
 migrstructure <- readRDS("Plots/migrstructure.rds")
 migrstructure
-
-
 ```
 \pagebreak
 
-The graph visualises the proportion of different educational layers in the demography. We know from other studies (Source here) that most swiss people do have in fact a Secondary Education degree, which leads us to the assumption that the demographic segment only in possession of a obligratory education might contain a high percentage of non-swiss populations, particularly refugees which could not complete their schooling programme since they have been forced to leave by war and conflict. Therefore the swiss population can be divided roughly in secondary and tertiary educated people. The populations having a secondary-level education are of particular interest since they represent mostly swiss and swiss-born migrants, with or without swiss citizenship, that did not further continue education after receiving  their professional degree. From prior studies on this topic, we know that they might be more likely to vote in favour of the far-right party SVP and less likely to vote in favour of left-wing SP and Greens as well as centrist parties GLP and FDP. From the graph we can extract the information that we see some consistency in educational level across Switzerland with some fluctuations from XX on the lower end up to XX on the higher end.
+The graph visualises the proportion of different educational layers in the demography. We know from other studies (Source here) that most Swiss people do have in fact a Secondary Education degree, which leads us to the assumption that the demographic segment only in possession of an obligatory education might contain a high percentage of non-Swiss populations, particularly refugees which could not complete their schooling programme since they have been forced to leave by war and conflict. Therefore, the Swiss population can be divided roughly in secondary and tertiary educated people. The populations having a secondary-level education are of particular interest since they represent mostly Swiss and Swiss-born migrants, with or without Swiss citizenship, which did not further continue education after receiving their professional degree. From prior studies on this topic, we know that they might be more likely to vote in favour of the far-right party SVP and less likely to vote in favour of left-wing SP and Greens as well as centrist parties GLP and FDP. From the graph we can extract the information that we see some consistency in educational level across Switzerland with some fluctuations from XX on the lower end up to XX on the higher end.
 
 
 ```{r edustructure, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-
 edustructure <- readRDS("Plots/edustructure.rds")
 edustructure
-
-
 ```
+
 \pagebreak
 
 ```{r demogr_scatter, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-
 demogr_scatter <- readRDS("Plots/demogr_scatter.rds")
 demogr_scatter
-
-
 ```
 
 \pagebreak
 
 ```{r cantons_scatter, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-
 cantons_scatter <- readRDS("Plots/cantons_scatter.rds")
 cantons_scatter
-
-
 ```
 
 \pagebreak
@@ -273,79 +261,53 @@ Plots TBD
 
 ```{r plot_SVP23vsAge, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-
 plot_SVP23vsAge <- readRDS("Plots/plot_SVP23vsAge.rds")
-
-htmltools::div(
-  style = "text-align: center;",
-  plot_SVP23vsAge
-) 
-
+plot_SVP23vsAge
 ```
 
-
+The plot shows the age ratio of the municpalities and the election outcome of SVP in 2023.
 
 
 ```{r plot_SVP23vsIncome, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-
 plot_SVP23vsIncome <- readRDS("Plots/plot_SVP23vsIncome.rds")
 plot_SVP23vsIncome 
-
 ```
-
-
+The plot shows the taxable income of the municpalities and the election outcome of SVP in 2023.
 
 ```{r plot_SVP23vsNSwissPop, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-
 plot_SVP23vsNSwissPop <- readRDS("Plots/plot_SVP23vsNSwissPop.rds")
 plot_SVP23vsNSwissPop 
-
 ```
 
-
-
+The plot shows the percentage of non-swiss population of the municpalities and the election outcome of SVP in 2023.
 
 ```{r plot_SVP23vsNaturalization, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-
 plot_SVP23vsNaturalization <- readRDS("Plots/plot_SVP23vsNaturalization.rds")
 plot_SVP23vsNaturalization 
-
 ```
 
-
-
-
+The plot shows the naturalization rate in percent of the municpalities and the election outcome of SVP in 2023.
 
 
 ```{r plot_SVPvsPopSize, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-
 plot_SVPvsPopSize <- readRDS("Plots/plot_SVPvsPopSize.rds")
 plot_SVPvsPopSize 
-
 ```
 
-
-
-
+The plot shows the population size in number of inhabitants of the municpalities and the election outcome of SVP in 2023.
 
 
 ```{r plot_SVPvsEduLvl, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-
 plot_SVPvsEduLvl <- readRDS("Plots/plot_SVPvsEduLvl.rds")
 plot_SVPvsEduLvl 
-
 ```
 
-
-
-
-
-
+The plot shows the education level in percentage of inhabitants only holding a secondary eductation degree of the municpalities and the election outcome of SVP in 2023.
 
 
 
@@ -354,10 +316,8 @@ plot_SVPvsEduLvl
 
 ```{r regr_scatter, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-
 regr_scatter <- readRDS("Plots/regr_scatter.rds")
 regr_scatter 
-
 ```
 
 
@@ -365,12 +325,9 @@ regr_scatter
 
 ```{r regr_heatmap, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-
 regr_heatmap <-  readRDS("Plots/regr_heatmap.rds")
 regr_heatmap
-
 ```
-
 
 
 \pagebreak
@@ -383,9 +340,10 @@ Maps with municipalities (or cantons, districts etc.).
 
 # Limitations
 
--   High percentage of non-voters whose opinions can't be measured.
--   Some people vote for SVP for reasons unrelated to migration policy.
--   Different statistical methods yield different results.
+Procedural limitations of the analysis include the unreliability of election results to establish a causal relationship to voting motivation. Since the far-right SVP campaigned on an anti-migration platform we assume that many voters were mobilised by this issue. But this does not account for non-voters, which represented in 2023 XX% of the population. Also, some people might have been voting for far-right parties for other reasons like fiscal austerity and the far right's opposition to social liberty policies - sometimes called "culture war" issues. And as always in elections, a lot of people stick for many years with the party they most identify with.
+
+Some limitations must be noted for the statistical analysis. For the education levels BfS only publishes data per district, not per municipality. The scarcity of data points means a smaller reliability of the indicator.
+
 
 \pagebreak
 

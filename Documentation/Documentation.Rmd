@@ -146,13 +146,6 @@ The most recent parliamentary elections in Switzerland took place on October 22,
 
 \pagebreak
 ### Geographic Indicators
-#### Switzerland
-
-TBD
-
-#### Cantons
-
-TBD
 
 #### Municipalities
 
@@ -161,6 +154,10 @@ As per Januar first 2024 Switzerland has 2XXX registered municipalities, that we
 During prepocessing of data there were minor inconsistencies since the used datasets span from 2019 to 2024 and some smaller municipalities had merged with larger communes during those years. Therefore, some smaller communities can not be represented perfectly in the analysis. In 2020, the former municipalities of Vogorno, Sonogno, Corippo, Brione (Verzasca) and Frasco merged to form the new municipality of Verzasca. In 2021 many small communes disappeared from the map: Haldenstein (merged into Chur), Bauen (merged into Seedorf), Surpierre (merged into Cheiry), Charrat (merged into Martigny), Montherod (merged into Aubonne), Casti-Wergenstein, Donat, Lohn and Mathon (merged together),Miège, Venthône and Veyras (merged together), municipalities of Gänsbrunnen and Welschenrohr (mmerged together),Obersteckholz (merged into Langenthal), Gettnau (merged into Willisau), Altwis (merged into Hitzkirch), Rohr (merged into Stüsslingen), Bagnes and Vollèges (merged together), Corcelles-Cormondrèche, Peseux and Valangin (merged into Neuchâtel), Les Brenets (merged into Le Locle), Bioley-Orjulaz (merged into Assens), Apples, Cottens, Pampigny, Sévery, Bussy-Chardonney and Reverolle merged into the new municipality of Hautemorges. In 2022, the following communes were dissolved: Galmiz, Gempenach and Clavaleyres (merged into Murten), Essertes (merged into Oron), Bözen, Effingen, Elfingen and Hornussen (merged together), Bad Zurzach, Baldingen, Böbikon, Kaiserstuhl, Rekingen, Rietheim, Rümikon and Wislikofen (merged into the municipality of Zurzach), Rüte and Schwende (merged together), Blonay and Saint-Légier-La Chiésaz merged together. 2023 saw the dissolution of Herznach and Ueken (merged togehter), La Chaux-des-Breuleux (merged into Le Breleux), Burg (merged into Menziken), Adlikon and Humlikon (merged to form the municipality of Andelfingen (merged together), Hemberg and Oberhelfenschwil merged into the new municipality of Neckertal. In 2021, Lüterswil-Gächliwil merged into Buchegg, Turgi was merged into Baden. Bonfol merged with Beurnevésin, Wangenried merged into Wangen an der Aare.
 
 Even tough the list of communes seems long, most of these munnicipalities do not affect the outcome of the weighted correlation since their population is in almost all cases below 1000 and in many cases below 100, with Corippo TI having a population of to 9 inhabitants at the time of the merger being the lowest populated commune ever recorded in Switzerland. Therefore these mergers do not affect the outcome of the analysis in any significant way.
+
+#### Cantons and Switzerland
+
+All the data points (apart from education level) were available on municipality-level. To calculate the corresponding values for each canton, the municipal values were grouped by canton and weighted by population size of the municipality in case of the demographic values or by vote numbers in the case of the election results.
 
 \pagebreak
 
@@ -184,7 +181,7 @@ The Income per capita is a normalized measure used by the Bundesamt für Statist
 
 #### Education Level
 
-The three indicators are as follows:
+Education levels, usually measured in form of the highest achieved school degree, are crucial for economical and social development of populations. They significantly impact individuals' perception of life and political leanings. The three indicators are as follows:
 -	Low Education: Only obligatory school education, which in Switzerland represents usually 9 school years.
 -	Secondary Education: A professional college degree, usually acquired as a result of an apprenticeship (Berufslehre, Apprentissage)
 -	Tertiary Education: An academic university degree, acquired as a result of a university study program but also includes higher degrees from professional colleges (Höhere Fachschule, Ecole Superieure)
@@ -229,6 +226,7 @@ migrstructure
 
 The graph visualises the proportion of different educational layers in the demography. We know from other studies (Source here) that most Swiss people do have in fact a Secondary Education degree, which leads us to the assumption that the demographic segment only in possession of an obligatory education might contain a high percentage of non-Swiss populations, particularly refugees which could not complete their schooling programme since they have been forced to leave by war and conflict. Therefore, the Swiss population can be divided roughly in secondary and tertiary educated people. The populations having a secondary-level education are of particular interest since they represent mostly Swiss and Swiss-born migrants, with or without Swiss citizenship, which did not further continue education after receiving their professional degree. From prior studies on this topic, we know that they might be more likely to vote in favour of the far-right party SVP and less likely to vote in favour of left-wing SP and Greens as well as centrist parties GLP and FDP. From the graph we can extract the information that we see some consistency in educational level across Switzerland with some fluctuations from XX on the lower end up to XX on the higher end.
 
+https://www.bfs.admin.ch/bfs/de/home/statistiken/wirtschaftliche-soziale-situation-bevoelkerung/gleichstellung-frau-mann/bildung/bildungsstand.assetdetail.30625351.html
 
 ```{r edustructure, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)

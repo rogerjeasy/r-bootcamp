@@ -1,3 +1,5 @@
+rm(list = ls())
+
 library(ggplot2)
 library(plotly)
 library(dplyr)
@@ -10,10 +12,13 @@ library(tidyr)
 library(raster)
 library(magrittr)
 
+setwd("C:/Users/rogej/Documents/hslu/courses/bootcamp/r-bootcamp")
+getwd()
 
-election_results <- read_csv("Data/datatable.csv")
-party_colors <- read_csv("Data/party_colors.csv")
-canton_symbols <- read_csv("Data/kanton_names.csv")
+
+election_results <- read_csv("Data/datatable.csv", show_col_types = FALSE)
+party_colors <- read_csv("Data/party_colors.csv", show_col_types = FALSE)
+canton_symbols <- read_csv("Data/kanton_names.csv", show_col_types = FALSE)
 
 # Read canton and lake borders
 canton_geo <- read_sf("Shapefiles/g2k23.shp") %>% st_transform(3857)
@@ -25,16 +30,16 @@ country_geo <- read_sf("Shapefiles/g2l23.shp")
 # Load the relief raster
 relief <- raster("Shapefiles/02-relief-ascii.asc")
 
-swiss_cantons <- election_map %>%
+swiss_cantons <- election_results %>%
   distinct(Kanton) %>%  
   filter(!is.na(Kanton)) %>%  
   pull(Kanton)
 
 # Identify the party columns dynamically (columns from CSP_23 to Uebrige_23)
-party_cols <- names(election_map)[which(names(election_map) == "CSP_23"):which(names(election_map) == "Uebrige_23")]
+party_cols <- names(election_results)[which(names(election_results) == "CSP_23"):which(names(election_results) == "Uebrige_23")]
 
 # Compute total percentage per canton
-canton_totals <- election_map %>%
+canton_totals <- election_results %>%
   pivot_longer(cols = all_of(party_cols), names_to = "Party", values_to = "Votes") %>%
   group_by(Kanton, Party) %>%
   summarise(Total_Votes = sum(Votes), .groups = "drop") %>%
@@ -57,7 +62,7 @@ canton_totals <- canton_totals %>%
   left_join(party_colors, by = "Party")
 
 # Ensure canton order is maintained
-canton_totals$Kanton <- factor(canton_totals$Kanton, levels = unique(election_map$Kanton))
+canton_totals$Kanton <- factor(canton_totals$Kanton, levels = unique(election_results$Kanton))
 
 canton_geo_with_data <- canton_geo %>%
   left_join(canton_symbols, by = "KTNAME")
@@ -130,7 +135,7 @@ municipality_prod_geo %<>%
 
 
 municipality_prod_geo %<>%
-  left_join(election_map, by = "municipalityId")
+  left_join(election_results, by = "municipalityId")
 
 View(municipality_prod_geo)
 
@@ -160,14 +165,8 @@ municipality_totals <- municipality_totals %>%
   mutate(Party = gsub("_23$", "", Party)) %>%  # Remove suffix "_23"
   left_join(party_colors, by = "Party")
 
-# Join municipality totals with municipality geometries
-municipality_geo_with_data <- municipality_geo_with_data %>%
-  rename(municipalityId = municipalityId.x) %>%
-  select(-municipalityId.y)
-View(municipality_geo_with_data)
-
 # Create tooltip text
-municipality_geo_with_data <- municipality_geo_with_data %>%
+municipality_geo_with_data <- municipality_totals %>%
   mutate(tooltip_text = sprintf("Municipality: %s\nParty: %s\nPercentage: %.1f%%", 
                                 municipalityId, Party, Percentage))
 
@@ -217,5 +216,102 @@ interactive_map_municipalities <- ggplotly(p_municipalities, tooltip = "text") %
 # Display the interactive map
 interactive_map_municipalities
 
+######### Working #############
 
+municipality_totals <- municipality_totals %>%
+  mutate(tooltip_text = case_when(
+    is.na(municipalityId) | is.na(Party) | is.na(Percentage) ~ "Data unavailable",
+    TRUE ~ sprintf("Municipality: %s\nParty: %s\nPercentage: %.1f%%", 
+                   municipalityId, Party, Percentage)
+  ))
+
+# Check if the mutation worked
+print("New structure after adding tooltip:")
+str(municipality_totals)
+
+# First ensure municipality_prod_geo has the correct ID format
+municipality_prod_geo <- municipality_prod_geo %>%
+  mutate(municipalityId = sprintf("%04d", BFS_ID))
+
+# Convert municipality_totals to a regular data frame if it's an sf object
+municipality_totals_df <- municipality_geo_with_data
+if (inherits(municipality_geo_with_data, "sf")) {
+  municipality_totals_df <- st_drop_geometry(municipality_geo_with_data)
+}
+
+# Now perform the join
+municipality_spatial_data <- municipality_prod_geo %>%
+  left_join(municipality_totals_df, by = "municipalityId")
+  mutate(Percentage = as.numeric(Percentage))
+
+# Alternative way to process relief
+relief_fixed <- raster("Shapefiles/02-relief-ascii.asc") %>%
+  mask(country_geo) %>%
+  rasterToPoints() %>%
+  as.data.frame()
+
+# Check if municipality_spatial_data has the Party column
+print(names(municipality_spatial_data))
+
+# Check if there are any values in the Party column
+print(table(municipality_spatial_data$Party, useNA = "always"))
+
+# Check if the join worked properly
+print(sum(!is.na(municipality_spatial_data$Party)))
+
+# Now try the complete plot with the fixed relief
+interactive_map_muni_results <- ggplot() +
+  # Relief layer with correct column name
+  geom_raster(
+    data = relief_fixed,
+    aes(x = x, y = y, alpha = X02.relief.ascii),  # Using correct column name
+    inherit.aes = FALSE
+  ) +
+  scale_alpha(name = "",
+              range = c(0.1, 0.9),
+              guide = "none") +
+  # Municipality layer
+  geom_sf(
+    data = municipality_spatial_data,
+    mapping = aes(fill = Party, alpha = Percentage, text = tooltip_text),
+    color = "white",
+    size = 0.1
+  ) +
+  scale_fill_manual(
+    values = setNames(party_colors$Color, party_colors$Party),
+    name = "Political Parties"
+  ) +
+  geom_sf(
+    data = canton_geo,
+    fill = "transparent",
+    color = "white",
+    size = 0.5
+  ) +
+  geom_sf(
+    data = lake_geo,
+    fill = "#D6F1FF",
+    color = "transparent"
+  ) +
+  labs(x = NULL,
+       y = NULL,
+       title = "Swiss Election Results 2023",
+       subtitle = "Results by Municipality") +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+
+# Create interactive map for municipalities
+interactive_map_muni_results <- ggplotly(interactive_map_muni_results, tooltip = "text") %>%
+  layout(
+    hoverlabel = list(
+      bgcolor = "white",
+      font = list(family = "Arial", size = 12)
+    )
+  )
+
+# Display the interactive map
+interactive_map_muni_results
 

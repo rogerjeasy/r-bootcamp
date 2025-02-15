@@ -50,6 +50,13 @@ Lorem Ipsum....
 
 Rade: TBD.
 
+**From the Assignment Infosheet: "Your group work should consist of a comprehensive analysis of your use case, which you will present to a (hypothetical) client. This analysis should include an in-depth examination of the problem being addressed. Be sure to support your findings with relevant data and insights to effectively communicate the value of your work."**
+
+**Also: "In this chapter we want you to use a package that was not mentioned in the main part of the course (data manipulation, visualisation using ggplot2, regular expressions and reporting using Rmarkdown does not count) and perform a task that was not directly discussed in the course. Be creative! Note: Here we don’t want you to use a new statistical/machine learning method. We rather want you to use a method to prepare or display data. It could even be a package that enables you to create prettier documents. What we don’t want to see is you fitting e.g. a regression model to your data. Please insert a separate section in your report and call it “Chapter of choice” such that we can easily recognise it! If you need input: feel free to ask us. Please indicate or highlight in your report what is your chapter of choice." **
+
+
+**"Your analysis must be a story that you would like to sell to a client and in this sense, it should be complete,ceasy to read, and have a thread (what are you doing, why, conclusions, interpretations, overview . . . ). It is completely up to you how the story goes and flows.vTo create a cohesive narrative in your story, it is essential to address the following key points: Source of the data, Objectives and hypotheses of the analysis, Interpretation of each step, Conclusions drawn from the analysis, Potential limitations of the study. Put yourself into the position of a client and check if your analysis is detailed, comprehensible, and easy to follow."**
+
 \pagebreak
 
 # Background
@@ -115,6 +122,11 @@ kable(dataset_info, caption = "Overview of Used Datasets")
 The process commenced with the specification of a research question and hypothesis, establishing the conceptual foundation for the project. Following this, the necessary datasets were identified and acquired on the BfS-webpage. The initial phase involved exploratory analysis through basic linear models and correlation assessments, serving as a preliminary validation of the research direction. As the project progressed, increasing levels of complexity were introduced, incorporating  statistical modelling techniques and advanced visualisations to capture the relationship between demographic indicators, regional dimensions and electoral outcomes in greater depth.
 
 \pagebreak
+
+## Generative AI
+
+
+**From the Assignment Infosheet: "ChatGPT and co. are useful tools that can provide great support during your work, but it is important to avoid abusing it. Write a quarter to maximum a half a page about which tools you have used and your learning in using gerative AI for solving tasks in R. What have you used it for? For what kind of tasks turned they out to be helpful? How do you check correctness of the answer? What did not work? Those are example questions which you can ask yourself and reflect, but you are free to write about your experiences."**
 
 ## Indicators
 

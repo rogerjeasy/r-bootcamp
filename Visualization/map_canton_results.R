@@ -5,10 +5,17 @@ library(readr)
 library(tidyr)
 library(htmltools)
 
+setwd("C:/Users/rogej/Documents/hslu/courses/bootcamp/r-bootcamp")
+getwd()
+
 # Read data files
 election_results <- read_csv("Data/datatable.csv", show_col_types = FALSE)
 party_colors <- read_csv("Data/party_colors.csv", show_col_types = FALSE)
 canton_symbols <- read_csv("Data/kanton_names.csv", show_col_types = FALSE)
+
+# Define party order explicitly
+party_order <- c("PdA_Sol", "GRUENE", "SP", "GLP", "CSP", 
+                 "Mitte", "EVP", "FDP", "EDU", "Lega", "MCR", "SVP", "LPS", "Uebrige")
 
 # Read and transform ALL geographical data to WGS84 (EPSG:4326) immediately
 canton_geo <- read_sf("Shapefiles/g2k23.shp") %>% 
@@ -40,9 +47,13 @@ canton_totals <- election_results %>%
   filter(!is.na(Kanton)) %>%
   mutate(Party = gsub("_23$", "", Party))
 
-# Clean up and join data
 party_colors <- party_colors %>%
-  distinct(Party, .keep_all = TRUE)
+  filter(!is.na(Party) & Party != "") %>%  # Ensure no NA or empty values
+  distinct(Party, .keep_all = TRUE) %>%  # Keep unique Party entries
+  mutate(Party = factor(Party, levels = party_order)) %>%  # Convert Party to factor
+  filter(!is.na(Party)) %>%  # Double check removal of NA factors
+  arrange(Party)
+
 
 canton_totals <- canton_totals %>%
   left_join(party_colors, by = "Party")
@@ -101,7 +112,7 @@ election_map <- leaflet(options = leafletOptions(minZoom = 7, maxZoom = 12)) %>%
       direction = "auto"
     ),
     highlightOptions = highlightOptions(
-      weight = 2,
+      weight = 1,
       color = "#666",
       fillOpacity = 0.9,
       bringToFront = TRUE
@@ -121,7 +132,7 @@ election_map <- leaflet(options = leafletOptions(minZoom = 7, maxZoom = 12)) %>%
   addPolygons(
     data = canton_geo,
     fill = FALSE,
-    weight = 2,
+    weight = 0.1,
     color = "white",
     opacity = 0.8
   ) %>%
@@ -130,7 +141,7 @@ election_map <- leaflet(options = leafletOptions(minZoom = 7, maxZoom = 12)) %>%
   addLegend(
     position = "bottomleft",
     colors = party_colors$Color,
-    labels = party_colors$Party,
+    labels = as.character(party_colors$Party),
     title = "Political Parties",
     opacity = 0.7
   ) %>%

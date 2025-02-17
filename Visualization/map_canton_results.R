@@ -162,3 +162,130 @@ election_map <- leaflet(options = leafletOptions(minZoom = 7, maxZoom = 12)) %>%
 election_map
 
 saveRDS(election_map, file = "Documentation/Plots/map_plot_election_results_cantons.rds")
+
+#######################################################
+# Select the top 2 strongest parties for each canton
+# Select the top 2 strongest parties for each canton
+canton_top2_winners <- merged_data %>%
+  group_by(Kanton) %>%
+  slice_max(Percentage, n = 2, with_ties = FALSE) %>%  
+  mutate(Rank = row_number()) %>%  
+  ungroup()
+
+# Merge party colors into canton_top2_winners before pivoting
+canton_top2_winners <- canton_top2_winners %>%
+  left_join(party_colors, by = "Party")  # Ensure Color column is included
+
+# Convert sf object to a regular data frame before pivoting
+canton_top2_pivot <- canton_top2_winners %>%
+  st_drop_geometry() %>%  
+  dplyr::select(Kanton, Party, Percentage, Color, Rank) %>%  # Include Color
+  pivot_wider(
+    names_from = Rank, 
+    values_from = c(Party, Percentage, Color),  # Ensure Color is pivoted
+    names_glue = "Rank_{Rank}_{.value}"  # Corrects column names
+  )
+
+# Verify that Color columns exist
+print(names(canton_top2_pivot))  # Should contain "Rank_1_Color", "Rank_2_Color"
+
+# Perform a regular left join (non-spatial)
+canton_geo_data <- canton_geo_with_data %>%
+  st_drop_geometry()
+
+canton_top2_geo <- canton_geo_data %>%
+  left_join(canton_top2_pivot, by = "Kanton") %>%
+  filter(!is.na(Rank_1_Party))  # Ensure no empty values
+
+# Restore spatial attributes after the join
+canton_top2_geo <- canton_geo_with_data %>%
+  left_join(canton_top2_geo, by = "Kanton")
+
+# Extract unique top 2 winning parties
+winning_parties_top2 <- canton_top2_winners %>%
+  distinct(Party) %>%
+  filter(!is.na(Party))  # Ensure no NA values
+
+# Filter party_colors to include only top 2 winning parties
+legend_colors_top2 <- party_colors %>%
+  filter(Party %in% winning_parties_top2$Party) %>%
+  arrange(Party)
+
+# Create interactive map with correct color assignment
+election_map_top2 <- leaflet(options = leafletOptions(minZoom = 7, maxZoom = 12)) %>%
+  # Set initial view to Switzerland
+  setView(lng = 8.2275, lat = 46.8182, zoom = 8) %>%
+  
+  # Add white background
+  addPolygons(
+    data = country_geo,
+    fillColor = "white",
+    fillOpacity = 1,
+    weight = 0,
+    color = "transparent"
+  ) %>%
+  
+  # Add canton polygons with top 2 winners
+  addPolygons(
+    data = canton_top2_geo,
+    fillColor = ~Rank_1_Color,  # Use Rank_1_Color for mapping
+    fillOpacity = 0.7,
+    weight = 1,
+    color = "white",
+    label = ~lapply(paste0(
+      "<strong>Canton:</strong> ", Kanton, "<br/>",
+      "<strong>First Strong Party:</strong> ", Rank_1_Party, " (", Rank_1_Percentage, "%)", "<br/>",
+      "<strong>Second Strong Party:</strong> ", Rank_2_Party, " (", Rank_2_Percentage, "%)"
+    ), HTML),
+    labelOptions = labelOptions(
+      style = list(
+        "background-color" = "white",
+        "border-color" = "#666",
+        "border-width" = "1px",
+        "border-style" = "solid",
+        "padding" = "4px",
+        "border-radius" = "4px"
+      ),
+      textsize = "13px",
+      direction = "auto"
+    ),
+    highlightOptions = highlightOptions(
+      weight = 1,
+      color = "#666",
+      fillOpacity = 0.9,
+      bringToFront = TRUE
+    )
+  ) %>%
+  
+  # Add lakes
+  addPolygons(
+    data = lake_geo,
+    fillColor = "#D6F1FF",
+    fillOpacity = 0.8,
+    weight = 0,
+    color = "transparent"
+  ) %>%
+  
+  # Add canton borders
+  addPolygons(
+    data = canton_geo,
+    fill = FALSE,
+    weight = 0.1,
+    color = "white",
+    opacity = 0.8
+  ) %>%
+  
+  # Add legend for top 2 winning parties
+  addLegend(
+    position = "bottomleft",
+    colors = legend_colors_top2$Color,  
+    labels = as.character(legend_colors_top2$Party),
+    title = "Top 2 Winning Parties",
+    opacity = 0.7
+  ) %>%
+  
+  # Set bounds to Switzerland
+  fitBounds(5.9, 45.8, 10.5, 47.8)
+
+# Display the updated map
+election_map_top2

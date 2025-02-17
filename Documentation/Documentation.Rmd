@@ -410,14 +410,28 @@ library(plotly)
 map_plot_election_results_cantons <- readRDS("Plots/map_plot_election_results_cantons.rds")
 map_plot_election_results_cantons
 ```
+Map results of the 2023 elections in Switzerland by canton.
 
 ```{r map_plot_election_results_municipalities, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
 map_plot_election_results_municipalities <- readRDS("Plots/map_plot_election_results_municipalities.rds")
 map_plot_election_results_municipalities
 ```
+Map results of the 2023 elections in Switzerland by municipality.
 
-**Here: ROGER. Maps with municipalities (or cantons, districts etc.).**
+```{r map_education_plot_cantons, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
+map_education_plot_cantons <- readRDS("Plots/map_education_plot_cantons.rds")
+map_education_plot_cantons
+```
+Map of the education factor per canton.
+
+```{r map_income_plot_cantons, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
+map_income_plot_cantons <- readRDS("Plots/map_income_plot_cantons.rds")
+map_income_plot_cantons
+```
+Map of the income per capita factor per canton.
 
 \pagebreak
 

@@ -7,6 +7,7 @@ output:
     toc_float: true 
     css: styles.css
     df_print: paged
+    self-contained: false
 always_allow_html: true
 bibliography: references.bib
 csl: apa-6th-edition.csl
@@ -28,6 +29,7 @@ Course   & R Bootcamp \\
 Semester & Fall 2024/25
 \end{tabular}
 ```
+
 
 \pagenumbering{gobble}
 \pagebreak
@@ -125,8 +127,7 @@ The process commenced with the specification of a research question and hypothes
 
 ## Generative AI
 
-
-**From the Assignment Infosheet: "ChatGPT and co. are useful tools that can provide great support during your work, but it is important to avoid abusing it. Write a quarter to maximum a half a page about which tools you have used and your learning in using gerative AI for solving tasks in R. What have you used it for? For what kind of tasks turned they out to be helpful? How do you check correctness of the answer? What did not work? Those are example questions which you can ask yourself and reflect, but you are free to write about your experiences."**
+Generative AI was utilised in a  limited capacity, primarily for debugging specific error messages in R and refining textual contents. In terms of text composition its primary use was for the correction of grammar and spelling errors, as well as stylistic improvements within certain paragraphs. Beyond these specific functions, the technology was not employed.
 
 ## Indicators
 
@@ -168,15 +169,12 @@ The most recent parliamentary elections in Switzerland took place on October 22,
 
 #### Municipalities
 
-As per Januar first 2024 Switzerland has 2XXX registered municipalities, that were taken into account for this analysis.
-
-During prepocessing of data there were minor inconsistencies since the used datasets span from 2019 to 2024 and some smaller municipalities had merged with larger communes during those years. Therefore, some smaller communities can not be represented perfectly in the analysis. In 2020, the former municipalities of Vogorno, Sonogno, Corippo, Brione (Verzasca) and Frasco merged to form the new municipality of Verzasca. In 2021 many small communes disappeared from the map: Haldenstein (merged into Chur), Bauen (merged into Seedorf), Surpierre (merged into Cheiry), Charrat (merged into Martigny), Montherod (merged into Aubonne), Casti-Wergenstein, Donat, Lohn and Mathon (merged together),Miège, Venthône and Veyras (merged together), municipalities of Gänsbrunnen and Welschenrohr (mmerged together),Obersteckholz (merged into Langenthal), Gettnau (merged into Willisau), Altwis (merged into Hitzkirch), Rohr (merged into Stüsslingen), Bagnes and Vollèges (merged together), Corcelles-Cormondrèche, Peseux and Valangin (merged into Neuchâtel), Les Brenets (merged into Le Locle), Bioley-Orjulaz (merged into Assens), Apples, Cottens, Pampigny, Sévery, Bussy-Chardonney and Reverolle merged into the new municipality of Hautemorges. In 2022, the following communes were dissolved: Galmiz, Gempenach and Clavaleyres (merged into Murten), Essertes (merged into Oron), Bözen, Effingen, Elfingen and Hornussen (merged together), Bad Zurzach, Baldingen, Böbikon, Kaiserstuhl, Rekingen, Rietheim, Rümikon and Wislikofen (merged into the municipality of Zurzach), Rüte and Schwende (merged together), Blonay and Saint-Légier-La Chiésaz merged together. 2023 saw the dissolution of Herznach and Ueken (merged togehter), La Chaux-des-Breuleux (merged into Le Breleux), Burg (merged into Menziken), Adlikon and Humlikon (merged to form the municipality of Andelfingen (merged together), Hemberg and Oberhelfenschwil merged into the new municipality of Neckertal. In 2021, Lüterswil-Gächliwil merged into Buchegg, Turgi was merged into Baden. Bonfol merged with Beurnevésin, Wangenried merged into Wangen an der Aare.
-
-Even tough the list of communes seems long, most of these munnicipalities do not affect the outcome of the weighted correlation since their population is in almost all cases below 1000 and in many cases below 100, with Corippo TI having a population of to 9 inhabitants at the time of the merger being the lowest populated commune ever recorded in Switzerland. Therefore these mergers do not affect the outcome of the analysis in any significant way.
+As per January 1st, 2024, Switzerland has 2131 registered municipalities, almost 100 hundred less than the total of 2212 in 2019. The analysis included only the municipalities that could be matched consistently across both elections, which included exactly 2113 municipalities, meaning their municpalityId remained the same from 2019 to 2024. 
+Even tough a range of 2113 municipalities to 2212 seems like a significant discrepancy, most of municipalities affected by merges or dissolution do not affect the outcome of the weighted correlation since their population is in almost all cases below 1000 and in many cases below 100. For example the village of Corippo TI was merged in 2019 into a neighbouring community but only had  a population of to 9 inhabitants at the time of the merger. The disappearance of such small municipalities due to mergers do not affect the outcome of the analysis in any significant way (bfs 2025).
 
 #### Cantons and Switzerland
 
-All the data points (apart from education level) were available on municipality-level. To calculate the corresponding values for each canton, the municipal values were grouped by canton and weighted by population size of the municipality in case of the demographic values or by vote numbers in the case of the election results. In the same way a total for all of Switzerland was calculateds and included in some plots to better compare the cantons not only in relation to one another but to the swiss average values.
+All the data points (apart from education level) were available on municipality-level. To calculate the corresponding values for each canton, the municipal values were grouped by canton and weighted by population size of the municipality in case of the demographic values or by vote numbers in the case of the election results. In the same way a total for all of Switzerland was calculated and included in some plots to better compare the cantons not only in relation to one another but to the swiss average values.
 
 \pagebreak
 
@@ -219,15 +217,15 @@ kable(dataset_info, caption = "Overview of Demographic Indicators")
 
 #### Non-Swiss Population
 
-The indicator “Non-Swiss Population” represents the percentage of citizens holding another passport than the swiss one per XX.XX.DATE in relation to the base number of the entire population. Migrants that have acquired swiss citizenship count as swiss population are not disclosed or analysed separately.
+The indicator “Non-Swiss Population” represents the percentage of citizens holding another passport than the swiss one per 2023 in relation to the base number of the entire population. Migrants that have acquired swiss citizenship count as swiss population are not disclosed or analysed separately.
 
 #### Citizenship Aquisition
 
-The indicator “Citizenship Aquisition” represents the percentage of citizens acquiring swiss passport in 202X in relation to the base number of the entire migrant population. The rate of absorption of foreign nationals into the swiss society indicates both willingness to become Swiss citizen from a migrant perspective as well as the willingness of local communities to support non-swiss population’s aim to integrate on a citizenship level.
+The indicator “Citizenship Acquisition” represents the percentage of citizens acquiring swiss passport in 202X in relation to the base number of the entire migrant population. The rate of absorption of foreign nationals into the swiss society indicates both willingness to become Swiss citizen from a migrant perspective as well as the willingness of local communities to support non-swiss population’s aim to integrate on a citizenship level.
 
 #### Income Per Capita
 
-The Income per capita is a normalized measure used by the Bundesamt für Statistik to compare income across Switzerland. It represents the income (minus deductibles on federal level) that is recorded by the federal tax office in collaboration with the cantonal tax administrations. Therefore it does not represent the net income, but rather the taxable income.
+The Income per capita is a normalized measure used by the Federal Statistical Office to compare income across Switzerland. It represents the income (minus deductibles on federal level) that is recorded by the federal tax office in collaboration with the cantonal tax administrations. Therefore it does not represent the net income, but rather the taxable income.
 
 #### Education Level
 
@@ -235,7 +233,7 @@ Education levels, usually measured in form of the highest achieved school degree
 
 #### Age ratio
 
-The age ratio is a standardized measure of the Bundesamt für Statistik, that measures the percentage of aged populations (65 and above) in relation to the adult respectively working-age population (18-64). Therefore, high number indicates an outsized aged population.
+The age ratio is a standardized measure of the Federal Statistical Office, that measures the percentage of aged populations (65 and above) in relation to the adult respectively working-age population (18-64). Therefore, high number indicates an outsized aged population.
 
 \pagebreak
 
@@ -263,27 +261,30 @@ In order to better understand the results of the analysis we assessed the data s
 
 ```{r migrstructure, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-migrstructure <- readRDS("Plots/migrstructure.rds")
+
+migrstructure <- readRDS("Plots/migrstructure.rds") %>%
+  toWebGL()
+
 migrstructure
 ```
 
-The graph visualises the proportion of non-Swiss citizens per canton as well as all of Switzerland. This information is of importance since previous studies (Sources) show that areas, which do not have large populations of migrants, tend to vote for parties that run on anti-migration campaigns. This highlights an important contradiction, meaning that people who are not exposed to migrant populations tend to be more critical towards migrations, than votes in areas with higher ethno-cultural diversity.
+The graph visualises the proportion of non-Swiss citizens per canton as well as all of Switzerland. This information is of importance since previous studies **(Tresch S. 15)** show that areas, which do not have large populations of migrants, tend to vote for parties that run on anti-migration campaigns. This highlights an important contradiction, meaning that people who are not exposed to migrant populations tend to be more critical towards migrations, than votes in areas with higher ethno-cultural diversity.
 
 \pagebreak
 
 ```{r edustructure, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-edustructure <- readRDS("Plots/edustructure.rds")
+edustructure <- readRDS("Plots/edustructure.rds") %>%
+  toWebGL()
 edustructure
 ```
 
-The graph visualises the proportion of different educational layers in the demography. We know from other studies (Source here) that most Swiss people do have in fact a Secondary Education degree, which leads us to the assumption that the demographic segment only in possession of an obligatory education might contain a high percentage of non-Swiss populations, particularly refugees which could not complete their schooling programme since they have been forced to leave by war and conflict. Therefore, the Swiss population can be divided roughly in secondary and tertiary educated people. The populations having a secondary-level education are of particular interest since they represent mostly Swiss and Swiss-born migrants, with or without Swiss citizenship, which did not further continue education after receiving their professional degree. From prior studies on this topic, we know that they might be more likely to vote in favour of the far-right party SVP and less likely to vote in favour of left-wing SP and Greens as well as centrist parties GLP and FDP. From the graph we can extract the information that we see some consistency in educational level across Switzerland with some fluctuations from XX on the lower end up to XX on the higher end.
+The graph visualises the proportion of different educational layers in the demography. We know from other studies **(bfs 2025)** that most Swiss people do have in fact a Secondary Education degree, which leads us to the assumption that the demographic segment only in possession of an obligatory education might contain a high percentage of non-Swiss populations, particularly refugees which could not complete their schooling programme since they have been forced to leave by war and conflict. Therefore, the Swiss population can be divided roughly in secondary and tertiary educated people. The populations having a secondary-level education are of particular interest since they represent mostly Swiss and Swiss-born migrants, with or without Swiss citizenship, which did not further continue education after receiving their professional degree. From prior studies on this topic, we know that they might be more likely to vote in favour of the far-right party SVP and less likely to vote in favour of left-wing SP and Greens as well as centrist parties GLP and FDP. From the graph we can extract the information that we see some consistency in educational level across Switzerland with some fluctuations from XX on the lower end up to XX on the higher end.
 
-<https://www.bfs.admin.ch/bfs/de/home/statistiken/wirtschaftliche-soziale-situation-bevoelkerung/gleichstellung-frau-mann/bildung/bildungsstand.assetdetail.30625351.html>
 
 ```{r demogr_scatter, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-demogr_scatter <- readRDS("Plots/demogr_scatter.rds")
+demogr_scatter <- readRDS("Plots/demogr_scatter.rds") 
 demogr_scatter
 ```
 
@@ -294,6 +295,13 @@ The stacked bar chart illustrates the distribution of education levels across Sw
 
 
 ### General Elections 2023
+
+```{r election_results_box_plot, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
+election_results_box_plot <- readRDS("Plots/box_plot_election_results.rds") %>%
+  toWebGL()
+election_results_box_plot
+```
 
 Switzerland held federal elections to renew the National Council and the Council of States on 22 October 2023. Leading up to the 2023 elections, there was considerable anticipation regarding whether the environmental momentum observed in 2019 would persist. 2019 saw a significant gain for parties that center their policies around pro-environmental messaging, most notably the Greens and GLP. However, the results indicated a shift in voter perception on priorities, with the SVP's focus on migration seemingly resonating more with the electorate.\
 The Swiss People's Party (SVP), known for its anti-migration stance since they first gained momentum in the 1990s, reinforced their image as a party of choise for a voterbase skeptical of migration. In 2023 they achieved significant gains, reversing the losses they experienced in the 2019 elections. In contrast, both the Green Party and the Green Liberal Party faced notable setbacks, losing a considerable portion of the seats they won in 2019.
@@ -308,7 +316,8 @@ In the first plot a positive y-value signifies a gain in SVP support, whereas a 
 
 ```{r plot_SVP_Change, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-plot_SVP_Change <- readRDS("Plots/plot_SVP_Change.rds")
+plot_SVP_Change <- readRDS("Plots/plot_SVP_Change.rds") %>%
+  toWebGL()
 plot_SVP_Change 
 ```
 
@@ -319,7 +328,8 @@ The visual representation of the data points without statistical analysis or any
 
 ```{r plot_SVP23vsNSwissPop, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-plot_SVP23vsNSwissPop <- readRDS("Plots/plot_SVP23vsNSwissPop.rds")
+plot_SVP23vsNSwissPop <- readRDS("Plots/plot_SVP23vsNSwissPop.rds") %>%
+  toWebGL()
 plot_SVP23vsNSwissPop 
 ```
 
@@ -327,7 +337,8 @@ The next plot as shown below illustrates the relationship between SVP's vote sha
 
 ```{r plot_SVP23vsAge, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-plot_SVP23vsAge <- readRDS("Plots/plot_SVP23vsAge.rds")
+plot_SVP23vsAge <- readRDS("Plots/plot_SVP23vsAge.rds") %>%
+  toWebGL()
 plot_SVP23vsAge
 ```
 
@@ -337,7 +348,8 @@ Larger municipalities, represented by bigger circles, tend to have slightly high
 
 ```{r plot_SVP23vsNaturalization, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-plot_SVP23vsNaturalization <- readRDS("Plots/plot_SVP23vsNaturalization.rds")
+plot_SVP23vsNaturalization <- readRDS("Plots/plot_SVP23vsNaturalization.rds") %>%
+  toWebGL()
 plot_SVP23vsNaturalization 
 ```
 
@@ -345,7 +357,8 @@ The scatter plot illustrates the relationship between the SVP's vote share in th
 
 ```{r plot_SVP23vsIncome, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-plot_SVP23vsIncome <- readRDS("Plots/plot_SVP23vsIncome.rds")
+plot_SVP23vsIncome <- readRDS("Plots/plot_SVP23vsIncome.rds") %>%
+  toWebGL()
 plot_SVP23vsIncome 
 ```
 
@@ -353,7 +366,8 @@ The scatter plot displays the relationship between the SVP's vote share in the 2
 
 ```{r plot_SVPvsPopSize, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-plot_SVPvsPopSize <- readRDS("Plots/plot_SVPvsPopSize.rds")
+plot_SVPvsPopSize <- readRDS("Plots/plot_SVPvsPopSize.rds") %>%
+  toWebGL()
 plot_SVPvsPopSize 
 ```
 
@@ -361,7 +375,8 @@ The scatter plot examines the relationship between the SVP's vote share in the 2
 
 ```{r plot_SVPvsEduLvl, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-plot_SVPvsEduLvl <- readRDS("Plots/plot_SVPvsEduLvl.rds")
+plot_SVPvsEduLvl <- readRDS("Plots/plot_SVPvsEduLvl.rds") %>%
+  toWebGL()
 plot_SVPvsEduLvl 
 ```
 
@@ -371,7 +386,8 @@ plot_SVPvsEduLvl
 
 ```{r regr_scatter, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-regr_scatter <- readRDS("Plots/regr_scatter.rds")
+regr_scatter <- readRDS("Plots/regr_scatter.rds") %>%
+  toWebGL()
 regr_scatter 
 ```
 
@@ -398,23 +414,19 @@ Two cantonal parties should also be mentioned, especially in terms of their loca
 
 ## Maps
 
-```{r election_results_box_plot, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
-library(plotly)
-election_results_box_plot <- readRDS("Plots/box_plot_election_results.rds")
-election_results_box_plot
-```
-Results of the 2023 elections in Switzerland are visualized in the box plot above.
 
 ```{r map_plot_election_results_cantons, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
-library(plotly)
-map_plot_election_results_cantons <- readRDS("Plots/map_plot_election_results_cantons.rds")
+library(plotly) 
+map_plot_election_results_cantons <- readRDS("Plots/map_plot_election_results_cantons.rds") %>%
+  toWebGL()
 map_plot_election_results_cantons
 ```
 Map results of the 2023 elections in Switzerland by canton.
 
 ```{r map_plot_election_results_municipalities, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-map_plot_election_results_municipalities <- readRDS("Plots/map_plot_election_results_municipalities.rds")
+map_plot_election_results_municipalities <- readRDS("Plots/map_plot_election_results_municipalities.rds") %>%
+  toWebGL()
 map_plot_election_results_municipalities
 ```
 Map results of the 2023 elections in Switzerland by municipality.
@@ -451,7 +463,7 @@ The results also highlight  distinct electoral profiles of two cantonal right-wi
 
 Looking at SVP's main competitors across the political spectrum, the Social Democratic Party (SP) performs best in urbanised municipalities with lower and middle incomes, higher shares of migrants and higher levels of education. The Greens similarly benefits from those variables, showing a significant overlap with SP's voter base in terms of demographic markers. Conversely, the Mitte party appeals to middle-class voters in less ethnoculturally diverse municipalities. The Green Liberal Party (GLP), on the other hand, finds its support diverse urban areas with high share of university-degree educated people. The Free Democratic Party (FDP) shares a similar economically liberal profile to GLP but performs best in high-income municipalities with a strong secondary education presence, suggesting a voter base of SMEs and middle-class professionals like self-employed entrepreneurs.\
 
-Despite clear trends and patterns, it remains difficult to establish causality between demographic factors and voting outcomes. While the SVP campaigned heavily on an anti-migration platform, it is impossible to determine whether voters were primarily mobilized by this issue. Many voters may have supported the party for other reasons, such as economic policies, opposition to social liberalism, or long-term partisan loyalty. Additionally, the analysis does not account for non-voters, who made up a significant portion of the electorate in 2023.\
+Despite clear trends and patterns, it remains difficult to establish causality between demographic factors and voting outcomes. While the SVP campaigned h eavily on an anti-migration platform, it is impossible to determine whether voters were primarily mobilized by this issue. Many voters may have supported the party for other reasons, such as economic policies, opposition to social liberalism, or long-term partisan loyalty. Additionally, the analysis does not account for non-voters, who made up a significant portion of the electorate in 2023.\
 
 Further methodological constraints arise from data availability and statistical modeling limitations. Education levels, for instance, are only published at the district level rather than for individual municipalities, reducing the precision of this variable. Additionally, demographic factors such as age, income, and migration are often highly correlated, creating potential issues of multicollinearity that make it difficult to isolate the independent effect of each variable. The assumption of linear relationships between predictors and election outcomes may also oversimplify the dynamics at play and heteroscedasticity may impact the reliability of the model’s estimates.\
 

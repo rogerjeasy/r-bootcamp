@@ -393,10 +393,16 @@ election_results_box_plot
 ```
 Results of the 2023 elections in Switzerland are visualized in the box plot above.
 
-```{r election_results_map, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r map_plot_election_results_cantons, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
-election_results_map <- readRDS("Plots/map_election_results.rds")
-election_results_map
+map_plot_election_results_cantons <- readRDS("Plots/map_plot_election_results_cantons.rds")
+map_plot_election_results_cantons
+```
+
+```{r map_plot_election_results_municipalities, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
+map_plot_election_results_municipalities <- readRDS("Plots/map_plot_election_results_municipalities.rds")
+map_plot_election_results_municipalities
 ```
 
 **Here: ROGER. Maps with municipalities (or cantons, districts etc.).**

@@ -39,12 +39,15 @@ swiss_cantons <- election_results %>%
 party_cols <- names(election_results)[which(names(election_results) == "CSP_23"):which(names(election_results) == "Uebrige_23")]
 
 # Compute total percentage per canton
+#canton_totals <- election_results %>%
+#  pivot_longer(cols = all_of(party_cols), names_to = "Party", values_to = "Votes") %>%
 canton_totals <- election_results %>%
-  pivot_longer(cols = all_of(party_cols), names_to = "Party", values_to = "Votes") %>%
+  pivot_longer(cols = all_of(party_cols), names_to = "Party", values_to = "Vote_Percentage") %>%
+  mutate(Actual_Votes = (Vote_Percentage / 100) * vote_num) %>%  
   group_by(Kanton, Party) %>%
-  summarise(Total_Votes = sum(Votes), .groups = "drop") %>%
+  summarise(Total_Votes = sum(Actual_Votes, na.rm = TRUE), .groups = "drop") %>%  
   group_by(Kanton) %>%
-  mutate(Percentage = round((Total_Votes / sum(Total_Votes)) * 100, 2)) %>%
+  mutate(Percentage = round((Total_Votes / sum(Total_Votes)) * 100, 2)) %>% 
   ungroup()
 
 canton_totals <- canton_totals %>%
@@ -148,8 +151,12 @@ party_cols <- names(municipality_election_data)[which(names(municipality_electio
 # Compute total percentage per municipality
 municipality_totals <- municipality_election_data %>%
   pivot_longer(cols = all_of(party_cols), names_to = "Party", values_to = "Votes") %>%
+  pivot_longer(cols = all_of(party_cols), names_to = "Party", values_to = "Vote_Percentage") %>%
+  mutate(Actual_Votes = (Vote_Percentage / 100) * vote_num) %>%  
   group_by(municipalityId, Party) %>%
   summarise(Total_Votes = sum(Votes, na.rm = TRUE), .groups = "drop") %>%
+  #summarise(Total_Votes = sum(Votes, na.rm = TRUE), .groups = "drop") %>%
+  summarise(Total_Votes = sum(Actual_Votes, na.rm = TRUE), .groups = "drop") %>%  
   group_by(municipalityId) %>%
   mutate(Percentage = round((Total_Votes / sum(Total_Votes)) * 100, 2)) %>%
   ungroup()

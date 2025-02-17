@@ -5,29 +5,28 @@ library(stringr)
 
 ### IMPORTING THE DATASETS
 
-import1 <- read.csv("Data/sd-t-17.02-NRW2023-parteien-appendix.csv",
-                  header = TRUE,
-                   sep = ";")
+import_data <- function(file_path, skip = 0, col_names = TRUE, sep = ";") {
+  if (grepl("\\.csv$", file_path)) {
+    return(read.csv(file_path, header = TRUE, sep = sep))
+  } else if (grepl("\\.xlsx$", file_path)) {
+    return(read_excel(file_path, skip = skip, col_names = col_names))
+  } else {
+    stop("Unsupported file format: ", file_path)
+  }
+}
+ files <- list(
+  list("Data/sd-t-17.02-NRW2023-parteien-appendix.csv", 0, TRUE, ";"),
+  list("Data/px-x-0102010000_104_20250127-155044.xlsx", 2, TRUE),
+  list("Data/su-e-40.02.15.08.05-2022.xlsx", 4, TRUE),
+  list("Data/px-x-0102020000_201_20250129-134648.xlsx", 2, FALSE),
+  list("Data/su-d-01.02.03.06.xlsx", 5, FALSE),
+  list("Data/27600_131.xlsx", 6, FALSE),
+  list("Data/Gemeindestand.xlsx", 0, TRUE),
+  list("Data/sd-t-17.02-NRW2023-wahlbeteiligung-appendix.csv",0, TRUE, ";")
+)
 
-import2 <- read_excel("Data/px-x-0102010000_104_20250127-155044.xlsx", 
-                      skip = 2)
-
-import3 <- read_excel("Data/su-e-40.02.15.08.05-2022.xlsx", skip = 4)
-
-import4 <- read_excel("Data/px-x-0102020000_201_20250129-134648.xlsx", 
-                      skip = 2, 
-                      col_names = FALSE)  
-
-import5 <- read_excel("Data/su-d-01.02.03.06.xlsx", 
-                      skip = 5, 
-                      col_names = FALSE)  
-
-import6 <- read_excel("Data/27600_131.xlsx", 
-                      skip = 6, 
-                      col_names = FALSE)  
-
-import7 <- read_excel("Data/Gemeindestand.xlsx")  
-
+imported_data <- lapply(files, function(f) import_data(f[[1]], f[[2]], f[[3]]))
+names(imported_data) <- paste0("import", 1:length(files))
 
 ### DATASET 1: Election Results 2023
 election2023 <- import1 %>%
@@ -82,12 +81,9 @@ election2023 <- import1 %>%
   group_by(municipality, municipalityId) %>% 
   dplyr::summarize(across(CSP_23:Uebrige_19, ~ sum(.x, na.rm = TRUE)), .groups = "drop") %>% 
   arrange(municipalityId) 
-
+ 
 election2023 <- election2023 %>%
   mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
-
-election2023
-
 
 ### DATASET 2: Population Numbers (Swiss vs. Non-Swiss Population)
 
@@ -112,12 +108,12 @@ swisspop <- swisspop %>%
   filter(nchar(municipalityId) == 4 & municipalityId != "8001") %>%
   mutate(
     nswisspop_num = population - swisspop_num,
-    nswisspop_pct = round((nswisspop_num / population) * 100, 2)
+    nswisspop_pct = round((nswisspop_num / population) * 100, 2),
+    swisspop_pct = round((swisspop_num / population) * 100, 2) 
   )
 swisspop
 
 ### DATASET 3: Education 
-
 
 education <- import3 %>%
   dplyr::select(districtId = 1, Kanton = 2, districtName = 3, edupop_num = 4, edulow_num = 6, edusec_num = 8, eduter_num = 10)
@@ -148,15 +144,13 @@ column_names <- c(
 )
 
 colnames(import4) <- column_names
-
+import4
 citizenship <- import4 %>%
   dplyr::select(-ID, -citizenship, -sex) %>%
   filter(grepl("^\\.\\.\\.\\.\\.\\.", municipalityId)) %>%
   mutate(
     municipalityId = substr(municipalityId, 7, 10)
   )
-
-print(citizenship)
 
 ### DATASET 5: Age distribution
 # agequota_pct: statistical measurement for aged population in relation to middle age (20-65) population
@@ -180,8 +174,6 @@ age <- import5 %>%
   ) %>%
   dplyr::select(municipalityId, agepop_num, age2065_num, age66plus_num, agequota_pct)  # Keep only relevant columns
 
-age
-
 ### DATASET 6: some income or wealth metric 
 
 income <- import6[, 1:4]
@@ -195,8 +187,6 @@ income <- income %>%
   mutate(incomePerCapita = round(as.numeric(incomePerCapita))) %>%
   dplyr::select(municipalityId, incomePerCapita)
 
-income
-
 ### DATASET 7: Overview of Municipality, Distric, Canton for improved matching
 
 municipaldata <- import7 %>%
@@ -208,25 +198,36 @@ municipaldata <- import7 %>%
 
 municipaldata <- municipaldata %>%
   mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
-municipaldata
+
+### DATASET 8: Total voter num
+votenums <- imported_data[[8]] %>%
+  dplyr::select(
+    municipalityId = gemeinde_nummer,   # Rename gemeinde_nummer to municipalityId
+    vote_num = gueltige_wahlzettel     # Rename gueltige_wahlzettel to vote_num
+  ) %>%
+  filter(!is.na(municipalityId) & municipalityId != "")  # Exclude rows where municipalityId is NA or empty
+
+votenums <- votenums %>%
+  mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
+
+View(votenums)
 
 ### JOINING THE DATASETS
 
 combined_data <- election2023 %>%
-  left_join(swisspop %>% dplyr::select(municipalityId, municipalityId, population, swisspop_num, nswisspop_num, nswisspop_pct), by = "municipalityId") %>%
+  left_join(swisspop %>% dplyr::select(municipalityId, municipalityId, population, swisspop_num, swisspop_pct, nswisspop_num, nswisspop_pct), by = "municipalityId") %>%
   left_join(citizenship %>% dplyr::select(municipalityId, naturalization_num), by = "municipalityId") %>%
   left_join(municipaldata %>% dplyr::select(municipalityId, Kanton, districtId, districtName), by = "municipalityId") %>%
   left_join(education %>% dplyr::select(districtId, edupop_num, edulow_num, edusec_num, eduter_num, edulow_pct, edusec_pct, eduter_pct), by = "districtId") %>%
   left_join(age %>% dplyr::select(municipalityId, agepop_num, age2065_num, age66plus_num, agequota_pct), by = "municipalityId") %>%
-  left_join(income %>% dplyr::select(municipalityId, incomePerCapita), by = "municipalityId") 
-
+  left_join(income %>% dplyr::select(municipalityId, incomePerCapita), by = "municipalityId")  %>%
+  left_join(votenums %>% dplyr::select(municipalityId, vote_num), by = "municipalityId") 
 
 combined_data <- combined_data %>%
   filter(nchar(municipalityId) == 4,
          !is.na(districtId),  # Remove rows where districtId is NA
          districtId != "" 
          )
-
 
 ## SAVE COMBINED DATA IN DATATABLE AS CSV
 

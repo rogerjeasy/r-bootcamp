@@ -5,49 +5,42 @@ output: html_document
 
 ### Open questions
 
-To be clarified:
-
--   ...
-
 ### Task Management Table
 
--   **Data Sets**
-    -   Must Haves
+-   ~~**Data Sets**~~
+    -   ~~Must Haves~~
         -   ~~Election Results~~
         -   ~~Demography, Table with all Municipalities~~
-        -   ~~Education Level~~ (District number missing!)
-        -   ~~Age distribution~~ (Rade)
-        -   Economical Indicator (Taxable income) -\> Rade
-    -   Nice-To-Haves
-        -   ...
--   **Statistical Models**
-    -   Must Haves
+        -   ~~Education Level~~
+        -   ~~Age distribution~~
+        -   ~~Economical Indicator (Taxable income) -\> Rade~~
+-   ~~**Statistical Models**~~
+    -   ~~Must Haves~~
         -   ~~Correlation Migrants vs. SVP Election Result: all of Switzerland~~ **(Rade)**
         -   ~~Correlation Migrants vs. SVP Election Result: per Cantons~~ **(Rade)**
-    -   Nice-To-Haves
-        -   Correlation Education Level vs. SVP Success: per District **(TBD)**
-        -   Correlation Migrants vs. SVP Election Result: per District **(TBD)**
-            -   ..but only if we do education level per district
+        -   ~~Correlation Education Level vs. SVP Success: per District **(TBD)**~~
+        -   ~~Correlation Migrants vs. SVP Election Result: per District **(TBD)**~~
 -   **Plots**
     -   Must Haves
-        -   Maps: General Plots with election results by shapefile **(Roger)**:
-            -   On the basis of:
-                -   Map of Cantons
-                -   Map of Municipalities
+        -   ~~Demographic Composition (**Rade):**~~
+            -   ~~**4 Bar Charts with more detailed demography per Canton (Rade)** / 1 per demographic factor~~
+            -   ~~Bivariate Graphs: SVP Success in % vs. Migrant Populations in % (Rade)~~
+            -   ~~Bivariate Graphs: SVP Success in % vs. Age Ratio (Rade)~~
+            -   ~~Bivariate Graphs: SVP Success in % vs. Citizenship Aquisition in % (Rade)~~
+            -   ~~Bivariate Graphs: SVP Success in % vs. Taxable IncomePerCapital in CHF (Rade)~~
+        -   **Maps: General Plots with election results by shapefile (Roger):**
+            -   **On the basis of:**
+                -   **Maps: Plot the demographic factors per municipalities (or per canton)**
+                -   **Map per Cantons: use dataset from stat_models "combined_regression_results"**
+                -   **Results of winning party but if possible include second party, third. etc. per Canton**
+                -   **.. and per Municplaity**
             -   Attention: Partys are color-coded (see <https://www.elections.admin.ch/en/ch/>)
-            -   Parties should be **in order of political position** (left to right):\
-                PdA_Sol, GRUENE, SP, GLP, CSP, Mitte, EVP, FDP, EDU, LEGA, MCR, SVP
-        -   Bar Diagram: Plotting Results in all cantons (see austrian example: <https://wetteraukreis.de/fileadmin/6_Wetterau/Portraet/Statistik/Wahlergebnisse_BTW_21_Gemeinden.jpg>)
-    -   Nice-To-Haves
-        -   Correlation Migrants vs. SVP Election Result:
-            -   Map of all Municipalities **(TBD)**
-            -   Map per Cantons **(TBD)**
-            -   Bivariate scatterplot for better comparison of cantons or municipalities **(TBD)**
-        -   If we include education: Map of Districts Correlation Education Level vs. SVP Success **(TBD)**
+            -   ~~Parties should be **in order of political position** (left to right):\
+                ~~PdA_Sol, GRUENE, SP, GLP, CSP, Mitte, EVP, FDP, EDU, LEGA, MCR, SVP
 -   **Documentation**
-    -   ~~Background and Core Concepts~~ **(Rade)**
-    -   Current State of Research **(Rade)**
-    -   Introduction **(Rade)**
-    -   Results **(Rade/Roger)**
-    -   Discussion **(Rade/Roger)**
-    -   Conclusion **(Rade)**
+    -   ~~Background and Core Concepts~~ ~~**(Rade)**~~
+    -   ~~Current State of Research **(Rade)**~~
+    -   **Introduction (Rade)**
+    -   **Results** **(Rade/Roger)**
+    -   ~~Discussion **(Rade)**~~
+    -   **Conclusion (Rade)**

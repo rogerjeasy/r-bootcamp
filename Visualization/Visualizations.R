@@ -26,13 +26,13 @@ swiss_cantons <- election_map %>%
 # Identify the party columns dynamically (columns from CSP_23 to Uebrige_23)
 party_cols <- names(election_map)[which(names(election_map) == "CSP_23"):which(names(election_map) == "Uebrige_23")]
 
-# Compute total percentage per canton
 canton_totals <- election_map %>%
-  pivot_longer(cols = all_of(party_cols), names_to = "Party", values_to = "Votes") %>%
+  pivot_longer(cols = all_of(party_cols), names_to = "Party", values_to = "Vote_Percentage") %>%
+  mutate(Actual_Votes = (Vote_Percentage / 100) * vote_num) %>%  
   group_by(Kanton, Party) %>%
-  summarise(Total_Votes = sum(Votes), .groups = "drop") %>%
+  summarise(Total_Votes = sum(Actual_Votes, na.rm = TRUE), .groups = "drop") %>%  
   group_by(Kanton) %>%
-  mutate(Percentage = round((Total_Votes / sum(Total_Votes)) * 100, 2)) %>%
+  mutate(Percentage = round((Total_Votes / sum(Total_Votes)) * 100, 2)) %>% 
   ungroup()
 
 canton_totals <- canton_totals %>%
@@ -49,9 +49,16 @@ canton_totals <- canton_totals %>%
   mutate(Party = gsub("_23$", "", Party)) %>%  # Remove suffix "_23"
   left_join(party_colors, by = "Party")
 
-# Ensure canton order is maintained
-canton_totals$Kanton <- factor(canton_totals$Kanton, levels = unique(election_map$Kanton))
-View(canton_totals)
+
+# Define party order explicitly
+party_order <- c("PdA_Sol", "GRUENE", "SP", "GLP", "CSP", 
+                 "Mitte", "EVP", "FDP", "EDU", "Lega", "MCR", "SVP", "LPS", "Uebrige")
+
+# Convert Party column to factor with correct order
+canton_totals$Party <- factor(canton_totals$Party, levels = party_order)
+
+canton_totals <- canton_totals %>%
+  filter(!is.na(Party))
 
 # Create the stacked bar plot
 p <- ggplot(canton_totals, aes(x = Kanton, y = Percentage, fill = Party, 
@@ -79,12 +86,4 @@ interactive_plot <- ggplotly(p, tooltip = "text") %>%
 
 # Display the interactive plot
 interactive_plot
-
-# canton borders
-canton_geo <- read_sf("Shapefiles/g2k23.shp")
-
-# read country borders
-country_geo <- read_sf("Shapefiles/g2l23.shp")
-
-# read lakes
-lake_geo <- read_sf("Shapefiles/g2s23.shp")
+saveRDS(interactive_plot, file = "Documentation/Plots/box_plot_election_results.rds")

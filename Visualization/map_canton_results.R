@@ -172,10 +172,6 @@ canton_top2_winners <- merged_data %>%
   mutate(Rank = row_number()) %>%  
   ungroup()
 
-# Merge party colors into canton_top2_winners before pivoting
-canton_top2_winners <- canton_top2_winners %>%
-  left_join(party_colors, by = "Party")  # Ensure Color column is included
-
 # Convert sf object to a regular data frame before pivoting
 canton_top2_pivot <- canton_top2_winners %>%
   st_drop_geometry() %>%  
@@ -289,3 +285,5 @@ election_map_top2 <- leaflet(options = leafletOptions(minZoom = 7, maxZoom = 12)
 
 # Display the updated map
 election_map_top2
+
+saveRDS(election_map_top2, file = "Documentation/Plots/map_plot_two_strongest_parties_election_results_cantons.rds")

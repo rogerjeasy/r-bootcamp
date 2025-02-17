@@ -1,19 +1,23 @@
 ---
-title: "Mapping Demographic Composition as a Predictor of Far-Right Success in the 2023 Swiss Federal Election"
-author: 'Bavibidila, R., Jevdenic, R.'
+title: "Mapping Demographic Composition as a Predictor of Far-Right Success in the
+  2023 Swiss Federal Election"
+author: "Bavibidila, R., Jevdenic, R."
 output:
   html_document:
-    toc: true
-    toc_float: true 
+    toc: yes
+    toc_float: yes
     css: styles.css
     df_print: paged
-    self-contained: false
-always_allow_html: true
+    self-contained: no
+  pdf_document:
+    toc: yes
+always_allow_html: yes
 bibliography: references.bib
-csl: apa-6th-edition.csl
+csl: "apa-6th-edition.csl"
 fontsize: 11pt
 linestretch: 1.3
-subtitle: "Exploring Interactions between Anti-Migration Sentiment and Ethnocultural Diversity"
+subtitle: "Exploring Interactions between Anti-Migration Sentiment and Ethnocultural
+  Diversity"
 ---
 
 ```{=latex}
@@ -422,6 +426,14 @@ map_plot_election_results_cantons <- readRDS("Plots/map_plot_election_results_ca
 map_plot_election_results_cantons
 ```
 Map results of the 2023 elections in Switzerland by canton.
+
+```{r map_plot_two_strongest_parties_election_results_cantons, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly) 
+map_plot_two_strongest_parties_election_results_cantons <- readRDS("Plots/map_plot_two_strongest_parties_election_results_cantons.rds") %>%
+  toWebGL()
+map_plot_two_strongest_parties_election_results_cantons
+```
+Results of winning party including the second party per canton.
 
 ```{r map_plot_election_results_municipalities, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)

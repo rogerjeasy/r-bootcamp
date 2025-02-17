@@ -502,6 +502,13 @@ print(missing_income)
 combined_regression_results <- combined_regression_results %>%
   mutate(estimate = ifelse(is.na(estimate), 0, estimate))
 
+write.csv(combined_regression_results, 
+          file = "Data/combined_regression_results.csv", 
+          row.names = FALSE)
+
+# Confirm the file was saved
+file.exists("Data/combined_regression_results.csv")
+
 ##### HEATMAP WITH LABELS #####
 
 heatmap_data <- combined_regression_results %>% 

@@ -11,10 +11,13 @@ library(htmltools)
 setwd("C:/Users/rogej/Documents/hslu/courses/bootcamp/r-bootcamp")
 getwd()
 
-# Read the existing data
 election_results <- read_csv("Data/datatable.csv", show_col_types = FALSE)
 party_colors <- read_csv("Data/party_colors.csv", show_col_types = FALSE)
 canton_symbols <- read_csv("Data/kanton_names.csv", show_col_types = FALSE)
+
+# Define party order explicitly
+party_order <- c("PdA_Sol", "GRUENE", "SP", "GLP", "CSP", 
+                 "Mitte", "EVP", "FDP", "EDU", "Lega", "MCR", "SVP", "LPS", "Uebrige")
 
 # Read geographical data and transform to WGS84
 canton_geo <- read_sf("Shapefiles/g2k23.shp") %>% st_transform(4326)
@@ -26,6 +29,7 @@ municipality_geo_data <- read_sf("Shapefiles/municipality/K4polg20230101vf_ch200
 # Process the election data
 party_cols <- names(election_results)[which(names(election_results) == "CSP_23"):
                                         which(names(election_results) == "Uebrige_23")]
+
 municipality_totals <- election_results %>%
   pivot_longer(
     cols = all_of(party_cols),
@@ -43,6 +47,13 @@ municipality_totals <- election_results %>%
     Percentage = round((Total_Votes / sum(Total_Votes, na.rm = TRUE)) * 100, 2)
   ) %>%
   ungroup()
+
+party_colors <- party_colors %>%
+  filter(!is.na(Party) & Party != "") %>%  
+  distinct(Party, .keep_all = TRUE) %>%  
+  mutate(Party = factor(Party, levels = party_order)) %>%  
+  filter(!is.na(Party)) %>% 
+  arrange(Party)
 
 # Clean up data
 municipality_totals <- municipality_totals %>%
@@ -63,6 +74,15 @@ municipality_winners <- municipality_geo %>%
   group_by(municipality) %>%
   slice_max(Percentage, n = 1) %>%
   ungroup()
+
+winning_parties <- municipality_winners %>%
+  distinct(Party) %>%
+  filter(!is.na(Party))  # Ensure no NA values
+
+# Filter party_colors to include only winning parties
+legend_colors <- party_colors %>%
+  filter(Party %in% winning_parties$Party) %>%
+  arrange(Party)
 
 # Create interactive map using leaflet
 interactive_map <- leaflet(options = leafletOptions(minZoom = 7, maxZoom = 12)) %>%
@@ -103,7 +123,7 @@ interactive_map <- leaflet(options = leafletOptions(minZoom = 7, maxZoom = 12)) 
       direction = "auto"
     ),
     highlightOptions = highlightOptions(
-      weight = 2,
+      weight = 1,
       color = "#666",
       fillOpacity = 0.9,
       bringToFront = TRUE
@@ -123,7 +143,7 @@ interactive_map <- leaflet(options = leafletOptions(minZoom = 7, maxZoom = 12)) 
   addPolygons(
     data = canton_geo,
     fill = FALSE,
-    weight = 2,
+    weight = 1,
     color = "white",
     opacity = 0.8
   ) %>%
@@ -139,9 +159,9 @@ interactive_map <- leaflet(options = leafletOptions(minZoom = 7, maxZoom = 12)) 
   # Add legend
   addLegend(
     position = "bottomleft",
-    colors = party_colors$Color,
-    labels = party_colors$Party,
-    title = "Political Parties",
+    colors = legend_colors$Color,  # Only winning parties' colors
+    labels = as.character(legend_colors$Party),  # Only winning parties' names
+    title = "Winning Parties",
     opacity = 0.7,
     group = "legend"
   ) %>%

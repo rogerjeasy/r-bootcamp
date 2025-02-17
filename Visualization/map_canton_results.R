@@ -48,10 +48,10 @@ canton_totals <- election_results %>%
   mutate(Party = gsub("_23$", "", Party))
 
 party_colors <- party_colors %>%
-  filter(!is.na(Party) & Party != "") %>%  # Ensure no NA or empty values
-  distinct(Party, .keep_all = TRUE) %>%  # Keep unique Party entries
-  mutate(Party = factor(Party, levels = party_order)) %>%  # Convert Party to factor
-  filter(!is.na(Party)) %>%  # Double check removal of NA factors
+  filter(!is.na(Party) & Party != "") %>%  
+  distinct(Party, .keep_all = TRUE) %>%  
+  mutate(Party = factor(Party, levels = party_order)) %>%  
+  filter(!is.na(Party)) %>% 
   arrange(Party)
 
 
@@ -72,6 +72,15 @@ canton_winners <- merged_data %>%
   group_by(Kanton) %>%
   slice_max(Percentage, n = 1) %>%
   ungroup()
+
+winning_parties <- canton_winners %>%
+  distinct(Party) %>%
+  filter(!is.na(Party))  # Ensure no NA values
+
+# Filter party_colors to only include winning parties
+legend_colors <- party_colors %>%
+  filter(Party %in% winning_parties$Party) %>%
+  arrange(Party)
 
 # Create interactive map
 election_map <- leaflet(options = leafletOptions(minZoom = 7, maxZoom = 12)) %>%
@@ -140,9 +149,9 @@ election_map <- leaflet(options = leafletOptions(minZoom = 7, maxZoom = 12)) %>%
   # Add legend
   addLegend(
     position = "bottomleft",
-    colors = party_colors$Color,
-    labels = as.character(party_colors$Party),
-    title = "Political Parties",
+    colors = legend_colors$Color,  # Only winning parties' colors
+    labels = as.character(legend_colors$Party),  # Only winning parties' names
+    title = "Winning Parties",
     opacity = 0.7
   ) %>%
   

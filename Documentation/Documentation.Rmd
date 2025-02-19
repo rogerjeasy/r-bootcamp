@@ -3,14 +3,14 @@ title: "Mapping Demographic Composition as a Predictor of Far-Right Success in t
   2023 Swiss Federal Election"
 author: "Bavibidila, R., Jevdenic, R."
 output:
+  pdf_document:
+    toc: yes
   html_document:
     toc: yes
     toc_float: yes
     css: styles.css
     df_print: paged
     self-contained: no
-  pdf_document:
-    toc: yes
 always_allow_html: yes
 bibliography: references.bib
 csl: "apa-6th-edition.csl"
@@ -23,7 +23,7 @@ subtitle: "Exploring Interactions between Anti-Migration Sentiment and Ethnocult
 ```{=latex}
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.8\textwidth]{title.png}
+\includegraphics[width=0.9\textwidth]{swiss_map.png}
 \end{figure}
 
 

@@ -3,14 +3,14 @@ title: "Mapping Demographic Composition as a Predictor of Far-Right Success in t
   2023 Swiss Federal Election"
 author: "Bavibidila, R., Jevdenic, R."
 output:
-  pdf_document:
-    toc: yes
   html_document:
     toc: yes
     toc_float: yes
     css: styles.css
     df_print: paged
     self-contained: no
+  pdf_document:
+    toc: yes
 always_allow_html: yes
 bibliography: references.bib
 csl: "apa-6th-edition.csl"
@@ -54,14 +54,12 @@ Lorem Ipsum....
 
 # Introduction
 
-Rade: TBD.
+Switzerland, known for its political stability, has a unique system of governance defined by direct democracy, a bicameral parliament and strong decentralised federal institutions. Since the establishment of the modern Swiss state in 1848, citizens have not only elected representatives but also enacted policies through referendums and initiatives. Excluded from these processes is one in five people since they do not hold swiss citizenship, despite significantly contributing to Swiss society and economy. Up until today, migrant populations remain largely excluded from federal decision-making processes even multiple decades after their parents, grand-parents or even great-grandparents came to Switzerland.
 
-**From the Assignment Infosheet: "Your group work should consist of a comprehensive analysis of your use case, which you will present to a (hypothetical) client. This analysis should include an in-depth examination of the problem being addressed. Be sure to support your findings with relevant data and insights to effectively communicate the value of your work."**
+The far-right Swiss People's Party (SVP) finds itself at the center of many ongoing political debates, having been a dominant political force for decades and internationally nowns for its hardline stance on immigration, religious diversity and social liberal issues like feminism and LGBT politics. The 2023 federal elections marked a significant moment, with the SVP coming back full force receiving 27.9%, compared to the considerably weaker result of 25.6% in 2019. This regained electoral momentum prompts a deeper examination: To what extent does demographic composition—particularly the proportion of non-Swiss residents—shape political preferences across Swiss municipalities? Are ethnoculturally homogeneous regions more likely to endorse far-right ideologies compared to diverse, urban centers?
 
-**Also: "In this chapter we want you to use a package that was not mentioned in the main part of the course (data manipulation, visualisation using ggplot2, regular expressions and reporting using Rmarkdown does not count) and perform a task that was not directly discussed in the course. Be creative! Note: Here we don’t want you to use a new statistical/machine learning method. We rather want you to use a method to prepare or display data. It could even be a package that enables you to create prettier documents. What we don’t want to see is you fitting e.g. a regression model to your data. Please insert a separate section in your report and call it “Chapter of choice” such that we can easily recognise it! If you need input: feel free to ask us. Please indicate or highlight in your report what is your chapter of choice." **
+This analysis project seeks to explore the relationships by looking closer at the 2023 Swiss federal election results alongside key demographic indicators, including citizenship acquisition rates, income levels, educational attainment, and age distribution. The primary recipient and potential client this study are political consultant, political parties and organisations who are researching political radicalisation and polarisation. Understanding the demographic and socioeconomic factors that are related to SVP's success offers important insights for improved political communications, campaign strategies, and social initiatives. Understanding what drives voting behavior and why certain messaging mobilises voters supports political discourse and offers an option for adressing both anxieties and aspirations. Also, by recognizing regions where demographic factors correlate with lower far-right support, parties can strengthen alliances and mobilize underrepresented groups, ensuring a more balanced and representative democratic landscape and lower risk of political radicalisation and social polarization.
 
-
-**"Your analysis must be a story that you would like to sell to a client and in this sense, it should be complete,ceasy to read, and have a thread (what are you doing, why, conclusions, interpretations, overview . . . ). It is completely up to you how the story goes and flows.vTo create a cohesive narrative in your story, it is essential to address the following key points: Source of the data, Objectives and hypotheses of the analysis, Interpretation of each step, Conclusions drawn from the analysis, Potential limitations of the study. Put yourself into the position of a client and check if your analysis is detailed, comprehensible, and easy to follow."**
 
 \pagebreak
 
@@ -483,7 +481,13 @@ Further methodological constraints arise from data availability and statistical 
 
 # Conclusion
 
-How to interpret the results.
+The 2023 Swiss federal election marked a pivotal moment in the country’s political landscape, with the Swiss People's Party (SVP) regaining its dominant position, securing 27.9% of the vote. The question remains which factors are driving far-right support and particularly which role demographic composition plays in shaping electoral outcomes. This is why the present study sought to investigate whether ethnoculturally homogeneous regions were more likely to endorse far-right ideologies compared to diverse, urban centers, while also considering the importance of other demographic indicators.
+
+The findings reveal insights into the demographic drivers of the SVP’s electoral success. Consistently across Swiss cantons, two factors stood out as the most robust predictors: the percentage of non-Swiss residents and the share of the population with secondary-level education. Municipalities with lower proportions of non-Swiss residents and higher percentages of individuals holding vocational education degrees exhibited significantly stronger support for the SVP. This suggests that the party's messaging resonates most effectively in regions characterized by ethnocultural homogeneity and among voters without university-level education. In contrast, areas with higher shares of foreign-born residents, higher naturalization rates, and greater educational attainment were more likely to support left-leaning parties, such as the Social Democratic Party (SP) and the Greens, reinforcing the hypothesis that diversity correlates with lower far-right support.
+
+However, the study also uncovered notable regional variations and complex relationships between demographic markers and party support. While secondary education and non-Swiss population share were consistent predictors, factors such as income per capita, age distribution, and naturalization rates varied across cantons. The analysis relied on correlation rather than causation, meaning that while strong associations were identified, the exact motivations driving voter behavior remain somewhat unclear. Moreover, potential multicollinearity among demographic factors and lack of research into non-voters' perceptions on the 2023 elections make it hard to reliably state to what degree the public opinon on migration has shifted. It is also worth noting that while the SVP centered its campaign on an anti-migration platform, other issues — such as economic concerns, cultural conservatism, and long-term partisan loyalty — may have also influenced voting patterns.
+
+In conclusion, despite some limitations the results do underscore the importance of demographic composition in shaping the success of far-right politics in Switzerland. Ethnoculturally homogeneous regions, particularly those with lower educational level and fewer foreign residents, appear to be fertile ground for the SVP’s political agenda. These insights offer valuable guidance for this study's clients, for example consultants, competing parties, and organizations seeking to counter political polarization and promote inclusive democratic participation. By considering the social and economic contexts that drive far-right support, stakeholders can craft more effective outreach strategies, address voter anxieties before polarization or radicalisation appear, and may create a more balanced political discourse in the future.
 
 \pagebreak
 

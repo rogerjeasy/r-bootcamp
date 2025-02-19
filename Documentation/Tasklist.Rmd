@@ -8,31 +8,15 @@ output: html_document
 ### Task Management Table
 
 -   **To-Do:**
-    -   **Maps: General Plots with election results by shapefile (Roger):**
-        -   **On the basis of:**
-            -   **Maps: Plot the demographic factors per municipalities (or per canton)**
-            -   **Map per Cantons: use dataset from stat_models "combined_regression_results"**
-            -   **Results of winning party but if possible include second party, third. etc. per Canton**
-            -   **.. and per Municplaity**
-        -   Attention: Partys are color-coded (see <https://www.elections.admin.ch/en/ch/>)
-        -   ~~Parties should be **in order of political position** (left to right):\
-            ~~PdA_Sol, GRUENE, SP, GLP, CSP, Mitte, EVP, FDP, EDU, LEGA, MCR, SVP
--   **Documentation:**
-    -   **Introduction (Rade/Roger)**
-        -   Use-Case: Who is our client? The other political parties?
-            -   *From the Assignment Infosheet: "Your group work should consist of a comprehensive analysis of your use case, which you will present to a (hypothetical) client. This analysis should include an in-depth examination of the problem being addressed. Be sure to support your findings with relevant data and insights to effectively communicate the value of your work."*
-            -   *"Your analysis must be a story that you would like to sell to a client and in this sense, it should be complete,ceasy to read, and have a thread (what are you doing, why, conclusions, interpretations, overview . . . ). It is completely up to you how the story goes and flows.vTo create a cohesive narrative in your story, it is essential to address the following key points: Source of the data, Objectives and hypotheses of the analysis, Interpretation of each step, Conclusions drawn from the analysis, Potential limitations of the study. Put yourself into the position of a client and check if your analysis is detailed, comprehensible, and easy to follow."*
-    -   **Method: (Rade/Roger)**
-        -   GenerativeAI
-            -   *From the Assignment Infosheet: "ChatGPT and co. are useful tools that can provide great support during your work, but it is important to avoid abusing it. Write a quarter to maximum a half a page about which tools you have used and your learning in using gerative AI for solving tasks in R. What have you used it for? For what kind of tasks turned they out to be helpful? How do you check correctness of the answer? What did not work? Those are example questions which you can ask yourself and reflect, but you are free to write about your experiences."*
-    -   **Results** **(Rade/Roger)**
-    -   **Conclusion (Rade)**
--   "Chapter of Choice":
-    -   *From the Assignment: "Also: "In this chapter we want you to use a package that was not mentioned in the main part of the course (data manipulation, visualisation using ggplot2, regular expressions and reporting using Rmarkdown does not count) and perform a task that was not directly discussed in the course. Be creative! Note: Here we don’t want you to use a new statistical/machine learning method. We rather want you to use a method to prepare or display data. It could even be a package that enables you to create prettier documents. What we don’t want to see is you fitting e.g. a regression model to your data. Please insert a separate section in your report and call it “Chapter of choice” such that we can easily recognise it! If you need input: feel free to ask us. Please indicate or highlight in your report what is your chapter of choice."*
+    -   Chapter of Choice (Roger)
+    -   2-3 Paragraphs on the Maps (Rade)
+    -   Comments in R Script and split StatModels from Visualisations (Rade)
 
 **Done/Finished Tasks:**
 
--   **Documentation:**
+-   ~~**Documentation:**~~
+
+    -   ~~Introduction (Rade)~~
 
     -   ~~Background and Core Concepts~~ ~~**(Rade)**~~
 
@@ -40,29 +24,28 @@ output: html_document
 
     -   ~~Discussion **(Rade)**~~
 
+    -   ~~Conclusion (Rade)~~
+
 -   ~~**Data Sets**~~
 
-    -   ~~Must Haves~~
-        -   ~~Election Results~~
-        -   ~~Demography, Table with all Municipalities~~
-        -   ~~Education Level~~
-        -   ~~Age distribution~~
-        -   ~~Economical Indicator (Taxable income) -\> Rade~~
+    -   ~~Election Results~~
+    -   ~~Demography, Table with all Municipalities~~
+    -   ~~Education Level~~
+    -   ~~Age distribution~~
+    -   ~~Economical Indicator (Taxable income) -\> Rade~~
 
 -   ~~**Statistical Models**~~
 
-    -   ~~Must Haves~~
-        -   ~~Correlation Migrants vs. SVP Election Result: all of Switzerland~~ **(Rade)**
-        -   ~~Correlation Migrants vs. SVP Election Result: per Cantons~~ **(Rade)**
-        -   ~~Correlation Education Level vs. SVP Success: per District **(TBD)**~~
-        -   ~~Correlation Migrants vs. SVP Election Result: per District **(TBD)**~~
+    -   ~~Correlation Migrants vs. SVP Election Result: all of Switzerland~~ **(Rade)**
+    -   ~~Correlation Migrants vs. SVP Election Result: per Cantons~~ **(Rade)**
+    -   ~~Correlation Education Level vs. SVP Success: per District **(TBD)**~~
+    -   ~~Correlation Migrants vs. SVP Election Result: per District **(TBD)**~~
 
--   **Plots**
+-   ~~**Plots**~~
 
-    -   Must Haves
-        -   ~~Demographic Composition (**Rade):**~~
-            -   ~~**4 Bar Charts with more detailed demography per Canton (Rade)** / 1 per demographic factor~~
-            -   ~~Bivariate Graphs: SVP Success in % vs. Migrant Populations in % (Rade)~~
-            -   ~~Bivariate Graphs: SVP Success in % vs. Age Ratio (Rade)~~
-            -   ~~Bivariate Graphs: SVP Success in % vs. Citizenship Aquisition in % (Rade)~~
-            -   ~~Bivariate Graphs: SVP Success in % vs. Taxable IncomePerCapital in CHF (Rade)~~
+    -   ~~Demographic Composition (**Rade):**~~
+        -   ~~**4 Bar Charts with more detailed demography per Canton (Rade)** / 1 per demographic factor~~
+        -   ~~Bivariate Graphs: SVP Success in % vs. Migrant Populations in % (Rade)~~
+        -   ~~Bivariate Graphs: SVP Success in % vs. Age Ratio (Rade)~~
+        -   ~~Bivariate Graphs: SVP Success in % vs. Citizenship Aquisition in % (Rade)~~
+        -   ~~Bivariate Graphs: SVP Success in % vs. Taxable IncomePerCapital in CHF (Rade)~~

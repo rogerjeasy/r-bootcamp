@@ -220,6 +220,7 @@ combined_regression_results <- bind_rows(regression_results, regression_results_
   filter(term != "(Intercept)") %>%
   mutate(Canton = factor(Canton, levels = c("CH", sort(setdiff(unique(Canton), "CH")))))
 
+View(combined_regression_results)
 
 #############################
 ##### DATA PLOTS ############
@@ -522,7 +523,7 @@ heatmap <- ggplot(heatmap_data,
     low = "red", mid = "white", high = "blue", midpoint = 0,
     limits = c(-2, 2),  
     oob = scales::squish,  
-    name = "Weighted Effect Size"
+    name = "Weighted Regression Estimate"
   ) +
   facet_wrap(~ Canton, ncol = 4 ) + 
   labs(
@@ -568,7 +569,7 @@ p <- ggplot(scatter_data, aes(
   x = estimate, 
   y = term,  
   color = Party, 
-  text = paste("Canton:", Canton, "<br>Party:", Party, "<br>Effect Size:", round(estimate, 2))
+  text = paste("Canton:", Canton, "<br>Party:", Party, "<br>Regression Estimate:", round(estimate, 2))
 )) +
   geom_jitter(width = 0.1, height = 0, size = 2) +  
   facet_wrap(~ Canton, ncol = 4 ) +
@@ -577,7 +578,7 @@ p <- ggplot(scatter_data, aes(
     limits = c(-10, 10)
   ) +
   scale_color_manual(values = party_colors) +  
-  labs(title = "Regression Results Across Cantons", x = "Effect Size (Log Scaled)", y = "Factor") +
+  labs(title = "Regression Results Across Cantons", x = "Regression Estimate (Log Scaled)", y = "Factor") +
   theme_minimal() +
   theme(
     axis.text.x = element_text(size = 8),  # Reduce x-axis text size

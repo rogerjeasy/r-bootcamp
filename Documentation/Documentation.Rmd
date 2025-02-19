@@ -3,8 +3,6 @@ title: "Mapping Demographic Composition as a Predictor of Far-Right Success in t
   2023 Swiss Federal Election"
 author: "Bavibidila, R., Jevdenic, R."
 output:
-  pdf_document:
-    toc: yes
   html_document:
     toc: yes
     toc_float: yes
@@ -16,8 +14,7 @@ bibliography: references.bib
 csl: "apa-6th-edition.csl"
 fontsize: 11pt
 linestretch: 1.3
-subtitle: "Exploring Interactions between Anti-Migration Sentiment and Ethnocultural
-  Diversity"
+subtitle: "Exploring Interactions between Anti-Migration Sentiment and Ethnocultural Diversity"
 ---
 
 ```{=latex}
@@ -34,36 +31,22 @@ Semester & Fall 2024/25
 \end{tabular}
 ```
 
-
-\pagenumbering{gobble}
-\pagebreak
-\pagenumbering{Roman}
-
 **Abstract**
 
 Lorem Ipsum....
 
-\pagebreak
 
 ```{=latex}
 \tableofcontents
 ```
 
-\pagebreak
-\pagenumbering{arabic}
-
 # Introduction
 
-Rade: TBD.
+Switzerland, known for its political stability, has a unique system of governance defined by direct democracy, a bicameral parliament and strong decentralised federal institutions. Since the establishment of the modern Swiss state in 1848, citizens have not only elected representatives but also enacted policies through referendums and initiatives. Excluded from these processes is one in residents of Switzerland, since they do not hold Swiss citizenship, despite significantly contributing to Swiss society and economy. Up until today, migrant populations remain largely excluded from federal decision-making processes even multiple decades after their parents, grand-parents or even great-grandparents came to Switzerland.\
 
-**From the Assignment Infosheet: "Your group work should consist of a comprehensive analysis of your use case, which you will present to a (hypothetical) client. This analysis should include an in-depth examination of the problem being addressed. Be sure to support your findings with relevant data and insights to effectively communicate the value of your work."**
+The far-right Swiss People's Party (SVP) finds itself at the center of many ongoing political debates, having been a dominant political force for decades and having gained attention internationally for its hardline opposition to immigration, religious diversity and social liberal issues like feminism and LGBT politics. The 2023 federal elections marked a significant moment, with the SVP coming back full force receiving 27.9% of votes, compared to the considerably weaker result of 25.6% in 2019. This renewed electoral momentum — apparently driven by anti-migration rhetoric — calls for a more thoughtful examination: To what extent does demographic composition—particularly the proportion of non-Swiss residents—shape political preferences across Swiss municipalities? Are ethnoculturally homogeneous regions more likely to endorse far-right ideologies compared to diverse, urban centers?\
 
-**Also: "In this chapter we want you to use a package that was not mentioned in the main part of the course (data manipulation, visualisation using ggplot2, regular expressions and reporting using Rmarkdown does not count) and perform a task that was not directly discussed in the course. Be creative! Note: Here we don’t want you to use a new statistical/machine learning method. We rather want you to use a method to prepare or display data. It could even be a package that enables you to create prettier documents. What we don’t want to see is you fitting e.g. a regression model to your data. Please insert a separate section in your report and call it “Chapter of choice” such that we can easily recognise it! If you need input: feel free to ask us. Please indicate or highlight in your report what is your chapter of choice." **
-
-
-**"Your analysis must be a story that you would like to sell to a client and in this sense, it should be complete,ceasy to read, and have a thread (what are you doing, why, conclusions, interpretations, overview . . . ). It is completely up to you how the story goes and flows.vTo create a cohesive narrative in your story, it is essential to address the following key points: Source of the data, Objectives and hypotheses of the analysis, Interpretation of each step, Conclusions drawn from the analysis, Potential limitations of the study. Put yourself into the position of a client and check if your analysis is detailed, comprehensible, and easy to follow."**
-
-\pagebreak
+This project seeks to explore the relationships by looking closer at the 2023 Swiss federal election results alongside key demographic indicators, including citizenship acquisition rates, income levels, educational attainment, and age distribution. The primary recipient and potential client of this study are political consultants, political parties and organisations who are researching political radicalisation and polarisation. Understanding the demographic and socioeconomic factors that are related to SVP's success offers important insights for improved political communications, campaign strategies, and social initiatives. Understanding what drives voting behavior and why certain messaging mobilises voters supports political discourse and offers an option for adressing both anxieties and aspirations. Also, by recognizing regions where demographic factors correlate with lower far-right support, parties can strengthen alliances and mobilize underrepresented groups, ensuring a more balanced and representative democratic landscape and lower risk of political radicalisation and social polarization.
 
 # Background
 
@@ -82,8 +65,6 @@ The underlying hypothesis posits a positive correlation between ethnocultural ho
 Defining what constitutes a “high” or “low” proportion of the non-Swiss population is inherently subjective. However, current demographic data indicate that 27% of Switzerland’s total population is non-Swiss, with canton-level proportions ranging from 12.9% (Appenzell Innerrhoden) to 42.2% (Geneva). Based on this distribution, a low share of the migrant population can be approximated as below 20%, while a high share is anything above 30%.
 
 To better understand the multitude of factors influencing electoral behaviour, additional variables are incorporated into the analysis, including: citizenship acquisition rate, taxable income per capita, educational attainment levels, and age distribution. These factors help to contextualise the observable effects and differentiate between correlation and causation. Furthermore, to comprehensively examine the SVP’s 2023 electoral success, the analysis includes other political parties to highlight electoral dynamics and explore how voter distributions vary across demographic markers. The derived research question is as follows: "Which demographic factors exhibit a strong relationship with the 2023 Swiss federal election results?" The question can be divided into looking at specific aspects between parties and their respective election performance.
-
-\pagebreak
 
 # Method
 
@@ -121,17 +102,13 @@ kable(dataset_info, caption = "Overview of Used Datasets")
 
 ```
 
-\pagebreak
-
 ## Research Process
 
 The process commenced with the specification of a research question and hypothesis, establishing the conceptual foundation for the project. Following this, the necessary datasets were identified and acquired on the BfS-webpage. The initial phase involved exploratory analysis through basic linear models and correlation assessments, serving as a preliminary validation of the research direction. As the project progressed, increasing levels of complexity were introduced, incorporating  statistical modelling techniques and advanced visualisations to capture the relationship between demographic indicators, regional dimensions and electoral outcomes in greater depth.
 
-\pagebreak
-
 ## Generative AI
 
-Generative AI was utilised in a  limited capacity, primarily for debugging specific error messages in R and refining textual contents. In terms of text composition its primary use was for the correction of grammar and spelling errors, as well as stylistic improvements within certain paragraphs. Beyond these specific functions, the technology was not employed.
+Generative AI was utilised in a  limited capacity, primarily for debugging specific error messages in R and refining textual contents. In terms of text composition its primary use was for the correction of grammar and spelling errors, as well as stylistic improvements within certain paragraphs. Beyond these specific functions, the technology was not employed. Altough generative AI can be can be useful to speed up the writing process, most texts generated or corrected by the these systems have a very generic sound to them and are immediately recognisable as such. This is why the text always needs to be rewritten and refined. So even if it helps reducing grammar mistakes and inconsistencies it does not replace the writing process.
 
 ## Indicators
 
@@ -167,8 +144,6 @@ Regional parties like the far-right Lega in the Canton of Ticino or Movement Cit
 
 The most recent parliamentary elections in Switzerland took place on October 22, 2023. Switzerland's bicameral parliament comprises the National Council, which proportionally represents the Swiss population with seats allocated to each canton based on its population, and the Council of States, where all cantons have equal representation. As the National Council reflects the population proportionally, its election results are often regarded as an indicator of trends in public opinion regarding politics and policy.\
 
-\pagebreak
-
 ### Geographic Indicators
 
 #### Municipalities
@@ -179,8 +154,6 @@ Even tough a range of 2113 municipalities to 2212 seems like a significant discr
 #### Cantons and Switzerland
 
 All the data points (apart from education level) were available on municipality-level. To calculate the corresponding values for each canton, the municipal values were grouped by canton and weighted by population size of the municipality in case of the demographic values or by vote numbers in the case of the election results. In the same way a total for all of Switzerland was calculated and included in some plots to better compare the cantons not only in relation to one another but to the swiss average values.
-
-\pagebreak
 
 ### Demographic Indicators
 
@@ -239,27 +212,19 @@ Education levels, usually measured in form of the highest achieved school degree
 
 The age ratio is a standardized measure of the Federal Statistical Office, that measures the percentage of aged populations (65 and above) in relation to the adult respectively working-age population (18-64). Therefore, high number indicates an outsized aged population.
 
-\pagebreak
-
 ## Statistical Methods
 
 Initially the correlation between migrant population and far-right election success was calculated both weighted and unweighted, meaning each municipality counts as one unit nevertheless of the population size. The unajusted analysis did not produce a significiant correlation, presumebly, because both left-wing votership and migrant populations tend to be concentrated in larger cities and therefore could not be represented in an unweighted statistical design. But when adjusted for population size, there were clear correlations visible.\
 
 The statistical analysis relies on correlation and linear models. In orner to improve the model's performance, the demographic indicators were scaled and weighted. The scaling improves interpretability, numerical stability and measureability of smaller differences while eradicating the influence of outliers. The weighting was necessary for practical reasons since the size of a municipality also can be an predictor of election outcomes and if every municpality couunted as one unit this would suppress the outcomes of bigger citites.\
 
-Most of the plots did not include statistical models but do rather visalise the election outcome unmodelled.
-
-\pagebreak
+Most of the plots did not include statistical models but do rather visualise the election outcome unmodelled.
 
 # Results
-
-\pagebreak
 
 ## Plots
 
 ### Explanatory Analysis of the Dataset
-
-Explanatory Analysis
 
 In order to better understand the results of the analysis we assessed the data set. The main goal was to get an idea of the existing trends and distributions to reason why certain effects might cause correlations or regressions.\
 
@@ -274,7 +239,7 @@ migrstructure
 
 The graph visualises the proportion of non-Swiss citizens per canton as well as all of Switzerland. This information is of importance since previous studies **(Tresch S. 15)** show that areas, which do not have large populations of migrants, tend to vote for parties that run on anti-migration campaigns. This highlights an important contradiction, meaning that people who are not exposed to migrant populations tend to be more critical towards migrations, than votes in areas with higher ethno-cultural diversity.
 
-\pagebreak
+
 
 ```{r edustructure, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
@@ -293,10 +258,6 @@ demogr_scatter
 ```
 
 The stacked bar chart illustrates the distribution of education levels across Swiss cantons, displaying the weighted percentage of populations with low education, secondary education and tertiary education. Each bar represents a canton, with CH on the left representing the national average. The chart reveals significant variation in education levels across different regions. Some cantons, such as Zurich (ZH), Geneva (GE), and Zug (ZG), show a higher proportion of tertiary education, reflecting their strong economic and academic infrastructure. In contrast, cantons like Appenzell Innerrhoden (AI), Uri (UR), and Obwalden (OW) have a higher share of secondary education and lower tertiary education levels, which aligns with the prevalence of vocational training in these regions. The share of low education varies but tends to be more pronounced in rural or traditionally working-class cantons.
-
-
-\pagebreak
-
 
 ### General Elections 2023
 
@@ -346,7 +307,6 @@ plot_SVP23vsAge <- readRDS("Plots/plot_SVP23vsAge.rds") %>%
 plot_SVP23vsAge
 ```
 
-
 The scatter plot illustrates the relationship between SVP's vote share in 2023 (x-axis) and the naturalization rate (y-axis) across Swiss municipalities. The distribution suggests that municipalities with higher SVP support generally have lower naturalization rates, as most points are concentrated near the bottom of the y-axis. There are relatively few municipalities with both high SVP support and high naturalization rates, reinforcing the idea that areas with more frequent citizenship acquisitions may be less inclined to vote for the far-right party.\
 Larger municipalities, represented by bigger circles, tend to have slightly higher naturalization rates, possibly due to more diverse populations and administrative capacity for processing naturalizations. The plot suggests an inverse relationship between naturalization rates and SVP support, aligning with the broader hypothesis that ethnocultural diversity correlates with lower far-right voting patterns.
 
@@ -384,8 +344,6 @@ plot_SVPvsEduLvl <- readRDS("Plots/plot_SVPvsEduLvl.rds") %>%
 plot_SVPvsEduLvl 
 ```
 
-\pagebreak
-
 ### Regression Analysis
 
 ```{r regr_scatter, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -412,9 +370,6 @@ he Green Liberal Party (GLP) gains support in municipalities with higher taxable
 The Free Democratic Party (FDP) performs best in municipalities with high taxable income per capita and a strong secondary education presence, also indicating SMEs and self-employed upper class as well as higher middle class populations being their key voter base.\
 
 Two cantonal parties should also be mentioned, especially in terms of their local performance. Lega in Ticino shows a strong positive correlation with lower taxable income per capita and lower secondary education levels, indicating that it performs well in economically weaker areas with lower educational attainment. It is also positively associated with municipalities that have a higher share of non-Swiss residents and higher naturalization rates, suggesting that the party gains support in more diverse regions where migration issues may be politically relevant. Mouvement Citoyens Genevois (MCR) in Geneva is negatively correlated with taxable income per capita, secondary education, non-Swiss population share, and naturalization rates, suggesting that it performs badly in wealthier and well-educated municipalities. Its support decreases in areas with a higher proportion of foreign residents. Both Lega and MCR seem to share some voter base characteristics but especially on the cantonal level there seems to be segmentation with visible differences in indicators of SVP's electoral success versus Lega or MCR.
-
-
-\pagebreak
 
 ## Maps
 
@@ -457,15 +412,11 @@ map_income_plot_cantons
 ```
 Map of the income per capita factor per canton.
 
-\pagebreak
-
 # Limitations
 
 Procedural limitations of the analysis include the unreliability of election results to establish a causal relationship to voting motivation. Since the far-right SVP campaigned on an anti-migration platform we assume that many voters were mobilised by this issue. But this does not account for non-voters, which represented in 2023 XX% of the population. Also, some people might have been voting for far-right parties for other reasons like fiscal austerity and the far right's opposition to social liberty policies - sometimes called "culture war" issues. And as always in elections, a lot of people stick for many years with the party they most identify with. The election data doesn’t include hints to non-voters motivation to abstain from voting and therefore may not be representative of the entire population, leading to biased results.\
 
 Some limitations must be noted for the statistical analysis. For the education levels BfS only publishes data per district, not per municipality. The scarcity of data points means a smaller reliability of the indicator. Demographic factors like age ratio, income per capita, and migrant population percentage can be highly correlated, making it difficult to isolate the effect of each variable and leading to multicollinearity. The relationship between election results and demographic factors may not be linear. Linear models may oversimplify these relationships. Also, the chosen demographic indicator might not be conclusive and failing to include relevant variables can lead to biased estimates. The variance of errors may not be constant across observations, violating one of the key assumptions of linear regression (Heteroscedasticity).
-
-\pagebreak
 
 # Discussion
 
@@ -479,12 +430,16 @@ Despite clear trends and patterns, it remains difficult to establish causality b
 
 Further methodological constraints arise from data availability and statistical modeling limitations. Education levels, for instance, are only published at the district level rather than for individual municipalities, reducing the precision of this variable. Additionally, demographic factors such as age, income, and migration are often highly correlated, creating potential issues of multicollinearity that make it difficult to isolate the independent effect of each variable. The assumption of linear relationships between predictors and election outcomes may also oversimplify the dynamics at play and heteroscedasticity may impact the reliability of the model’s estimates.\
 
-\pagebreak
+
 
 # Conclusion
 
-How to interpret the results.
+The 2023 Swiss federal election marked a pivotal moment in the country’s political landscape, with the Swiss People's Party (SVP) regaining its dominant position, securing 27.9% of the vote. The question remains which factors are driving far-right support and particularly which role demographic composition plays in shaping electoral outcomes. This is why the present study sought to investigate whether ethnoculturally homogeneous regions were more likely to endorse far-right ideologies compared to diverse, urban centers, while also considering the importance of other demographic indicators.\
 
-\pagebreak
+The findings reveal insights into the demographic drivers of the SVP’s electoral success. Consistently across Swiss cantons, two factors stood out as the most robust predictors: the percentage of non-Swiss residents and the share of the population with secondary-level education. Municipalities with lower proportions of non-Swiss residents and higher percentages of individuals holding vocational education degrees exhibited significantly stronger support for the SVP. This suggests that the party's messaging resonates most effectively in regions characterized by ethnocultural homogeneity and among voters without university-level education. In contrast, areas with higher shares of foreign-born residents, higher naturalization rates, and greater educational attainment were more likely to support left-leaning parties, such as the Social Democratic Party (SP) and the Greens, reinforcing the hypothesis that diversity correlates with lower far-right support.\
+
+However, the study also uncovered notable regional variations and complex relationships between demographic markers and party support. While secondary education and non-Swiss population share were consistent predictors, factors such as income per capita, age distribution, and naturalization rates varied across cantons. The analysis relied on correlation rather than causation, meaning that while strong associations were identified, the exact motivations driving voter behavior remain somewhat unclear. Moreover, potential multicollinearity among demographic factors and lack of research into non-voters' perceptions on the 2023 elections make it hard to reliably state to what degree the public opinon on migration has shifted. It is also worth noting that while the SVP centered its campaign on an anti-migration platform, other issues — such as economic concerns, cultural conservatism, and long-term partisan loyalty — may have also influenced voting patterns.\
+
+In conclusion, despite some limitations the results do underscore the importance of demographic composition in shaping the success of far-right politics in Switzerland. Ethnoculturally homogeneous regions, particularly those with lower educational level and fewer foreign residents, appear to be fertile ground for the SVP’s political agenda. These insights offer valuable guidance for this study's clients, for example consultants, competing parties, and organizations seeking to counter political polarization and promote inclusive democratic participation. By considering the social and economic contexts that drive far-right support, stakeholders can craft more effective outreach strategies, address voter anxieties before polarization or radicalisation appear, and may create a more balanced political discourse in the future.
 
 # References

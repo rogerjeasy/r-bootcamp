@@ -114,8 +114,10 @@ column_labels <- c(
   "nswisspop_pct" = "Non-Swiss Population"
 )
 
-# 3 Plots #####################################################################
-## 3.1 Percentage of demographic Subset (Totals) #############################
+# 3. Plots #####################################################################
+## 3.1 Percentage of Demographic Subset (Totals) ###############################
+# Description: Scatterplot showing all demographic facets used in the analysis,
+#              based on the weighted data (unmodelled).
 
 # Reshape the data into long format
 
@@ -147,6 +149,9 @@ p <- ggplot(scatter_data, aes(
 interactive_scatterplot_dem <- ggplotly(p, tooltip = "text", width = 800, height = 900)
 
 ## 3.2 Percentage of demographic Subset (Cantons) #############################
+# Description: Scatterplot showing the main demographic facets used in the 
+#              analysis, based on the weighted data (unmodelled).
+
 # Apply readable labels to `Factor`
 
 weighted_data_pivot <- weighted_data_pivot %>%
@@ -186,6 +191,8 @@ p <- ggplot(scatterplot_cantons, aes(
 interactive_scatterplot_canton <- ggplotly(p, tooltip = "text", width = 800, height = 900)
 
 ## 3.3 SVP Success versus demographic indicators (not modelled) ################
+# Description: Scatterplot showing the main demographic facets vs SVP election 
+#              result, based on the weighted data (unmodelled).
 
 create_interactive_plot <- function(data,x_var,y_var, group_var = "Kanton", title, tooltip_vars = c("municipality", "Kanton"), 
                                     jitter = FALSE, log_scale = FALSE, fix_negative = FALSE, y_range = NULL) {
@@ -275,6 +282,9 @@ plot_SVP_Change <- create_interactive_plot(
 )
 
 ## 3.4 Facet Scatter Plot ######################################################
+# Description: Scatterplot showing the regression estimates demographic facets 
+#              vs election outcomes of all parties (regression model, scaled).
+
 
 scatter_data <- combined_regression_results %>%
   mutate(term = ifelse(term %in% names(column_labels), column_labels[term], term)) %>%
@@ -316,10 +326,8 @@ regr_scatter <- ggplotly(p, tooltip = "text", width = 800, height = 800) %>%
     margin = list(l = 50, r = 200, t = 50, b = 50) 
   )
 
-regr_scatter
-
-
 ## 3.5 Migrant Populations #####################################################
+# Description: Bar plots with migrant populations per canton (unmodelled).
 
 migrstructure_cantons <- weighted_data %>%
   select(Kanton, w_nswisspop_pct, w_swisspop_pct) %>%
@@ -346,6 +354,8 @@ migrstructure_interactive <- ggplotly(migrstructure, width = 800, height = 300)
 migrstructure_interactive
 
 ## 3.6 Educational Structure ################################################### 
+# Description: Barplot percentage of population only holding secondary level 
+#              education (Berufslehre/Aprentissage) per canton (unmodelled).
 
 edustructure_cantons <- weighted_data %>%
   select(Kanton, w_edulow_pct, w_edusec_pct, w_eduter_pct) %>%
@@ -375,10 +385,11 @@ edustructure_interactive
 
 # 4. Exports ###################################################################
 
-saveRDS(migrstructure_interactive, "../Documentation/Plots/migrstructure.rds")
-saveRDS(edustructure_interactive, "../Documentation/Plots/edustructure.rds")
+# 3.1 / 3.2
 saveRDS(interactive_scatterplot_dem, "../Documentation/Plots/demogr_scatter.rds")
 saveRDS(interactive_scatterplot_canton, "../Documentation/Plots/cantons_scatter.rds")
+
+# 3.3
 saveRDS(plot_SVP23vsAge, "../Documentation/Plots/plot_SVP23vsAge.rds")
 saveRDS(plot_SVP23vsIncome, "../Documentation/Plots/plot_SVP23vsIncome.rds")
 saveRDS(plot_SVP23vsNSwissPop, "../Documentation/Plots/plot_SVP23vsNSwissPop.rds")
@@ -386,5 +397,9 @@ saveRDS(plot_SVP23vsNaturalization, "../Documentation/Plots/plot_SVP23vsNaturali
 saveRDS(plot_SVPvsPopSize, "../Documentation/Plots/plot_SVPvsPopSize.rds")
 saveRDS(plot_SVPvsEduLvl, "../Documentation/Plots/plot_SVPvsEduLvl.rds")
 saveRDS(plot_SVP_Change, "../Documentation/Plots/plot_SVP_Change.rds")
+
+# 3.4 - 3.5
 saveRDS(regr_scatter, "../Documentation/Plots/regr_scatter.rds")
+saveRDS(migrstructure_interactive, "../Documentation/Plots/migrstructure.rds")
+saveRDS(edustructure_interactive, "../Documentation/Plots/edustructure.rds")
 

@@ -1,6 +1,5 @@
-#############################
-####### Import ##############
-#############################
+# 1. Import ####################################################################
+
 
 library(tidyr)
 library(dplyr)
@@ -23,20 +22,24 @@ data <- data %>%
     naturalization_pct = (100/nswisspop_num*naturalization_num),
     naturalization_scl = as.numeric(scale((naturalization_pct), center = TRUE, scale = TRUE))
   )
-View(data)
 
+# 2. Models ####################################################################
+## 2.1 Basic Models ############################################################
 
-#############################
-####### Models ##############
-#############################
+# The basic models and advanced models below were used for orientation in the 
+# data set and are not included in the final product.
+# For models used in the analysis (plots etc.) see chapter 2.3 and 2.4.
 
-## Basic Correlation 
+### 2.1.1 Correlation ##########################################################
+
 cor_result <- cor(data$SVP_23, data$nswisspop_pct, use = "complete.obs", method = "pearson")
 
-## Weighted Correlation 
+### 2.1.2 Weighted Correlation #################################################
+
 wtd_cor_result <- wtd.cor(data$SVP_23, data$nswisspop_pct, weight = data$vote_num)
 
-## Basic Correlation per canton
+### 2.1.3 Correlation per Canton ###############################################
+
 get_correlation <- function(df) {
   cor(df$SVP_23, df$nswisspop_pct, use = "pairwise.complete.obs")
 }
@@ -48,7 +51,7 @@ cor_by_canton <- data %>%
 
 names(cor_by_canton) <- unique(data$Kanton)
 
-## Weighted Correlation per canton
+### 2.1.4 Weighted Correlation per canton ###################################### 
 
 get_wtd_correlation <- function(df) {
   wtd_cor_result <- tryCatch(
@@ -70,21 +73,20 @@ wtd_cor_by_canton <- split_data %>%
 
 names(wtd_cor_by_canton) <- map_chr(split_data, ~ unique(.x$Kanton))
 
-
-###  Correlations per canton but every municipality = 1 unit (non-adjusted) ###
 cor_result
 print(cor_by_canton[order(names(cor_by_canton))])
 
-
-### Correlations per canton but adjusted for population ###
 print(wtd_cor_result)
 print(wtd_cor_by_canton[order(names(wtd_cor_by_canton))])
+
+## 2.2 Advanced Models #########################################################
+### 2.2.1 Linear Model #########################################################
 
 model <- lm(SVP_23 ~ incomePerCapita + agequota_pct + edusec_pct + nswisspop_pct + naturalization_pct, 
             data = data, 
             weights = vote_num)
 
-### Anova and Interaction Model ###
+### 2.2.2 Anova and Interaction Model ##########################################
 
 anova_result <- anova(model)
 anova_result
@@ -94,11 +96,12 @@ model_interaction <- lm(SVP_23 ~ incomePerCapita * edusec_pct + incomePerCapita 
 
 model_interaction
 
-### Regression Models ###
+## 2.3 Regression Function #####################################################
+# Multiple Linear Regression Model with all parties and demographic factors
+# All data was scaled in order normalize the different data types and to account
+# for some of the indicators that have smaller (but notable) variance.
 
-# Unified regression function
 
-# Unique Cantons & Parties
 cantons <- unique(data$Kanton)
 parties <- c("CSP_23","EDU_23", "EVP_23","FDP_23","FGA_23","GLP_23",
              "GRUENE_23","Lega_23","LPS_23","MCR_23", "Mitte_23",
@@ -150,20 +153,11 @@ print(missing_income)
 combined_regression_results <- combined_regression_results %>%
   mutate(estimate = ifelse(is.na(estimate), 0, estimate))
 
-write.csv(combined_regression_results, 
-          file = "../Data/combined_regression_results.csv", 
-          row.names = FALSE)
 
-# Confirm the file was saved
-file.exists("../Data/combined_regression_results.csv")
+## 2.4. Weighted Data (Unmodelled) #############################################
+# Export of the indicators weighted based on populations without further 
+# modelling (for some introductory plots).
 
-
-#############################
-##### DATA PLOTS ############
-#### (NOT MODELLED) #########
-#############################
-
-# Compute weighted demographic factors for both Cantons and Switzerland
 weighted_data <- data %>%
   group_by(Kanton) %>%
   summarise(
@@ -194,6 +188,16 @@ weighted_data <- weighted_data %>%
       mutate(Kanton = "CH")
   ) %>%
   mutate(Kanton = factor(Kanton, levels = c("CH", setdiff(unique(Kanton), "CH"))))
+
+# 3. Export ####################################################################
+
+write.csv(combined_regression_results, 
+          file = "../Data/combined_regression_results.csv", 
+          row.names = FALSE)
+
+# Confirm the file was saved
+file.exists("../Data/combined_regression_results.csv")
+
 
 write.csv(weighted_data, 
           file = "../Data/weighted_data.csv", 

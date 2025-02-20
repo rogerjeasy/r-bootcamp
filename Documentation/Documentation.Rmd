@@ -17,23 +17,10 @@ linestretch: 1.3
 subtitle: "Exploring Interactions between Anti-Migration Sentiment and Ethnocultural Diversity"
 ---
 
-```{=latex}
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.9\textwidth]{swiss_map.png}
-\end{figure}
-
-
-
-\begin{tabular}{ll}
-Course   & R Bootcamp \\
-Semester & Fall 2024/25
-\end{tabular}
-```
-
 **Abstract**
 
-Lorem Ipsum....
+This research project investigates the relationship between regional demographic composition and voting behaviour in the context of the 2023 Swiss federal election. With the Swiss People's Party (SVP) regaining its electoral strength by securing 27.9%, this study explores how demographic factors, particularly the percentage of non-Swiss residents in a particular area, correlate with SVP support. The analysis includes other demographic indicators, such as education level, age, income per capita, and naturalisation rates, to control for confounding variables. The findings reveal that municipalities with lower proportions of non-Swiss residents and higher shares of individuals with secondary-level education (e.g., vocational training) exhibited significantly stronger support for the SVP. In contrast, regions with higher shares of foreign-born residents, greater educational attainment, and higher naturalisation rates were more likely to favour left-leaning parties, such as the Social Democratic Party (SP) and the Greens. While the study highlights strong correlations, it does not establish clear causation, and regional variations persist. These insights provide valuable guidance for policymakers, political organisations, and civil society groups aiming to address political polarisation and promote inclusive democratic participation.
+
 
 ```{=latex}
 \tableofcontents
@@ -53,7 +40,7 @@ This project seeks to explore these relationships by looking more closely at the
 
 Switzerland has a long tradition of democracy, with its modern political system rooted in the 1848 Federal Constitution. Along with its constitution, the bicameral legislative system, was established [@church_concise_2013, Chapter 6]. Swiss elections take place every four years, with the federal government following a system of direct democracy that allows citizens not only to elect representatives but also to participate in referendums and initiatives. As mentioned before, Switzerland’s Federal Parliament consists of two chambers: the National Council (200 members) and the Council of States (46 members). The National Council represents the population proportionally, while the Council of States represents the cantons, with each full canton electing two representatives and six half-cantons electing one. This bicameral system aims to balance demographic and regional interests in legislative decisions.\
 
-According to the annual overview of the Federal Statistical Office [@bundesamt_fur_statistik_schweiz_2023], Switzerland has a population of 8.8 million people (p. 132), of whom around 74% hold Swiss citizenship. The remaining 26% are non-Swiss residents, including permanent residents, cross-border workers, and asylum seekers (p. 142). Swiss nationality is acquired by most citizens through descent and by migrants through naturalisation, a decentralised process primarily reliant on cantonal and municipal approval. Only a fraction of foreign nationals apply for naturalisation—between 30,000 and 45,000 people per year over the last decade — which corresponds to around 2% of the population eligible for naturalisation (p. 142).\
+According to the annual overview of the Federal Statistical Office [@bfs_schweiz_2023], Switzerland has a population of 8.8 million people (p. 132), of whom around 74% hold Swiss citizenship. The remaining 26% are non-Swiss residents, including permanent residents, cross-border workers, and asylum seekers (p. 142). Swiss nationality is acquired by most citizens through descent and by migrants through naturalisation, a decentralised process primarily reliant on cantonal and municipal approval. Only a fraction of foreign nationals apply for naturalisation—between 30,000 and 45,000 people per year over the last decade — which corresponds to around 2% of the population eligible for naturalisation (p. 142).\
 
 Non-Swiss residents, despite their significant share of the population, have limited political rights at the federal level. Some cantons and municipalities allow foreigners to vote in local elections or even run for office, but they are largely excluded from national decision-making [@jurach_droits_2025; @nech_droits_2025]. The politics of Switzerland are described as relatively polarised compared to international standards [@jansen_affective_2024, p. 3].\
 
@@ -141,9 +128,7 @@ kable(party_table, caption = "Overview of Parties and Campaign Focus")
 
 Regional parties, such as the far-right Lega in the Canton of Ticino or the Mouvement Citoyen Romand MCR in Geneva, have been taken into account for some analyses. However, due to their regionality, the data for these parties are scarce and might not yield highly reliable results.\
 
-#### Elections
-
-## 2023 Swiss Federal Elections
+#### Election Results
 
 The most recent parliamentary elections in Switzerland took place on 22 October 2023. Switzerland's bicameral parliament comprises the National Council, which proportionally represents the Swiss population with seats allocated to each canton based on its population, and the Council of States, where all cantons have equal representation. As the National Council reflects the population proportionally, its election results are often regarded as an indicator of trends in public opinion regarding politics and policy.\
 
@@ -151,7 +136,7 @@ The most recent parliamentary elections in Switzerland took place on 22 October 
 
 #### Municipalities
 
-As of 1 January 2024, Switzerland has 2,131 registered municipalities, almost 100 fewer than the total of 2,212 in 2019. The analysis included only the municipalities that could be matched consistently across both elections, which comprised exactly 2,113 municipalities, meaning their municipality ID remained the same from 2019 to 2024. Even though a range of 2,113 to 2,212 municipalities seems like a significant discrepancy, most municipalities affected by mergers or dissolution do not impact the outcome of the weighted correlation, as their population is, in almost all cases, below 1,000 and, in many cases, below 100. For example, the village of Corippo TI was merged in 2019 into a neighbouring community but had only 9 inhabitants at the time of the merger. The disappearance of such small municipalities due to mergers does not affect the outcome of the analysis in any significant way [@bundesamt_fur_statistik_2131_2025].\
+As of 1 January 2024, Switzerland has 2,131 registered municipalities, almost 100 fewer than the total of 2,212 in 2019. The analysis included only the municipalities that could be matched consistently across both elections, which comprised exactly 2,113 municipalities, meaning their municipality ID remained the same from 2019 to 2024. Even though a range of 2,113 to 2,212 municipalities seems like a significant discrepancy, most municipalities affected by mergers or dissolution do not impact the outcome of the weighted correlation, as their population is, in almost all cases, below 1,000 and, in many cases, below 100. For example, the village of Corippo TI was merged in 2019 into a neighbouring community but had only 9 inhabitants at the time of the merger. The disappearance of such small municipalities due to mergers does not affect the outcome of the analysis in any significant way [@bfs_2131_2025].\
 
 #### Cantons and Switzerland
 
@@ -252,7 +237,7 @@ edustructure <- readRDS("Plots/edustructure.rds") %>%
 edustructure
 ```
 
-The graph also visualises the proportion of different educational levels within the population. We know from other studies [@bundesamt_fur_statistik_bildungsniveau_2025-1] that most Swiss people hold a secondary education degree, leading us to assume that the demographic segment possessing only obligatory education might include a high percentage of non-Swiss populations, particularly refugees who could not complete their schooling due to displacement caused by war and conflict. Therefore, the Swiss population can be roughly divided into those with secondary and tertiary education. The segment with secondary-level education is of particular interest, as it predominantly comprises Swiss citizens and Swiss-born migrants, with or without Swiss citizenship, who did not pursue further education after completing their professional qualifications. Prior studies on this topic suggest that this group may be more likely to vote in favour of the far-right party SVP and less likely to support left-wing parties like the SP and Greens, as well as centrist parties like the GLP and FDP. From the graph, we can observe some consistency in education levels across Switzerland, with fluctuations ranging from 30% on the lower end to 50% on the higher end.\
+The graph also visualises the proportion of different educational levels within the population. We know from other studies [@bfs_bildungsniveau_2025-1; @bfs_bildungsniveau_2025] that most Swiss people hold a secondary education degree, leading us to assume that the demographic segment possessing only obligatory education might include a high percentage of non-Swiss populations, particularly refugees who could not complete their schooling due to displacement caused by war and conflict. Therefore, the Swiss population can be roughly divided into those with secondary and tertiary education. The segment with secondary-level education is of particular interest, as it predominantly comprises Swiss citizens and Swiss-born migrants, with or without Swiss citizenship, who did not pursue further education after completing their professional qualifications. Prior studies on this topic suggest that this group may be more likely to vote in favour of the far-right party SVP and less likely to support left-wing parties like the SP and Greens, as well as centrist parties like the GLP and FDP. From the graph, we can observe some consistency in education levels across Switzerland, with fluctuations ranging from 30% on the lower end to 50% on the higher end.\
 
 ```{r demogr_scatter, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
@@ -276,7 +261,38 @@ Switzerland held federal elections to renew the National Council and the Council
 
 The Swiss People's Party (SVP), known for its anti-migration stance since gaining momentum in the 1990s, reinforced its image as the party of choice for a voter base sceptical of migration. In 2023, the party achieved significant gains, reversing the losses it experienced in the 2019 elections. In contrast, both the Green Party and the Green Liberal Party faced notable setbacks, losing a considerable portion of the seats they had won in 2019.\
 
-**HERE: Roger Plot of Election results 2023 vs 2019.**
+**HERE: Roger Plot of Election results 2023 vs 2019?**
+
+```{r map_plot_election_results_cantons, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly) 
+map_plot_election_results_cantons <- readRDS("Plots/map_plot_election_results_cantons.rds") %>%
+  toWebGL()
+map_plot_election_results_cantons
+```
+
+This map visualises the winning political party in each Swiss canton based on the 2023 federal election results. Each canton is colour-coded to represent the party with the highest vote share. The map shows a clear regional divide, with the SVP dominating in central and eastern Switzerland, the SP winning in the western, predominantly French-speaking cantons, and the Mitte party prevailing in some central and southern regions. The FDP's dominance is visible in Ticino.\ 
+
+```{r map_plot_two_strongest_parties_election_results_cantons, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly) 
+map_plot_two_strongest_parties_election_results_cantons <- readRDS("Plots/map_plot_two_strongest_parties_election_results_cantons.rds") %>%
+  toWebGL()
+map_plot_two_strongest_parties_election_results_cantons
+```
+
+This map expands on the first by including both the first and second most popular parties per canton. It introduces the Greens (GRUENE). The SP and SVP remain the dominant players, with the Mitte and FDP securing strongholds in central and southern regions.\
+
+**@ROGER: Does the map not need to be in the colors of the second strongest party?**
+
+```{r map_plot_election_results_municipalities, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
+map_plot_election_results_municipalities <- readRDS("Plots/map_plot_election_results_municipalities.rds") %>%
+  toWebGL()
+map_plot_election_results_municipalities
+```
+
+This detailed map displays the winning party in each Swiss municipality, offering a granular view of the 2023 election results. The SVP dominates rural and less densely populated areas, particularly in the German-speaking parts of Switzerland.\ 
+
+The SP and the Greens hold the majority in urban centres such as Geneva, Lausanne, Bern, Zurich, and Basel. Regional parties like Lega in Ticino and MCG in Geneva also appear prominently now. This municipal-level analysis reinforces the pattern seen at the cantonal level, where urban areas favour left-leaning parties while rural regions remain conservative strongholds.\ 
 
 ### Demographic Indicators of Far-Right Success
 
@@ -324,7 +340,7 @@ plot_SVP23vsNaturalization <- readRDS("Plots/plot_SVP23vsNaturalization.rds") %>
 plot_SVP23vsNaturalization 
 ```
 
-he scatter plot illustrates the relationship between the SVP's vote share in the 2023 election (x-axis) and the taxable income per capita in Swiss municipalities (y-axis). The distribution suggests that municipalities with higher income levels tend to have lower SVP support, as most high-income areas are clustered on the left side of the plot. Municipalities with lower income levels show a broader range of SVP vote shares, but a large concentration of points is visible in the lower-to-mid range of SVP support. The presence of a few high-income municipalities with relatively low SVP support reinforces the idea that wealthier areas may be less inclined to vote for the far-right party.\
+The scatter plot illustrates the relationship between the SVP's vote share in the 2023 election (x-axis) and the taxable income per capita in Swiss municipalities (y-axis). The distribution suggests that municipalities with higher income levels tend to have lower SVP support, as most high-income areas are clustered on the left side of the plot. Municipalities with lower income levels show a broader range of SVP vote shares, but a large concentration of points is visible in the lower-to-mid range of SVP support. The presence of a few high-income municipalities with relatively low SVP support reinforces the idea that wealthier areas may be less inclined to vote for the far-right party.\
 
 Larger municipalities, represented by bigger circles, generally appear in the lower-to-middle income range, further suggesting that urban and economically stronger regions have lower SVP support.\
 
@@ -380,42 +396,11 @@ The Free Democratic Party (FDP) performs best in municipalities with high taxabl
 
 Two cantonal parties also merit attention, particularly regarding their local performance. Lega in Ticino shows a strong positive correlation with lower taxable income per capita and lower secondary education levels, indicating that it performs well in economically weaker areas with lower educational attainment. It is also positively associated with municipalities that have a higher share of non-Swiss residents and higher naturalisation rates, suggesting that the party gains support in more diverse regions where migration issues may be politically relevant. The Mouvement Citoyens Genevois (MCG) in Geneva is negatively correlated with taxable income per capita, secondary education, non-Swiss population share, and naturalisation rates, suggesting that it performs poorly in wealthier and well-educated municipalities. Its support decreases in areas with a higher proportion of foreign residents. Both Lega and MCG seem to share some voter base characteristics, but at the cantonal level, there appears to be segmentation, with visible differences in the indicators of the SVP's electoral success compared to Lega or MCG.\
 
-## Maps
+### Mapping Demographic Influence
 
-```{r map_plot_election_results_cantons, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
-library(plotly) 
-map_plot_election_results_cantons <- readRDS("Plots/map_plot_election_results_cantons.rds") %>%
-  toWebGL()
-map_plot_election_results_cantons
-```
+**Rade: Not entirely clear if these two maps show the relationshop to demographic factors (regression, correlaction?)**
 
-Map results of the 2023 elections in Switzerland by canton.
-
-```{r map_plot_two_strongest_parties_election_results_cantons, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
-library(plotly) 
-map_plot_two_strongest_parties_election_results_cantons <- readRDS("Plots/map_plot_two_strongest_parties_election_results_cantons.rds") %>%
-  toWebGL()
-map_plot_two_strongest_parties_election_results_cantons
-```
-
-Results of winning party including the second party per canton.
-
-```{r map_plot_election_results_municipalities, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
-library(plotly)
-map_plot_election_results_municipalities <- readRDS("Plots/map_plot_election_results_municipalities.rds") %>%
-  toWebGL()
-map_plot_election_results_municipalities
-```
-
-Map results of the 2023 elections in Switzerland by municipality.
-
-```{r map_education_plot_cantons, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
-library(plotly)
-map_education_plot_cantons <- readRDS("Plots/map_education_plot_cantons.rds")
-map_education_plot_cantons
-```
-
-Map of the education factor per canton.
+This map presents the scaled income per capita across Swiss cantons, with blue representing higher-income regions and red indicating lower-income areas. The wealthiest cantons include Zug, Zurich, and Geneva, while lower-income regions are concentrated in the Jura, Valais, and parts of central Switzerland. Higher-income regions tend to lean towards economically liberal parties like the FDP and GLP, while lower-income areas show stronger support for the SVP and cantonal parties like Lega and MCG. This aligns with the broader trend of wealthier urban areas favouring centrist and progressive policies, while economically weaker regions lean towards populist and conservative platforms.
 
 ```{r map_income_plot_cantons, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
@@ -423,7 +408,14 @@ map_income_plot_cantons <- readRDS("Plots/map_income_plot_cantons.rds")
 map_income_plot_cantons
 ```
 
-Map of the income per capita factor per canton.
+This map illustrates the scaled education factor by canton, with colours ranging from red (lower education levels) to blue (higher education levels). Higher education levels are most prominent in cantons like Zurich, Geneva, and Vaud, while lower levels are found in rural cantons such as Uri, Obwalden, and Appenzell Innerrhoden. The map highlights the correlation between education and political preferences, as cantons with higher education attainment tend to support left-leaning parties (SP, Greens), while those with lower education levels align more with the SVP and other conservative parties.
+
+```{r map_education_plot_cantons, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
+map_education_plot_cantons <- readRDS("Plots/map_education_plot_cantons.rds")
+map_education_plot_cantons
+```
+
 
 # Limitations
 

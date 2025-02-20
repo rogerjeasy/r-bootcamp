@@ -165,7 +165,6 @@ saveRDS(election_map, file = "Documentation/Plots/map_plot_election_results_cant
 
 #######################################################
 # Select the top 2 strongest parties for each canton
-# Select the top 2 strongest parties for each canton
 canton_top2_winners <- merged_data %>%
   group_by(Kanton) %>%
   slice_max(Percentage, n = 2, with_ties = FALSE) %>%  
@@ -224,7 +223,7 @@ election_map_top2 <- leaflet(options = leafletOptions(minZoom = 7, maxZoom = 12)
   # Add canton polygons with top 2 winners
   addPolygons(
     data = canton_top2_geo,
-    fillColor = ~Rank_1_Color,  # Use Rank_1_Color for mapping
+    fillColor = ~Rank_2_Color,  # Use Rank_2_Color for mapping
     fillOpacity = 0.7,
     weight = 1,
     color = "white",

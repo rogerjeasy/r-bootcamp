@@ -239,3 +239,35 @@ if (file.exists("Data/datatable.csv")) {
 }
 write.csv(combined_data, "Data/datatable.csv", row.names = FALSE)
 
+############ RUN START MODEL AND THEN PLOTS ####################
+
+# Get the path to the Scripts folder for analysis and visualization
+analysis_folder <- file.path(getwd(), "Script Plots")
+
+# Function to safely source scripts with error handling
+run_script <- function(script_name) {
+  script_path <- file.path(analysis_folder, script_name)
+  tryCatch({
+    message(paste("Running", script_name, "..."))
+    source(script_path)
+    message(paste("Successfully completed", script_name))
+  }, error = function(e) {
+    message(paste("Error in", script_name, ":", e$message))
+  }, warning = function(w) {
+    message(paste("Warning in", script_name, ":", w$message))
+  })
+}
+
+# Verify the scripts exist
+script_files <- list.files(analysis_folder, pattern = "\\.R$")
+message("Found the following scripts in folder:")
+print(script_files)
+
+# Run analysis and visualization scripts in sequence
+run_script("kanton_names.R")
+run_script("party_colors.R")
+run_script("stat_models.R")
+run_script("boxplots.R")
+run_script("scatterplots_barplots.R")
+
+message("All analysis and visualization scripts have been executed")

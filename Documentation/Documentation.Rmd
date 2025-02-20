@@ -247,6 +247,28 @@ demogr_scatter
 
 The stacked bar chart illustrates the distribution of education levels across Swiss cantons, displaying the weighted percentage of populations with low, secondary, and tertiary education. Each bar represents a canton, with CH on the left representing the national average. The chart reveals significant variation in education levels across different regions. Some cantons, such as Zurich (ZH), Geneva (GE), and Zug (ZG), show a higher proportion of tertiary education, reflecting their strong economic and academic infrastructure. In contrast, cantons like Appenzell Innerrhoden (AI), Uri (UR), and Obwalden (OW) have a higher share of secondary education and lower tertiary education levels, aligning with the prevalence of vocational training in these regions. The share of low education varies but tends to be more pronounced in rural or traditionally working-class cantons.\
 
+The boxplots presented in this visualisation illustrate the distribution of taxable income per capita across Switzerland, both at the national level and disaggregated by canton.\
+
+```{r boxplot_CH, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
+boxplot_CH <- readRDS("Plots/boxplot_CH.rds") %>%
+  toWebGL()
+boxplot_CH
+```
+
+In the consolidated Swiss boxplot, the median income per capita appears to be around CHF 31'520. The top 1 percentile outliers were filtered out because they skewed the boxplot, but still the presence of numerous high-income outliers suggests a concentration of wealth in certain regions and thus indicating significant income disparities across Swiss municipalities. The whiskers extend to approximately 1.5 times the interquartile range, beyond which extreme values are plotted as individual points. The overall distribution indicates that while the majority of municipalities cluster within a similar income range, a subset of regions demonstrates exceptionally high taxable incomes, potentially influencing the national economy.\
+
+
+```{r boxplot_cantons, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(plotly)
+boxplot_cantons <- readRDS("Plots/boxplot_cantons.rds") %>%
+  toWebGL()
+boxplot_cantons
+```
+
+The second boxplot presents income per capita at the cantonal level. Certain cantons, such as Zug, Schwyz, and Geneva, exhibit higher median incomes and a greater number of extreme outliers, indicating the presence of high-income municipalities. Conversely, cantons such as Jura, Valais, and Uri display significantly lower median taxable incomes.\
+
+The variation in box sizes also indicates differing levels of income inequality within each canton, with some exhibiting a narrower interquartile range, while others display a broader distribution of incomes. For example Geneva showing by far the highest variance while some cantons seem to have very little variance (Glarus, Jura and Schaffhausen).
 
 ### General Elections 2023
 

@@ -10,8 +10,8 @@ output: html_document
 -   **To-Do:**
     -   Chapter of Choice (Roger)
     -   Find a way to trigger all scripts from Elections.R (Roger)
-    -   2-3 Paragraphs on the Maps (Rade)
-    -   Boxplot Taxable Income (Rade)
+    -   ~~2-3 Paragraphs on the Maps (Rade)~~
+    -   ~~Boxplot Taxable Income (Rade)~~
     -   Comments in R Script ~~and split StatModels from Visualisations (Rade)~~
 
 **Done/Finished Tasks:**

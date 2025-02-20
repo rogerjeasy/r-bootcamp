@@ -268,7 +268,7 @@ boxplot_cantons
 
 The second boxplot presents income per capita at the cantonal level. Certain cantons, such as Zug, Schwyz, and Geneva, exhibit higher median incomes and a greater number of extreme outliers, indicating the presence of high-income municipalities. Conversely, cantons such as Jura, Valais, and Uri display significantly lower median taxable incomes.\
 
-The variation in box sizes also indicates differing levels of income inequality within each canton, with some exhibiting a narrower interquartile range, while others display a broader distribution of incomes. For example Geneva showing by far the highest variance while some cantons seem to have very little variance (Glarus, Jura and Schaffhausen).
+The variation in box sizes also indicates differing levels of income inequality within each canton, with some exhibiting a narrower interquartile range, while others display a broader distribution of incomes. For example Geneva showing by far the highest variance while some cantons seem to have very little variance (Glarus, Jura and Schaffhausen).\
 
 ### General Elections 2023
 

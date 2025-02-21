@@ -24,7 +24,6 @@ subtitle: "Exploring Interactions between Anti-Migration Sentiment and Ethnocult
 
 This research project investigates the relationship between regional demographic composition and voting behaviour in the context of the 2023 Swiss federal election. With the Swiss People's Party (SVP) regaining its electoral strength by securing 27.9%, this study explores how demographic factors, particularly the percentage of non-Swiss residents in a particular area, correlate with SVP support. The analysis includes other demographic indicators, such as education level, age, income per capita, and naturalisation rates, to control for confounding variables. The findings reveal that municipalities with lower proportions of non-Swiss residents and higher shares of individuals with secondary-level education (e.g., vocational training) exhibited significantly stronger support for the SVP. In contrast, regions with higher shares of foreign-born residents, greater educational attainment, and higher naturalisation rates were more likely to favour left-leaning parties, such as the Social Democratic Party (SP) and the Greens. While the study highlights strong correlations, it does not establish clear causation, and regional variations persist. These insights provide valuable guidance for policymakers, political organisations, and civil society groups aiming to address political polarisation and promote inclusive democratic participation.
 
-
 ```{=latex}
 \tableofcontents
 ```
@@ -216,28 +215,28 @@ Most of the plots did not include statistical models but rather visualised the e
 
 # Chapter of Choice: Interactive Electoral Maps
 
-This project leverages interactive mapping capabilities to visualize Swiss electoral results data. While packages like dplyr and ggplot2 were covered in the main course, we specifically focus on the leaflet package for creating interactive web maps - a specialized tool for geographical data presentation that offers new possibilities for data visualization. This approach combines familiar data manipulation techniques with advanced spatial data handling through `leaflet`'s interactive features and the `sf` (simple features) package's geospatial capabilities. \ 
+This project leverages interactive mapping capabilities to visualize Swiss electoral results data. While packages like dplyr and ggplot2 were covered in the main course, we specifically focus on the leaflet package for creating interactive web maps - a specialized tool for geographical data presentation that offers new possibilities for data visualization. This approach combines familiar data manipulation techniques with advanced spatial data handling through `leaflet`'s interactive features and the `sf` (simple features) package's geospatial capabilities.  
 
 The implementation utilizes several specialized R packages:
 
-* `leaflet`: For creating interactive web maps
-* `sf`: For handling spatial vector data
-* `htmltools`: For HTML widget generation
-* `raster`: For spatial data processing
+-   `leaflet`: For creating interactive web maps
+-   `sf`: For handling spatial vector data
+-   `htmltools`: For HTML widget generation
+-   `raster`: For spatial data processing
 
-These packages extend beyond basic data visualization to create dynamic, web-based visualizations that allow to explore electoral data through an interactive interface. \
+These packages extend beyond basic data visualization to create dynamic, web-based visualizations that allow to explore electoral data through an interactive interface.\
 
-The maps integrate various spatial data levels including municipality boundaries, canton boundaries, Lakes (for improved geographical context), country outline. Incorporated interactive elements are hover tooltips showing detailed electoral information, color-coded regions based on winning parties, Zoom and pan capabilities. The coordinate system management  handles coordinate system transformations, converting all geographical data to WGS84 (EPSG:4326) for web compatibility. \
+The maps integrate various spatial data levels including municipality boundaries, canton boundaries, Lakes (for improved geographical context), country outline. Incorporated interactive elements are hover tooltips showing detailed electoral information, color-coded regions based on winning parties, Zoom and pan capabilities. The coordinate system management handles coordinate system transformations, converting all geographical data to WGS84 (EPSG:4326) for web compatibility.\
 
 The interactive elements allow to explore both broad patterns and specific local results, representing a significant advance over static visualizations. This chapter demonstrates two distinct mapping approaches:
 
-1. **Canton-Level Analysis**: Shows winning parties by canton with simplified boundaries, offering a broad overview of regional political trends.
+1.  **Canton-Level Analysis**: Shows winning parties by canton with simplified boundaries, offering a broad overview of regional political trends.
 
-2. **Municipality-Level Detail**: Provides granular insight into local voting patterns, revealing nuanced geographical patterns that might be missed in aggregate data.
+2.  **Municipality-Level Detail**: Provides granular insight into local voting patterns, revealing nuanced geographical patterns that might be missed in aggregate data.
 
-Several technical challenges were addressed. Merging electoral data with geographical boundaries required careful handling of identifiers and coordinate systems (Data Integration). The maps balance detail with performance, managing the complexity of displaying over 2,000 municipalities while maintaining responsiveness (Performance Optimization). Careful consideration was given to color schemes and opacity levels to ensure readability while maintaining aesthetic appeal (Visual Clarity). \
+Several technical challenges were addressed. Merging electoral data with geographical boundaries required careful handling of identifiers and coordinate systems (Data Integration). The maps balance detail with performance, managing the complexity of displaying over 2,000 municipalities while maintaining responsiveness (Performance Optimization). Careful consideration was given to color schemes and opacity levels to ensure readability while maintaining aesthetic appeal (Visual Clarity).\
 
-This mapping approach adds several valuable dimensions to the analysis. One focus was on the spatial context, in order to reveals geographical patterns in voting behavior that might be missed in traditional statistical analysis. Interactive elements allow readers to explore data according to their interests, improving user engagement. Further the maps effectively communicate multiple data dimensions (winning party, vote share, geographical location) in an intuitive format. \
+This mapping approach adds several valuable dimensions to the analysis. One focus was on the spatial context, in order to reveals geographical patterns in voting behavior that might be missed in traditional statistical analysis. Interactive elements allow readers to explore data according to their interests, improving user engagement. Further the maps effectively communicate multiple data dimensions (winning party, vote share, geographical location) in an intuitive format.\
 
 # Results
 
@@ -286,7 +285,6 @@ boxplot_CH
 
 In the consolidated Swiss boxplot, the median income per capita appears to be around CHF 31'520. The top 1 percentile outliers were filtered out because they skewed the boxplot, but still the presence of numerous high-income outliers suggests a concentration of wealth in certain regions and thus indicating significant income disparities across Swiss municipalities. The whiskers extend to approximately 1.5 times the interquartile range, beyond which extreme values are plotted as individual points. The overall distribution indicates that while the majority of municipalities cluster within a similar income range, a subset of regions demonstrates exceptionally high taxable incomes, potentially influencing the national economy.\
 
-
 ```{r boxplot_cantons, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
 boxplot_cantons <- readRDS("Plots/boxplot_cantons.rds") %>%
@@ -318,7 +316,7 @@ map_plot_election_results_cantons <- readRDS("Plots/map_plot_election_results_ca
 map_plot_election_results_cantons
 ```
 
-This map visualises the winning political party in each Swiss canton based on the 2023 federal election results. Each canton is colour-coded to represent the party with the highest vote share. The map shows a clear regional divide, with the SVP dominating in central and eastern Switzerland, the SP winning in the western, predominantly French-speaking cantons, and the Mitte party prevailing in some central and southern regions. The FDP's dominance is visible in Ticino.\ 
+This map visualises the winning political party in each Swiss canton based on the 2023 federal election results. Each canton is colour-coded to represent the party with the highest vote share. The map shows a clear regional divide, with the SVP dominating in central and eastern Switzerland, the SP winning in the western, predominantly French-speaking cantons, and the Mitte party prevailing in some central and southern regions. The FDP's dominance is visible in Ticino. 
 
 ```{r map_plot_two_strongest_parties_election_results_cantons, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly) 
@@ -336,9 +334,9 @@ map_plot_election_results_municipalities <- readRDS("Plots/map_plot_election_res
 map_plot_election_results_municipalities
 ```
 
-This detailed map displays the winning party in each Swiss municipality, offering a granular view of the 2023 election results. The SVP dominates rural and less densely populated areas, particularly in the German-speaking parts of Switzerland.\ 
+This detailed map displays the winning party in each Swiss municipality, offering a granular view of the 2023 election results. The SVP dominates rural and less densely populated areas, particularly in the German-speaking parts of Switzerland. 
 
-The SP and the Greens hold the majority in urban centres such as Geneva, Lausanne, Bern, Zurich, and Basel. Regional parties like Lega in Ticino and MCG in Geneva also appear prominently now. This municipal-level analysis reinforces the pattern seen at the cantonal level, where urban areas favour left-leaning parties while rural regions remain conservative strongholds.\ 
+The SP and the Greens hold the majority in urban centres such as Geneva, Lausanne, Bern, Zurich, and Basel. Regional parties like Lega in Ticino and MCG in Geneva also appear prominently now. This municipal-level analysis reinforces the pattern seen at the cantonal level, where urban areas favour left-leaning parties while rural regions remain conservative strongholds. 
 
 ### Demographic Indicators of Far-Right Success
 
@@ -461,7 +459,6 @@ library(plotly)
 map_education_plot_cantons <- readRDS("Plots/map_education_plot_cantons.rds")
 map_education_plot_cantons
 ```
-
 
 # Limitations
 

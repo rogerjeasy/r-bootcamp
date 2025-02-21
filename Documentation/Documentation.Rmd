@@ -311,8 +311,6 @@ Switzerland held federal elections to renew the National Council and the Council
 
 The Swiss People's Party (SVP), known for its anti-migration stance since gaining momentum in the 1990s, reinforced its image as the party of choice for a voter base sceptical of migration. In 2023, the party achieved significant gains, reversing the losses it experienced in the 2019 elections. In contrast, both the Green Party and the Green Liberal Party faced notable setbacks, losing a considerable portion of the seats they had won in 2019.\
 
-**HERE: Roger Plot of Election results 2023 vs 2019?**
-
 ```{r map_plot_election_results_cantons, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly) 
 map_plot_election_results_cantons <- readRDS("Plots/map_plot_election_results_cantons.rds") %>%
@@ -330,8 +328,6 @@ map_plot_two_strongest_parties_election_results_cantons
 ```
 
 This map expands on the first by including both the first and second most popular parties per canton. It introduces the Greens (GRUENE). The SP and SVP remain the dominant players, with the Mitte and FDP securing strongholds in central and southern regions.\
-
-**@ROGER: Does the map not need to be in the colors of the second strongest party?**
 
 ```{r map_plot_election_results_municipalities, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(plotly)
@@ -447,8 +443,6 @@ The Free Democratic Party (FDP) performs best in municipalities with high taxabl
 Two cantonal parties also merit attention, particularly regarding their local performance. Lega in Ticino shows a strong positive correlation with lower taxable income per capita and lower secondary education levels, indicating that it performs well in economically weaker areas with lower educational attainment. It is also positively associated with municipalities that have a higher share of non-Swiss residents and higher naturalisation rates, suggesting that the party gains support in more diverse regions where migration issues may be politically relevant. The Mouvement Citoyens Genevois (MCG) in Geneva is negatively correlated with taxable income per capita, secondary education, non-Swiss population share, and naturalisation rates, suggesting that it performs poorly in wealthier and well-educated municipalities. Its support decreases in areas with a higher proportion of foreign residents. Both Lega and MCG seem to share some voter base characteristics, but at the cantonal level, there appears to be segmentation, with visible differences in the indicators of the SVP's electoral success compared to Lega or MCG.\
 
 ### Mapping Demographic Influence
-
-**Rade: Not entirely clear if these two maps show the relationshop to demographic factors (regression, correlaction?)**
 
 This map presents the scaled income per capita across Swiss cantons, with blue representing higher-income regions and red indicating lower-income areas. The wealthiest cantons include Zug, Zurich, and Geneva, while lower-income regions are concentrated in the Jura, Valais, and parts of central Switzerland. Higher-income regions tend to lean towards economically liberal parties like the FDP and GLP, while lower-income areas show stronger support for the SVP and cantonal parties like Lega and MCG. This aligns with the broader trend of wealthier urban areas favouring centrist and progressive policies, while economically weaker regions lean towards populist and conservative platforms.
 

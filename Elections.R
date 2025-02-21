@@ -218,9 +218,6 @@ votenums <- votenums %>%
 
 ## JOINING THE DATASETS  #######################################################
 
-filterincome <- filter(income, is.na(as.numeric(gsub("[^0-9.]", "", incomePerCapita))))
-View(filterincome)
-
 combined_data <- election2023 %>%
   left_join(swisspop %>% dplyr::select(municipalityId, municipalityId, population, swisspop_num, swisspop_pct, nswisspop_num, nswisspop_pct), by = "municipalityId") %>%
   left_join(citizenship %>% dplyr::select(municipalityId, naturalization_num), by = "municipalityId") %>%

@@ -113,12 +113,14 @@ swisspop <- swisspop %>%
     nswisspop_pct = round((nswisspop_num / population) * 100, 2),
     swisspop_pct = round((swisspop_num / population) * 100, 2) 
   )
-swisspop
 
 ## DATASET 3: Education   ######################################################
 
 education <- import3 %>%
   dplyr::select(districtId = 1, Kanton = 2, districtName = 3, edupop_num = 4, edulow_num = 6, edusec_num = 8, eduter_num = 10)
+
+education <- education %>%
+  filter(!is.na(districtId))
 
 education <- education %>%
   mutate(
@@ -146,7 +148,7 @@ column_names <- c(
 )
 
 colnames(import4) <- column_names
-import4
+
 citizenship <- import4 %>%
   dplyr::select(-ID, -citizenship, -sex) %>%
   filter(grepl("^\\.\\.\\.\\.\\.\\.", municipalityId)) %>%
@@ -154,7 +156,7 @@ citizenship <- import4 %>%
     municipalityId = substr(municipalityId, 7, 10)
   )
 
-### DATASET 5: Age distribution  ###############################################
+## DATASET 5: Age distribution  ###############################################
 # agequota_pct: statistical measurement for aged population in relation to
 #               middle age (20-65) population
 
@@ -177,7 +179,7 @@ age <- import5 %>%
   ) %>%
   dplyr::select(municipalityId, agepop_num, age2065_num, age66plus_num, agequota_pct) 
 
-## DATASET 6: some income or wealth metric   ###################################
+## DATASET 6: Income per Capita (Taxable)   ###################################
 
 income <- import6[, 1:4]
 column_names_inc <- c("municipalityId", "municipalityName", "incomePerCommune", "incomePerCapita")
@@ -185,9 +187,8 @@ colnames(income) <- column_names_inc
 
 income <- income %>%
   mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
-
 income <- income %>%
-  mutate(incomePerCapita = round(as.numeric(incomePerCapita))) %>%
+  mutate(incomePerCapita = round(as.numeric(gsub("[^0-9.]", "", incomePerCapita)))) %>%
   dplyr::select(municipalityId, incomePerCapita)
 
 ## DATASET 7: Overview of Municipality, District, Canton for matching ##########
@@ -217,14 +218,18 @@ votenums <- votenums %>%
 
 ## JOINING THE DATASETS  #######################################################
 
+filterincome <- filter(income, is.na(as.numeric(gsub("[^0-9.]", "", incomePerCapita))))
+View(filterincome)
+
 combined_data <- election2023 %>%
   left_join(swisspop %>% dplyr::select(municipalityId, municipalityId, population, swisspop_num, swisspop_pct, nswisspop_num, nswisspop_pct), by = "municipalityId") %>%
   left_join(citizenship %>% dplyr::select(municipalityId, naturalization_num), by = "municipalityId") %>%
   left_join(municipaldata %>% dplyr::select(municipalityId, Kanton, districtId, districtName), by = "municipalityId") %>%
-  left_join(education %>% dplyr::select(districtId, edupop_num, edulow_num, edusec_num, eduter_num, edulow_pct, edusec_pct, eduter_pct), by = "districtId") %>%
-  left_join(age %>% dplyr::select(municipalityId, agepop_num, age2065_num, age66plus_num, agequota_pct), by = "municipalityId") %>%
-  left_join(income %>% dplyr::select(municipalityId, incomePerCapita), by = "municipalityId")  %>%
-  left_join(votenums %>% dplyr::select(municipalityId, vote_num), by = "municipalityId") 
+  left_join(age %>% dplyr::select(municipalityId, agepop_num, age2065_num, age66plus_num, agequota_pct), by = "municipalityId")   %>%
+  left_join(income %>% dplyr::select(municipalityId, incomePerCapita), by = "municipalityId")    %>%
+  left_join(votenums %>% dplyr::select(municipalityId, vote_num), by = "municipalityId") %>%
+  left_join(education %>% dplyr::select(districtId, edupop_num, edulow_num, edusec_num, eduter_num, edulow_pct, edusec_pct, eduter_pct), by = "districtId")  
+
 
 combined_data <- combined_data %>%
   filter(nchar(municipalityId) == 4,

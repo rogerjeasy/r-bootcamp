@@ -444,6 +444,8 @@ Two cantonal parties also merit attention, particularly regarding their local pe
 
 ### Mapping Demographic Influence
 
+Two of the indicators - income per capita and education - seem to have a particularly interesting regional variance Below, their influence according to the regression model is mapped.
+
 This map presents the scaled income per capita across Swiss cantons, with blue representing higher-income regions and red indicating lower-income areas. The wealthiest cantons include Zug, Zurich, and Geneva, while lower-income regions are concentrated in the Jura, Valais, and parts of central Switzerland. Higher-income regions tend to lean towards economically liberal parties like the FDP and GLP, while lower-income areas show stronger support for the SVP and cantonal parties like Lega and MCG. This aligns with the broader trend of wealthier urban areas favouring centrist and progressive policies, while economically weaker regions lean towards populist and conservative platforms.
 
 ```{r map_income_plot_cantons, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -466,6 +468,8 @@ map_education_plot_cantons
 Procedural limitations of the analysis include the unreliability of election results in establishing a causal relationship to voting motivation. Since the far-right SVP campaigned on an anti-migration platform, we assume that many voters were mobilised by this issue. However, this does not account for non-voters, who represented 53% of the population in 2023. Additionally, some people might have voted for far-right parties for other reasons, such as fiscal austerity or opposition to social liberty policies—sometimes referred to as "culture war" issues. As with all elections, many people continue to vote for the party they have identified with for years. The election data does not provide insights into non-voters' motivations for abstaining from voting and, therefore, may not be representative of the entire population, potentially leading to biased results.\
 
 Some limitations must also be noted regarding the statistical analysis. For education levels, the BFS only publishes data per district, not per municipality. The scarcity of data points reduces the reliability of this indicator. Furthermore, demographic factors such as age ratio, income per capita, and migrant population percentage can be highly correlated, making it difficult to isolate the effect of each variable and leading to multicollinearity. The relationship between election results and demographic factors may not be linear, and linear models may oversimplify these relationships. Moreover, the chosen demographic indicators might not be conclusive, and the omission of relevant variables can lead to biased estimates. The variance of errors may not be constant across observations, violating one of the key assumptions of linear regression (heteroscedasticity).\
+
+Looking at the statistical relevance, many of the regressions and correlations (particulary in cantons with few parties and few municipalities) are not significant. Since the statistical modelling was not the focus of this project, the low significance of some values is considered neglible.\
 
 # Discussion
 

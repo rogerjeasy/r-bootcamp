@@ -1,3 +1,5 @@
+# 1. Import ####################################################################
+
 library(ggplot2)
 library(plotly)
 library(dplyr)
@@ -12,7 +14,7 @@ library(magrittr)
 library(viridis)
 library(scales)
 
-setwd("C:/Users/rogej/Documents/hslu/courses/bootcamp/r-bootcamp")
+# 2. Plots #####################################################################
 
 # Define canton colors
 canton_colors <- tibble::tibble(
@@ -130,6 +132,9 @@ swiss_map <- ggplot() +
     crs = st_crs(canton_geo),
     datum = st_crs(canton_geo)
   )
+
+# 3. Exports ###################################################################
+
 
 # Display the map
 swiss_map

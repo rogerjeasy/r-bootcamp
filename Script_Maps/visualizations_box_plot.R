@@ -1,3 +1,5 @@
+# 1. Import ####################################################################
+
 library(ggplot2)
 library(dplyr)
 library(maptiles)
@@ -10,9 +12,6 @@ library(raster)
 library(magrittr)
 library(plotly)
 
-setwd("C:/Users/rogej/Documents/hslu/courses/bootcamp/r-bootcamp")
-getwd()
-
 
 election_map <- read_csv("Data/datatable.csv")
 party_colors <- read_csv("Data/party_colors.csv")
@@ -22,6 +21,8 @@ swiss_cantons <- election_map %>%
   distinct(Kanton) %>%  
   filter(!is.na(Kanton)) %>%  
   pull(Kanton)
+
+# 2. Plots #####################################################################
 
 # Identify the party columns dynamically (columns from CSP_23 to Uebrige_23)
 party_cols <- names(election_map)[which(names(election_map) == "CSP_23"):which(names(election_map) == "Uebrige_23")]
@@ -83,6 +84,8 @@ p <- ggplot(canton_totals, aes(x = Kanton, y = Percentage, fill = Party,
 # Convert to interactive plot
 interactive_plot <- ggplotly(p, tooltip = "text") %>%
   layout(legend = list(orientation = "h", y = -0.2))
+
+# 3. Exports ###################################################################
 
 # Display the interactive plot
 interactive_plot

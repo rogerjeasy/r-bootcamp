@@ -1,3 +1,5 @@
+# 1. Import ####################################################################
+
 library(leaflet)
 library(plotly)
 library(dplyr)
@@ -8,12 +10,12 @@ library(raster)
 library(magrittr)
 library(htmltools)
 
-setwd("C:/Users/rogej/Documents/hslu/courses/bootcamp/r-bootcamp")
-getwd()
 
 election_results <- read_csv("Data/datatable.csv", show_col_types = FALSE)
 party_colors <- read_csv("Data/party_colors.csv", show_col_types = FALSE)
 canton_symbols <- read_csv("Data/kanton_names.csv", show_col_types = FALSE)
+
+# 2. Plots #####################################################################
 
 # Define party order explicitly
 party_order <- c("PdA_Sol", "GRUENE", "SP", "GLP", "CSP", 
@@ -168,6 +170,9 @@ interactive_map <- leaflet(options = leafletOptions(minZoom = 7, maxZoom = 12)) 
   
   # Set bounds
   fitBounds(5.9, 45.8, 10.5, 47.8)
+
+# 3. Exports ###################################################################
+
 
 # Display the map
 interactive_map

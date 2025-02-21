@@ -5,6 +5,9 @@ library(dplyr)
 library(readr)
 library(stringr)
 
+# Description: the function below imports the data sources and names them
+#              importX (X = number in sequence).
+
 import_data <- function(file_path, skip = 0, col_names = TRUE, sep = ";") {
   if (grepl("\\.csv$", file_path)) {
     return(read.csv(file_path, header = TRUE, sep = sep))
@@ -30,7 +33,12 @@ names(imported_data) <- paste0("import", 1:length(files))
 
 # 2. Data Sets #################################################################
 
+# Description: Below the data sets are preprocessed to make sure they are 
+#              structurally equal for analysis. For matching we use 
+#              municipalityID and in one case districtId (education).
+
 ## DATASET 1: Election Results 2023 ############################################
+
 election2023 <- import1 %>%
   dplyr::select(gemeinde_bezeichnung,
          gemeinde_nummer,
@@ -204,6 +212,7 @@ municipaldata <- municipaldata %>%
   mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
 
 ## DATASET 8: Total voter num  #################################################
+
 votenums <- imported_data[[8]] %>%
   dplyr::select(
     municipalityId = gemeinde_nummer,   
@@ -215,6 +224,11 @@ votenums <- votenums %>%
   mutate(municipalityId = str_pad(as.character(municipalityId), width = 4, side = "left", pad = "0"))
 
 # 3. Export ####################################################################
+
+# Description: The final dataset is exported as csv from where the other scripts
+#              extract the necessary data. This two-step approach enabled us  
+#              during the project that one person could start coding the plots 
+#              while the other was still processing and refining the data set.
 
 ## JOINING THE DATASETS  #######################################################
 

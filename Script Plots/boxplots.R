@@ -1,9 +1,11 @@
 # 1. Import ####################################################################
 
+# Description: Boxplots to visualise the income distribution in Switzerland and 
+#              and per cantons.
+
 library(ggplot2)
 library(plotly)
 library(dplyr)
-
 
 custom_colors <- c("#FF9999", "#D4A76A", "#91C169", "#3DC280", "#49C7E3", "#47A8FF", "#C28BEE", "#FF85D8")
 data <- read.csv("../Data/datatable.csv", stringsAsFactors = FALSE)

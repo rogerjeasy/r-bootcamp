@@ -216,9 +216,8 @@ Most of the plots did not include statistical models but rather visualised the e
 
 # Chapter of Choice: Interactive Electoral Maps
 
-This project leverages interactive mapping capabilities to visualize Swiss electoral results data. While packages like dplyr and ggplot2 were covered in the main course, we specifically focus on the leaflet package for creating interactive web maps - a specialized tool for geographical data presentation that offers new possibilities for data visualization. This approach combines familiar data manipulation techniques with advanced spatial data handling through `leaflet`'s interactive features and the `sf` (simple features) package's geospatial capabilities. 
+This project leverages interactive mapping capabilities to visualize Swiss electoral results data. While packages like dplyr and ggplot2 were covered in the main course, we specifically focus on the leaflet package for creating interactive web maps - a specialized tool for geographical data presentation that offers new possibilities for data visualization. This approach combines familiar data manipulation techniques with advanced spatial data handling through `leaflet`'s interactive features and the `sf` (simple features) package's geospatial capabilities. \ 
 
-### Implementation of Interactive Maps
 The implementation utilizes several specialized R packages:
 
 * `leaflet`: For creating interactive web maps
@@ -226,56 +225,19 @@ The implementation utilizes several specialized R packages:
 * `htmltools`: For HTML widget generation
 * `raster`: For spatial data processing
 
-These packages extend beyond basic data visualization to create dynamic, web-based visualizations that allow to explore electoral data through an interactive interface.
+These packages extend beyond basic data visualization to create dynamic, web-based visualizations that allow to explore electoral data through an interactive interface. \
 
-### Technical Innovations
+The maps integrate various spatial data levels including municipality boundaries, canton boundaries, Lakes (for improved geographical context), country outline. Incorporated interactive elements are hover tooltips showing detailed electoral information, color-coded regions based on winning parties, Zoom and pan capabilities. The coordinate system management  handles coordinate system transformations, converting all geographical data to WGS84 (EPSG:4326) for web compatibility. \
 
-The mapping implementation includes several innovative features:
-
-1. **Multiple Geographic Layers**: The maps integrate various spatial data levels including:
-   - Municipality boundaries
-   - Canton boundaries
-   - Lakes (for improved geographical context)
-   - Country outline
-
-2. **Interactive Elements**: The maps incorporate:
-   - Hover tooltips showing detailed electoral information
-   - Color-coded regions based on winning parties
-   - Zoom and pan capabilities
-
-3. **Coordinate System Management**: The project handles coordinate system transformations, converting all geographical data to WGS84 (EPSG:4326) for web compatibility.
-
-### Novel Visualization Approaches
-
-This chapter demonstrates two distinct mapping approaches:
+The interactive elements allow to explore both broad patterns and specific local results, representing a significant advance over static visualizations. This chapter demonstrates two distinct mapping approaches:
 
 1. **Canton-Level Analysis**: Shows winning parties by canton with simplified boundaries, offering a broad overview of regional political trends.
 
 2. **Municipality-Level Detail**: Provides granular insight into local voting patterns, revealing nuanced geographical patterns that might be missed in aggregate data.
 
-The interactive elements allow to explore both broad patterns and specific local results, representing a significant advance over static visualizations.
+Several technical challenges were addressed. Merging electoral data with geographical boundaries required careful handling of identifiers and coordinate systems (Data Integration). The maps balance detail with performance, managing the complexity of displaying over 2,000 municipalities while maintaining responsiveness (Performance Optimization). Careful consideration was given to color schemes and opacity levels to ensure readability while maintaining aesthetic appeal (Visual Clarity). \
 
-### Technical Challenges Overcome
-
-Several technical challenges were addressed:
-
-1. **Data Integration**: Merging electoral data with geographical boundaries required careful handling of identifiers and coordinate systems.
-
-2. **Performance Optimization**: The maps balance detail with performance, managing the complexity of displaying over 2,000 municipalities while maintaining responsiveness.
-
-3. **Visual Clarity**: Careful consideration was given to color schemes and opacity levels to ensure readability while maintaining aesthetic appeal. \
-
-### Value Addition
-
-This mapping approach adds several valuable dimensions to the analysis:
-
-1. **Spatial Context**: Reveals geographical patterns in voting behavior that might be missed in traditional statistical analysis.
-
-2. **User Engagement**: Interactive elements allow readers to explore data according to their interests.
-
-3. **Data Density**: Maps effectively communicate multiple data dimensions (winning party, vote share, geographical location) in an intuitive format.
-
-\
+This mapping approach adds several valuable dimensions to the analysis. One focus was on the spatial context, in order to reveals geographical patterns in voting behavior that might be missed in traditional statistical analysis. Interactive elements allow readers to explore data according to their interests, improving user engagement. Further the maps effectively communicate multiple data dimensions (winning party, vote share, geographical location) in an intuitive format. \
 
 # Results
 

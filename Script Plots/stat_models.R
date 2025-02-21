@@ -1,5 +1,7 @@
 # 1. Import ####################################################################
 
+# Description: Below the data is imported from the csv. For improved performance
+#              of the linear model we scale the indicators upon import.
 
 library(tidyr)
 library(dplyr)
@@ -26,6 +28,7 @@ data <- data %>%
 # 2. Models ####################################################################
 ## 2.1 Basic Models ############################################################
 
+# Description:
 # The basic models and advanced models below were used for orientation in the 
 # data set and are not included in the final product.
 # For models used in the analysis (plots etc.) see chapter 2.3 and 2.4.
@@ -97,6 +100,7 @@ model_interaction <- lm(SVP_23 ~ incomePerCapita * edusec_pct + incomePerCapita 
 model_interaction
 
 ## 2.3 Regression Function #####################################################
+# Description:
 # Multiple Linear Regression Model with all parties and demographic factors
 # All data was scaled in order normalize the different data types and to account
 # for some of the indicators that have smaller (but notable) variance.
@@ -155,6 +159,8 @@ combined_regression_results <- combined_regression_results %>%
 
 
 ## 2.4. Weighted Data (Unmodelled) #############################################
+
+# Description: 
 # Export of the indicators weighted based on populations without further 
 # modelling (for some introductory plots).
 

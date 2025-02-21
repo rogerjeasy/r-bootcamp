@@ -1,5 +1,9 @@
 # 1. Import #######################################################################
 
+# Description: The scatter plots and bar charts visualise the main indicators
+#              for a comparative perspective.
+
+
 library(tidyr)
 library(dplyr)
 library(Hmisc)
@@ -85,7 +89,6 @@ canton_colors <- c(
 
 # 2.2 Labels #######################################################################
 
-
 column_labels <- c(
   "population" = "Population",
   "w_agequota_pct" = "Age Quota",
@@ -131,7 +134,7 @@ p <- ggplot(scatter_data, aes(
   text = paste("Canton:", Kanton, "<br>Factor:", Factor, "<br>Value:", round(Value, 2))
 )) +
   geom_point(alpha = 0.8, aes(color = Factor)) +
-  facet_wrap(~ Factor, ncol = 1, scales = "free_y") +  # Facet labels now display readable names
+  facet_wrap(~ Factor, ncol = 1, scales = "free_y") + 
   labs(
     title = "Weighted Demographic Factors by Canton",
     x = "Canton",
@@ -187,12 +190,13 @@ p <- ggplot(scatterplot_cantons, aes(
     strip.text = element_text(size = 8, face = "bold")  # Adjust facet label size
   )
 
-# Convert to interactive plot
 interactive_scatterplot_canton <- ggplotly(p, tooltip = "text", width = 800, height = 900)
 
 ## 3.3 SVP Success versus demographic indicators (not modelled) ################
 # Description: Scatterplot showing the main demographic facets vs SVP election 
 #              result, based on the weighted data (unmodelled).
+#              Indicator "education" only available for districts, that's why 
+#              some additional aggregation was necessary.
 
 create_interactive_plot <- function(data,x_var,y_var, group_var = "Kanton", title, tooltip_vars = c("municipality", "Kanton"), 
                                     jitter = FALSE, log_scale = FALSE, fix_negative = FALSE, y_range = NULL) {
@@ -219,7 +223,7 @@ create_interactive_plot <- function(data,x_var,y_var, group_var = "Kanton", titl
     position = if (jitter) position_jitter(width = 0.2, height = 0.2) else position_identity()) +
     scale_size(range = c(1, 10)) +  
     scale_color_manual(values = canton_colors) +  
-    labs(x = x_label, y = y_label, title = title) +  # Apply readable labels
+    labs(x = x_label, y = y_label, title = title) + 
     theme_minimal() +
     theme(
       legend.position = "bottom",
@@ -230,15 +234,14 @@ create_interactive_plot <- function(data,x_var,y_var, group_var = "Kanton", titl
   
   # Apply log scale only if log_scale = TRUE
   if (log_scale) {
-    p <- p + scale_y_log10(labels = scales::comma)  # Ensures raw numbers display in log scale
+    p <- p + scale_y_log10(labels = scales::comma)  
   } else {
-    p <- p + scale_y_continuous(labels = scales::comma)  # Keeps normal numeric labels
+    p <- p + scale_y_continuous(labels = scales::comma)  # 
   }
   
   ggplotly(p, tooltip = "text", width = 800, height = 400)
 }
 
-# Adjusting y-axis focus ranges for specific plots
 plot_SVP23vsAge <- create_interactive_plot(data, "SVP_23", "agequota_pct", NULL, "SVP Election Result 2023 and Age Quota by Municipality", 
                                            tooltip_vars = c("municipality", "Kanton"), jitter = TRUE)
 
@@ -260,10 +263,10 @@ data_district <- data %>%
   summarise(
     SVP_23 = mean(SVP_23, na.rm = TRUE),
     edusec_pct = mean(edusec_pct, na.rm = TRUE),
-    population = sum(population, na.rm = TRUE)  # Summing population for districts
+    population = sum(population, na.rm = TRUE) 
   ) %>%
   ungroup() %>%
-  mutate(Kanton = as.factor(Kanton))  # Ensure Kanton remains a factor
+  mutate(Kanton = as.factor(Kanton))
 
 plot_SVPvsEduLvl <- create_interactive_plot(data_district, "SVP_23", "edusec_pct", NULL, 
                                             "SVP Election Result 2023 and Secondary Education (%) by District", tooltip_vars = c("districtId","districtName", "Kanton"))
@@ -363,7 +366,7 @@ edustructure_cantons <- weighted_data %>%
                names_to = "Education_Level", 
                values_to = "Weighted_Percentage") %>%
   mutate(Education_Level = ifelse(Education_Level %in% names(column_labels), 
-                                  column_labels[Education_Level], Education_Level)) %>%  # Apply labels
+                                  column_labels[Education_Level], Education_Level)) %>% 
   group_by(Kanton) %>%
   mutate(Weighted_Percentage = 100 * Weighted_Percentage / sum(Weighted_Percentage, na.rm = TRUE)) %>%
   ungroup() %>%
